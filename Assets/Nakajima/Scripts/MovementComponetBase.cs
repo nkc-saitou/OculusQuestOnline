@@ -83,11 +83,8 @@ namespace Nakajima.Movement
             // 移動方向にスピードを掛ける。ジャンプや落下がある場合は、別途Y軸方向の速度ベクトルを足す。
             velocity = moveForward * currentSpeed + new Vector3(0, velocity.y, 0);
 
-            Debug.Log("移動力 : " + velocity); 
-
             // キャラクターの向きを進行方向に
-            if (moveForward != Vector3.zero)
-            {
+            if (moveForward != Vector3.zero) {
                 transform.rotation = Quaternion.LookRotation(moveForward);
             }
         }

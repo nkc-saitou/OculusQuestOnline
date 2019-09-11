@@ -34,7 +34,7 @@ public class TestPlayer : MonoBehaviour
         inputVec.z = Input.GetAxis("Vertical");
         
         myMovement.AddInputVector(inputVec);
-
+        
         myRig.velocity = myMovement.Velocity;
     }
 }

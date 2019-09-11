@@ -240,8 +240,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   movementState: 0
   inputVec: {x: 0, y: 0, z: 0}
-  minSpeed: 4
-  maxSpeed: 10
+  minSpeed: 1
+  maxSpeed: 3
   accelSpeed: 0.5
 --- !u!54 &6670120
 Rigidbody:
