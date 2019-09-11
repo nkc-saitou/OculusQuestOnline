@@ -12,7 +12,7 @@ using UnityEngine.UI;
 
 namespace Saitou.OculusInput
 {
-    public class TestOculus : MonoBehaviour
+    public class TestOculus : MonoBehaviour, Photon.Pun.IPunObservable
     {
         NetworkTest network;
 
@@ -75,6 +75,18 @@ namespace Saitou.OculusInput
                 });
                 
 
+        }
+
+        public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
+        {
+            if (stream.IsWriting)
+            {
+                stream.SendNext(text.text);
+            }
+            else
+            {
+                this.text.text = (string)stream.ReceiveNext();
+            }
         }
     }
 }
