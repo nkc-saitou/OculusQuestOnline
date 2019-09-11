@@ -6,6 +6,8 @@ using Photon.Realtime;
 using UniRx;
 using System;
 using UniRx.Triggers;
+using UniRx.Async;
+using UnityEngine.UI;
 
 
 namespace Saitou.Network
@@ -17,22 +19,25 @@ namespace Saitou.Network
 
         // ルームの基本設定
         RoomOptions roomOptions;
+        public ReactiveProperty<bool> IsInRoom { get; private set; } = new ReactiveProperty<bool>();
 
-        // 現在部屋に入っているかどうか
-        ReactiveProperty<bool> isInRoom = new ReactiveProperty<bool>();
+        Subject<Unit> onInRoomSub = new Subject<Unit>();
+        public IObservable<Unit> OnInRoom { get { return onInRoomSub; } }
 
-        
+        public Text text;
+
+        string roomName = "myRoomName";
 
         void Start()
         {
-            isInRoom.Value = false;
+            IsInRoom.Value = false;
             // Photonに接続する(引数でゲームのバージョンを指定できる)
-            PhotonNetwork.ConnectUsingSettings();
+            Connect("1.0");
 
             InitRoomSetting();
 
             // 入っているかどうかを確認したい
-            isInRoom.Subscribe(_ => Debug.Log("isOpen" + isInRoom.Value));
+            IsInRoom.Subscribe(_ => Debug.Log("isOpen" + IsInRoom.Value));
         }
 
         /// <summary>
@@ -54,31 +59,66 @@ namespace Saitou.Network
             };
         }
 
-        // ロビーに入ると呼ばれる
+        // Photonに接続する
+        void Connect(string gameVersion)
+        {
+            if (PhotonNetwork.IsConnected == false)
+            {
+                PhotonNetwork.GameVersion = gameVersion;
+                PhotonNetwork.ConnectUsingSettings();
+            }
+        }
+
+        // ロビーに入る
+        void JoinLobby()
+        {
+            if (PhotonNetwork.IsConnected == false) return;
+            PhotonNetwork.JoinLobby();
+        }
+
+        //------------------------------------------------
+        // Photon
+        //------------------------------------------------
+
+
+        /// <summary>
+        /// マスターサーバーに接続した時
+        /// </summary>
+        public override void OnConnectedToMaster()
+        {
+            Debug.Log("OnConnectedToMaster");
+
+            // ロビーに入る
+            JoinLobby();
+        }
+
+        /// <summary>
+        /// ロビーに入ると呼ばれる
+        /// </summary>
         public override void OnJoinedLobby()
         {
             Debug.Log("ロビーに入りました。");
-
-            // ルームに入室する
-            PhotonNetwork.JoinRandomRoom();
+            text.text = "ロビー";
+            JoinOrCreateRoom().Forget();
         }
 
-        // ルームに入室すると呼ばれる
-        public override void OnJoinedRoom()
+        /// <summary>
+        ///  2. 部屋に入室する （存在しなければ作成して入室する）
+        /// </summary>
+        public async UniTask JoinOrCreateRoom()
         {
             Debug.Log("ルームへ入室しました。");
+            IsInRoom.Value = true;
 
-            isInRoom.Value = true;
-        }
+            // 入室 (存在しなければ部屋を作成して入室する)
+            if (PhotonNetwork.InLobby)
+            {
+                Debug.Log("ルーム存在しません。ルームを作成します。");
+                await UniTask.WaitUntil(() => PhotonNetwork.JoinOrCreateRoom(roomName, roomOptions, TypedLobby.Default));
+            }
 
-        // ルームの入室に失敗すると呼ばれる
-        void OnPhotonRandomJoinFailed()
-        {
-            Debug.Log("ルームの入室に失敗しました。");
-
-            // ルームがないと入室に失敗するため、その時は自分で作る
-            // 引数でルーム名を指定できる
-            PhotonNetwork.CreateRoom("myRoomName", roomOptions);
+            text.text = "ルーム";
+            onInRoomSub.OnNext(Unit.Default);
         }
     }
 }
