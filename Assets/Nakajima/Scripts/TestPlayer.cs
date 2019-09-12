@@ -30,8 +30,9 @@ public class TestPlayer : MonoBehaviour
 
     void Move()
     {
-        inputVec.x = Input.GetAxis("Horizontal");
-        inputVec.z = Input.GetAxis("Vertical");
+        Vector2 ovrInputVec = OVRInput.Get(OVRInput.Axis2D.PrimaryThumbstick);
+        inputVec.x = ovrInputVec.x;
+        inputVec.z = ovrInputVec.y;
         
         myMovement.AddInputVector(inputVec);
 
