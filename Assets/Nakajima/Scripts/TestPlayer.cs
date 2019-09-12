@@ -30,11 +30,9 @@ public class TestPlayer : MonoBehaviour
 
     void Move()
     {
-        Vector2 ovrInputVec = OVRInput.Get(OVRInput.Axis2D.PrimaryThumbstick);
-        inputVec.x = ovrInputVec.x;
-        inputVec.z = ovrInputVec.y;
+        inputVec = new Vector3(OVRInput.Get(OVRInput.RawAxis2D.LThumbstick).x, 0.0f, OVRInput.Get(OVRInput.RawAxis2D.LThumbstick).y);
         
-        myMovement.AddInputVector(inputVec);
+        myMovement.Move(inputVec);
 
         myRig.velocity = myMovement.Velocity;
     }

@@ -22,6 +22,10 @@ namespace Nakajima.Movement
         [Header("＜移動手段＞")]
         public MovementState movementState;
 
+        // 移動支点
+        [SerializeField, Header("移動の支点となるオブジェクト")]
+        protected GameObject player;
+
 
         // 移動する力
         private Vector3 velocity;
@@ -67,27 +71,24 @@ namespace Nakajima.Movement
         public void AddInputVector(Vector3 _vec)
         {
             // 入力があるなら加速
-            if(Mathf.Abs(_vec.x) >= 0.5f || Mathf.Abs(_vec.z) >= 0.5f) {
+            if (Mathf.Abs(_vec.x) >= 0.5f || Mathf.Abs(_vec.z) >= 0.5f) {
                 currentSpeed = maxSpeed;
             }
-            else if(Mathf.Abs(_vec.x) < 0.5f && Mathf.Abs(_vec.z) < 0.5f) {
+            else if (Mathf.Abs(_vec.x) < 0.5f && Mathf.Abs(_vec.z) < 0.5f) {
                 currentSpeed = minSpeed;
             }
 
             // カメラの方向から、x-z平面の単位ベクトルを取得
-            Vector3 cameraForward = Vector3.Scale(Camera.main.transform.forward, new Vector3(1, 0, 1)).normalized;
+            Vector3 cameraForward = Vector3.Scale(player.GetComponent<Camera>().transform.forward, new Vector3(1, 0, 1)).normalized;
 
             // 方向キーの入力値とカメラの向きから、移動方向の決定
             Vector3 moveForward = cameraForward * _vec.z + Camera.main.transform.right * _vec.x;
 
             // 移動方向にスピードを掛ける。ジャンプや落下がある場合は、別途Y軸方向の速度ベクトルを足す。
-            velocity = moveForward * currentSpeed + new Vector3(0, velocity.y, 0);
-
-            Debug.Log("移動力 : " + velocity); 
+            velocity = moveForward * currentSpeed;
 
             // キャラクターの向きを進行方向に
-            if (moveForward != Vector3.zero)
-            {
+            if (moveForward != Vector3.zero) {
                 transform.rotation = Quaternion.LookRotation(moveForward);
             }
         }
@@ -95,7 +96,7 @@ namespace Nakajima.Movement
         /// <summary>
         /// 移動処理
         /// </summary>
-        protected virtual void Move(float _value)
+        public virtual void Move(Vector3 _vec)
         {
 
         }
