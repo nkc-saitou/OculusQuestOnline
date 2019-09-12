@@ -15,7 +15,7 @@ namespace Saitou.Network
     public class NetworkTest : MonoBehaviourPunCallbacks
     {
         // 最大人数
-        [SerializeField] int maxPlayers = 2;
+        [SerializeField] int maxPlayers = 4;
 
         // ルームの基本設定
         RoomOptions roomOptions;
@@ -25,6 +25,7 @@ namespace Saitou.Network
         public IObservable<Unit> OnInRoom { get { return onInRoomSub; } }
 
         public Text text;
+        public Text playerText;
 
         string roomName = "myRoomName";
 
@@ -36,8 +37,18 @@ namespace Saitou.Network
 
             InitRoomSetting();
 
+            text.text = "未接続";
+
             // 入っているかどうかを確認したい
             IsInRoom.Subscribe(_ => Debug.Log("isOpen" + IsInRoom.Value));
+
+            this.UpdateAsObservable()
+                .TakeUntilDestroy(this)
+                .Where(_ => IsInRoom.Value)
+                .Subscribe(_ => 
+                {
+                    playerText.text = PhotonNetwork.PlayerList.Length.ToString();
+                });
         }
 
         /// <summary>
@@ -88,6 +99,7 @@ namespace Saitou.Network
         {
             Debug.Log("OnConnectedToMaster");
 
+            text.text = "サーバー接続中";
             // ロビーに入る
             JoinLobby();
         }
@@ -98,7 +110,7 @@ namespace Saitou.Network
         public override void OnJoinedLobby()
         {
             Debug.Log("ロビーに入りました。");
-            text.text = "ロビー";
+            text.text = "ロビー接続接続中";
             JoinOrCreateRoom().Forget();
         }
 
@@ -117,7 +129,7 @@ namespace Saitou.Network
                 await UniTask.WaitUntil(() => PhotonNetwork.JoinOrCreateRoom(roomName, roomOptions, TypedLobby.Default));
             }
 
-            text.text = "ルーム";
+            text.text = "ルーム入室済";
             onInRoomSub.OnNext(Unit.Default);
         }
     }
