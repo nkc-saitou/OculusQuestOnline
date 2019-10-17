@@ -115,7 +115,6 @@ public class PhotonTest : MonoBehaviourPunCallbacks, IPunObservable
                 case List<int> n:
                     foreach (int i in n)
                     {
-                        stream.SendNext(n);
                     }
                     break;
 
