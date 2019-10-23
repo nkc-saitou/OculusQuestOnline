@@ -9,7 +9,5 @@ namespace Matsumoto.Weapon {
 		public string DisplayName;
 		public int GuardPower;
 
-		public WeaponModuleData[] ModuleDataArray;
-
 	}
 }
