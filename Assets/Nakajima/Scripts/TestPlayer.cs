@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.XR;
 using Nakajima.Movement;
+using Nakajima.Weapon;
 
 /// <summary>
 /// テスト用のプレイヤークラス(消しても問題ない)
@@ -11,6 +12,9 @@ public class TestPlayer : MonoBehaviour
 {
     // 自身のMovement;
     private MovementComponetBase myMovement;
+
+    // 武器生成
+    private WeaponCreate weaponCreate;
 
     private Rigidbody myRig;
 
@@ -21,15 +25,35 @@ public class TestPlayer : MonoBehaviour
     {
         myRig = GetComponent<Rigidbody>();
         myMovement = GetComponent<MovementComponetBase>();
+        weaponCreate = GetComponent<WeaponCreate>();
     }
 
     // Update is called once per frame
     void Update()
     {
         Move();
+
+        Actoin();
     }
 
-    void Move()
+    /// <summary>
+    /// アクション
+    /// </summary>
+    private void Actoin()
+    {
+        // Xボタンで生成
+        if (OVRInput.GetDown(OVRInput.RawButton.X))
+        {
+            Debug.Log("押した");
+
+            weaponCreate.Create();
+        }
+    }
+
+    /// <summary>
+    /// 移動
+    /// </summary>
+    private void Move()
     {
         switch (myMovement.movementState)
         {
