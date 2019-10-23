@@ -16,10 +16,13 @@ public class Mover : MovementComponetBase
         // 移動手段に応じて移動方法を定義
         switch (movementState)
         {
+            // スティック移動
             case MovementState.MOVE_STICK:
                 AddInputVector(_vec);
                 break;
+            // 傾き移動
             case MovementState.MOVE_INCLINATION:
+                AddInputVector_Tracking(_vec);
                 break;
         }
     }

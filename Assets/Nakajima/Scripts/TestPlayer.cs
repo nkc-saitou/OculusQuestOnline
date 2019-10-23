@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.XR;
 using Nakajima.Movement;
 
 /// <summary>
@@ -9,11 +10,11 @@ using Nakajima.Movement;
 public class TestPlayer : MonoBehaviour
 {
     // 自身のMovement;
-    MovementComponetBase myMovement;
+    private MovementComponetBase myMovement;
 
-    Rigidbody myRig;
+    private Rigidbody myRig;
 
-    Vector3 inputVec;
+    private Vector3 inputVec;
 
     // Start is called before the first frame update
     void Start()
@@ -30,7 +31,16 @@ public class TestPlayer : MonoBehaviour
 
     void Move()
     {
-        inputVec = new Vector3(OVRInput.Get(OVRInput.RawAxis2D.LThumbstick).x, 0.0f, OVRInput.Get(OVRInput.RawAxis2D.LThumbstick).y);
+        switch (myMovement.movementState)
+        {
+            case MovementComponetBase.MovementState.MOVE_STICK:
+                inputVec = new Vector3(OVRInput.Get(OVRInput.RawAxis2D.LThumbstick).x, 0.0f, OVRInput.Get(OVRInput.RawAxis2D.LThumbstick).y);
+                break;
+            case MovementComponetBase.MovementState.MOVE_INCLINATION:
+                Quaternion Angles = InputTracking.GetLocalRotation(XRNode.Head);
+                inputVec =  myMovement.GetMoveDirObj().transform.position - transform.position;
+                break;
+        }
         
         myMovement.Move(inputVec);
 
