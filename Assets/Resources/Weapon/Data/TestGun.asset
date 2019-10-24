@@ -14,6 +14,3 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   DisplayName: TestGun
   GuardPower: 1
-  ModuleDataArray:
-  - {fileID: 11400000, guid: 72ff831a437df4f4f8e386e3f19977ec, type: 2}
-  - {fileID: 11400000, guid: 52f952f3929520c4f88fb21236335124, type: 2}

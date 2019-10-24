@@ -1,34 +1,43 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
-using Matsumoto.GoogleSpreadSheetLoader;
+using System.Linq;
 using UniRx.Async;
 
 namespace Matsumoto.Weapon {
 
 	public class WeaponManager : MonoBehaviour {
 
-		public const string WeaponDataPath = "Weapon/";
+		public const string WeaponPrefabPath = "Weapon/Prefabs/";
 
-		public async UniTask Start() {
+		private Dictionary<string, WeaponBase> _weaponBaseDictionary;
 
-			await OverrideDataAll();
+		public void Start() {
+
 
 		}
 
-		public async UniTask OverrideDataAll() {
-
-			var sheet = await SpreadSheetLoader.LoadSheet(DefinedData.ApiKey, DefinedData.SheetID, "WeaponDataOverride");
-			for(int i = 0;i < sheet.Values.Count;i++) {
-				var str = "";
-				for(int j = 0;j < sheet.Values[i].Count;j++) {
-					str += sheet.Values[i][j] + ",";
-				}
-				Debug.Log(str);
-			}
+		public void LoadWeapon() {
+			_weaponBaseDictionary = Resources.LoadAll<WeaponBase>(WeaponPrefabPath)
+				.ToDictionary(item => item.name, item => item);
 		}
 
-		public IWeapon CreateWeapon() {
+		/// <summary>
+		/// 読み込んでいるすべての武器の名前を取得する
+		/// </summary>
+		/// <returns></returns>
+		public string[] GetWeaponNameAll() {
+			return _weaponBaseDictionary
+				.Select(item => item.Key)
+				.ToArray();
+		}
+
+		/// <summary>
+		/// 武器を生成する
+		/// </summary>
+		/// <param name="name">武器の名前</param>
+		/// <returns>武器のインターフェース</returns>
+		public IWeapon CreateWeapon(string name) {
 			return null;
 		}
 
