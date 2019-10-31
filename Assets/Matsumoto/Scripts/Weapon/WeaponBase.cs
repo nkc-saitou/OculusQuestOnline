@@ -8,6 +8,15 @@ namespace Matsumoto.Weapon {
 
 		[SerializeField]
 		protected WeaponData _weaponData;
+		public WeaponData WeaponData {
+			get { return _weaponData; }
+		}
+
+		[SerializeField]
+		protected WeaponModuleBase[] _weaponModules;
+		public WeaponModuleBase[] WeaponModules {
+			get { return _weaponModules; }
+		}
 
 		public virtual UniTask Destroy() {
 			Destroy(gameObject);

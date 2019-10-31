@@ -17,6 +17,7 @@ namespace Matsumoto.Weapon {
 
 		}
 
+		[ContextMenu("LoadWeapon")]
 		public void LoadWeapon() {
 			_weaponBaseDictionary = Resources.LoadAll<WeaponBase>(WeaponPrefabPath)
 				.ToDictionary(item => item.name, item => item);
@@ -38,9 +39,27 @@ namespace Matsumoto.Weapon {
 		/// <param name="name">武器の名前</param>
 		/// <returns>武器のインターフェース</returns>
 		public IWeapon CreateWeapon(string name) {
-			return null;
+
+			if(!_weaponBaseDictionary.ContainsKey(name)) {
+				return null;
+			}
+
+			var weapon = Instantiate(_weaponBaseDictionary[name]);
+
+			for(int i = 0;i < weapon.WeaponModules.Length;i++) {
+				ref var arrayPos = ref weapon.WeaponModules[i];
+				var module = Instantiate(arrayPos, weapon.transform);
+				module.ModuleInitialize(weapon);
+				arrayPos = module;
+			}
+
+			return weapon;
 		}
 
+		[ContextMenu("OverrideData")]
+		public void OverrideData() {
+			WeaponDataDownloader.OverrideDataAll().Forget();
+		}
 	}
 
 
