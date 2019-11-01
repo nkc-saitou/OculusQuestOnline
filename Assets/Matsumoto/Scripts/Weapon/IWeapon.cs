@@ -14,7 +14,7 @@ namespace Matsumoto.Weapon {
 
 		GameObject GetBody();
 
-
+		Transform GetGrabAnchor();
 
 	}
 

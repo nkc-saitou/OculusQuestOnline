@@ -11,7 +11,13 @@ public class EffectObject : MonoBehaviour
         foreach (var item in Effects)
         {
             item.transform.SetParent(null);
-            Destroy(item,10);
+
+			var particle = item.GetComponent<ParticleSystem>();
+			if(particle) {
+				particle.Stop();
+			}
+
+			Destroy(item,10);
         }
     }
 }

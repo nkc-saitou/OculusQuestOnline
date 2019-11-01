@@ -27,6 +27,10 @@ namespace Matsumoto.Weapon {
 			return gameObject;
 		}
 
+		public virtual Transform GetGrabAnchor() {
+			return transform;
+		}
+
 		public virtual OVRHapticsClip GetHaptics() {
 			return null;
 		}

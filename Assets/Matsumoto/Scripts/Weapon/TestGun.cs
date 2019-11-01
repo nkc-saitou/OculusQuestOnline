@@ -13,6 +13,7 @@ namespace Matsumoto.Weapon {
 		// Update is called once per frame
 		void Update() {
 
+			// テストでキーでも動く
 			if(Input.GetKeyDown(KeyCode.E)) {
 				OnButtonDown(OVRInput.Button.One);
 			}
