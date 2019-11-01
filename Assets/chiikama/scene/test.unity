@@ -5145,8 +5145,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cd245577b8ae7b94cb24ba1b691d9ccb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 100
-  destroyTime: 2
+  Effects:
+  - {fileID: 850414964}
+  - {fileID: 1787574557}
 --- !u!4 &913188913
 Transform:
   m_ObjectHideFlags: 0
@@ -5361,8 +5362,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cd245577b8ae7b94cb24ba1b691d9ccb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 100
-  destroyTime: 2
+  Effects:
+  - {fileID: 1277646871}
+  - {fileID: 271664406}
 --- !u!1 &1362630698
 GameObject:
   m_ObjectHideFlags: 0
@@ -5440,7 +5442,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1362630698}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 15.9, y: 12.6, z: -18.5}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
