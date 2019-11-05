@@ -44,8 +44,6 @@ public class TestPlayer : MonoBehaviour
         // Xボタンで生成
         if (OVRInput.GetDown(OVRInput.RawButton.X))
         {
-            Debug.Log("押した");
-
             weaponCreate.Create();
         }
     }
