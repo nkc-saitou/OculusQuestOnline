@@ -10,22 +10,19 @@ namespace Nakajima.Weapon
     public class ProvisionalWeapon : MonoBehaviour
     {
         // 自身の生成元の参照
-        private GameObject targetObj;
+        [Header("<親オブジェクト>")]
+        public GameObject targetObj;
         private WeaponCreate weaponCreate;
         
         [SerializeField, Header("回転スピード")]
         private float rotateSpeed;
         // 差分
-        private Vector3 offset = new Vector3(0.0f, 1.0f, 0.0f);
-
-        // 自身の原点
-        private Vector3 originPos;
+        [SerializeField]
+        private Vector3 offset;
 
         void Start()
         {
-            originPos = transform.position;
-            weaponCreate = FindObjectOfType<WeaponCreate>();
-            targetObj = weaponCreate.gameObject;
+
         }
 
         void Update()
@@ -38,6 +35,8 @@ namespace Nakajima.Weapon
         /// </summary>
         private void Move()
         {
+            if (targetObj == null) return;
+
             // 差分計算
             transform.position = targetObj.transform.position + offset;
             transform.Rotate(0.0f, rotateSpeed, 0.0f);

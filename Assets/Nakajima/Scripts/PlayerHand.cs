@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using Nakajima.Weapon;
+using Matsumoto.Weapon;
 
 /// <summary>
 /// プレイヤーハンドクラス
@@ -12,10 +13,14 @@ namespace Nakajima.Player
     {
         // WeaponCreateの参照
         private WeaponCreate weaponCreate;
+        private WeaponManager weaponMgr;
 
         // どっちの手か
         [SerializeField]
         private OVRInput.RawButton myTouch;
+
+        [SerializeField]
+        private GameObject GunObj;
 
         // 触れたオブジェクト
         private GameObject touchObj;
@@ -32,29 +37,40 @@ namespace Nakajima.Player
         {
             HasWeapon = false;
             weaponCreate = FindObjectOfType<WeaponCreate>();
+            weaponMgr = FindObjectOfType<WeaponManager>();
         }
 
         void Update()
         {
+            // 武器を掴む
             if (OVRInput.GetDown(myTouch))
             {
                 if (HasWeapon) return;
 
-                // 生成中の武器だったら装備する
-                foreach (GameObject weapon in weaponCreate.createWeaponList)
+                GetHasWeapon();
+            }
+        }
+
+        /// <summary>
+        /// 武器を掴む
+        /// </summary>
+        private void GetHasWeapon()
+        {
+            // 生成中の武器だったら装備する
+            foreach (GameObject weapon in weaponCreate.createWeaponList)
+            {
+                if (weapon.name == touchObj.name)
                 {
-                    if (weapon.name == touchObj.name)
-                    {
-                        weapon.transform.parent = transform;
-                        weapon.transform.localPosition = Vector3.zero;
-                        weaponCreate.createWeaponList.Remove(weapon);
-                        weaponCreate.DeleteWeapon();
-                        HasWeapon = true;
-                        break;
-                    }
+                    GameObject weaponObj = Instantiate(GunObj, transform);
+                    weaponObj.transform.localPosition = Vector3.zero;
+                    weaponObj.transform.localRotation = Quaternion.identity;
+                    weaponCreate.DeleteWeapon();
+                    HasWeapon = true;
+
+                    weaponMgr.CreateWeapon("TestGun");
+                    break;
                 }
             }
-
         }
 
         /// <summary>
@@ -66,6 +82,8 @@ namespace Nakajima.Player
             // 武器を持っているならリターン
             if (HasWeapon) return;
 
+            var obj = _col.gameObject.GetComponent<ProvisionalWeapon>();
+            if (obj == null) return;
             touchObj = _col.gameObject;
         }
 
@@ -78,7 +96,9 @@ namespace Nakajima.Player
             // 武器を持っているならリターン
             if (HasWeapon) return;
 
-            var obj = _col.gameObject;
+            var obj = _col.gameObject.GetComponent<ProvisionalWeapon>();
+            if (obj == null) return;
+
             if (touchObj != null && touchObj == obj) touchObj = null;
         }
     }

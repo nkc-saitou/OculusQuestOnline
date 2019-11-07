@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: 7087850223829259319}
   - component: {fileID: 5009897950050573189}
   - component: {fileID: -8651612635193130866}
+  - component: {fileID: -6846547902034177998}
   m_Layer: 0
   m_Name: Cylinder
   m_TagString: Untagged
@@ -127,3 +128,17 @@ MonoBehaviour:
   m_snapOrientation: 0
   m_snapOffset: {fileID: 0}
   m_grabPoints: []
+--- !u!114 &-6846547902034177998
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2774092841041856841}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c78f89e70a3dc5c4da1b19b77b3d896a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  rotateSpeed: 0
+  offset: {x: 0, y: 0, z: 0}

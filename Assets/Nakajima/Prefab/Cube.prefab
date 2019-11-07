@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: 1471725116667207416}
   - component: {fileID: 1377790031441533446}
   - component: {fileID: 601823446567913882}
+  - component: {fileID: 1387468901325270867}
   m_Layer: 0
   m_Name: Cube
   m_TagString: Untagged
@@ -126,3 +127,17 @@ MonoBehaviour:
   m_snapOrientation: 0
   m_snapOffset: {fileID: 0}
   m_grabPoints: []
+--- !u!114 &1387468901325270867
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 277980463488806656}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c78f89e70a3dc5c4da1b19b77b3d896a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  rotateSpeed: 0
+  offset: {x: 0, y: 0, z: 0}
