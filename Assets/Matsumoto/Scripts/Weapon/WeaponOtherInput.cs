@@ -42,9 +42,23 @@ namespace Matsumoto.Weapon {
 			get { return _onTriggerAnalogValue; }
 		}
 
+		private Subject<Collider> _onTriggerEnter = new Subject<Collider>();
+		public IObservable<Collider> OnTriggerEnterRecieved {
+			get { return _onTriggerEnter; }
+		}
+
+		private Subject<Collider> _onTriggerExit = new Subject<Collider>();
+		public IObservable<Collider> OnTriggerExitRecieved {
+			get { return _onTriggerExit; }
+		}
+
 		public void Update() {
-			if(Input.GetKeyDown(KeyCode.I)) {
-				OnButtonDown(OVRInput.Button.One);
+			//if(Input.GetKeyDown(KeyCode.I)) {
+			//	OnButtonDown(OVRInput.Button.One);
+			//}
+
+			if(Input.GetKeyUp(KeyCode.I)) {
+				OnButtonUp(OVRInput.Button.One);
 			}
 		}
 
@@ -76,6 +90,14 @@ namespace Matsumoto.Weapon {
 
 		public override void OnTriggerAnalogValue(OVRInput.Axis1D type, float axis) {
 			_onTriggerAnalogValue.OnNext((type, axis));
+		}
+
+		private void OnTriggerEnter(Collider other) {
+			_onTriggerEnter.OnNext(other);
+		}
+
+		private void OnTriggerExit(Collider other) {
+			_onTriggerExit.OnNext(other);
 		}
 
 	}
