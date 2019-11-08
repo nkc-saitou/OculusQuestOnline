@@ -33,19 +33,12 @@ namespace Matsumoto.Weapon {
 				.ToArray();
 		}
 
-		/// <summary>
-		/// 武器を生成する
-		/// </summary>
-		/// <param name="name">武器の名前</param>
-		/// <returns>武器のインターフェース</returns>
-		public IWeapon CreateWeapon(string name) {
+		private WeaponBase CreateWeapon(WeaponBase weaponBase) {
 
-			if(!_weaponBaseDictionary.ContainsKey(name)) {
-				return null;
-			}
+			// 武器生成
+			var weapon = Instantiate(weaponBase);
 
-			var weapon = Instantiate(_weaponBaseDictionary[name]);
-
+			// モジュール生成
 			for(int i = 0;i < weapon.WeaponModules.Length;i++) {
 				ref var arrayPos = ref weapon.WeaponModules[i];
 				var module = Instantiate(arrayPos, weapon.transform);
@@ -54,6 +47,38 @@ namespace Matsumoto.Weapon {
 			}
 
 			return weapon;
+		}
+
+		/// <summary>
+		/// 武器を生成する
+		/// </summary>
+		/// <param name="name">武器の名前</param>
+		/// <returns>武器のインターフェース1~2個(利き手用、その他(あれば、なければ入らない))</returns>
+		public IWeapon[] CreateWeapon(string name) {
+
+			if(!_weaponBaseDictionary.ContainsKey(name)) {
+				return null;
+			}
+
+			var weaponArray = new List<WeaponBase>();
+
+			var weapon = CreateWeapon(_weaponBaseDictionary[name]);
+			weaponArray.Add(weapon);
+
+			if(!weapon.OtherWeapon) {
+				return weaponArray.ToArray();
+			}
+
+			// 両手武器用
+			var otherWeapon = CreateWeapon(weapon.OtherWeapon);
+			weapon.OtherWeapon = otherWeapon;
+			weaponArray.Add(otherWeapon);
+
+			foreach(var item in weaponArray) {
+				item.Initialize();
+			}
+
+			return weaponArray.ToArray();
 		}
 
 		[ContextMenu("OverrideData")]

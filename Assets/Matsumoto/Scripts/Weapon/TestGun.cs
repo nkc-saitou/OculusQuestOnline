@@ -1,14 +1,10 @@
 ﻿using UnityEngine;
 using System.Collections;
+using UniRx;
 
 namespace Matsumoto.Weapon {
 
 	public class TestGun : WeaponBase {
-
-		// Use this for initialization
-		void Start() {
-
-		}
 
 		// Update is called once per frame
 		void Update() {
@@ -18,6 +14,17 @@ namespace Matsumoto.Weapon {
 				OnButtonDown(OVRInput.Button.One);
 			}
 
+		}
+
+		public override void Initialize() {
+			base.Initialize();
+
+			// 他の手の入力を使用する
+			((WeaponOtherInput)_otherWeapon).OnButtonDownRecieved
+				.Subscribe(button => {
+					if(button == OVRInput.Button.One) _weaponModules[0].OnUseModule(this);
+				})
+				.AddTo(this);
 		}
 
 		public override void OnButtonDown(OVRInput.Button button) {
