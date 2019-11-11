@@ -13,8 +13,8 @@ namespace Matsumoto.Weapon {
 		public override void ModuleInitialize(WeaponBase weapon) {
 			base.ModuleInitialize(weapon);
 
-			var tranforms = weapon.transform.GetComponentsInChildren<Transform>();
-			foreach(Transform item in tranforms) {
+			var transforms = weapon.transform.GetComponentsInChildren<Transform>();
+			foreach(Transform item in transforms) {
 				if(item.name == "[ShotAnchor]") {
 					_shotAnchor = item;
 					return;

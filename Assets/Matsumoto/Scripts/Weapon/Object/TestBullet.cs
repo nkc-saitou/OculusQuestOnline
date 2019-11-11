@@ -15,6 +15,10 @@ namespace Matsumoto.Weapon {
 			get; set;
 		}
 
+		public override WeaponModuleData MagnificationData {
+			get; set;
+		}
+
 		private void Start() {
 
 			_effect = GetComponentInChildren<EffectObject>();

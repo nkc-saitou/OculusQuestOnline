@@ -8,6 +8,11 @@ namespace Matsumoto.Weapon {
 		public abstract WeaponModuleData ModuleData {
 			get; set;
 		}
+
+		public abstract WeaponModuleData MagnificationData {
+			get; set;
+		}
+
 	}
 
 }
