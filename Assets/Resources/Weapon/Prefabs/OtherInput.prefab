@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6866553684042852369}
   - component: {fileID: 2063658209161802891}
+  - component: {fileID: -1341863856191595387}
   m_Layer: 0
   m_Name: OtherInput
   m_TagString: Untagged
@@ -46,3 +47,16 @@ MonoBehaviour:
   _weaponData: {fileID: 0}
   _weaponModules: []
   _otherWeapon: {fileID: 0}
+--- !u!135 &-1341863856191595387
+SphereCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6072824674713708562}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 0.1
+  m_Center: {x: 0, y: 0, z: 0}

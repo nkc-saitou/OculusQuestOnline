@@ -287,7 +287,7 @@ MonoBehaviour:
   - {fileID: 2774092841041856841, guid: ae900dcbf3690cb44a53187ed9bff796, type: 3}
   - {fileID: 6041041907838705981, guid: 000719c32141d19429d12c2f7eb37b35, type: 3}
   - {fileID: 1353050716332709435, guid: 87acb058fbc9a34449a5dd79d6186898, type: 3}
-  - {fileID: 1353050716332709435, guid: 87acb058fbc9a34449a5dd79d6186898, type: 3}
+  - {fileID: 1448808920471177366, guid: b353011f4b2272349a26fcdb6e73790a, type: 3}
   createWeaponList: []
   radius: 0.8
   rotateSpeed: 0.5

@@ -40,8 +40,8 @@ namespace Nakajima.Weapon
         // 生成を基準とするオブジェクト
         [SerializeField, Header("<武器生成の基準オブジェクト(プレイヤーの周囲に生成)>")]
         private GameObject spawnOriginObj_Circle;
-        [SerializeField, Header("<武器生成の基準オブジェクト(コントローラーの角度から生成)>")]
-        private GameObject spawnOriginObj_Display;
+        [Header("<武器生成の基準オブジェクト(コントローラーの角度から生成)>")]
+        public GameObject spawnOriginObj_Display;
         // 生成中のオブジェクト
         private GameObject spawnObj;
 
@@ -59,6 +59,13 @@ namespace Nakajima.Weapon
         [SerializeField, Header("<武器の回転速度>")]
         private float rotateSpeed;
 
+        // 武器を生成可能かどうか
+        private bool canCreate = true;
+        public bool CanCreate
+        {
+            set { canCreate = value; }
+            get { return canCreate; }
+        }
         // 武器を展開中かどうか
         private bool isUnfold;
         public bool WeaponUnfold
@@ -73,7 +80,7 @@ namespace Nakajima.Weapon
         public void Create()
         {
             // 既に展開中ならリターン
-            if (WeaponUnfold == true) return;
+            if (WeaponUnfold == true || CanCreate == false) return;
 
             // ステートごとの生成方法で実行
             switch (currentState)
@@ -177,6 +184,7 @@ namespace Nakajima.Weapon
 
             // 要素から削除
             createWeaponList.RemoveAll(s => s == null);
+            createWeaponList.Clear();
         }
     }
 }

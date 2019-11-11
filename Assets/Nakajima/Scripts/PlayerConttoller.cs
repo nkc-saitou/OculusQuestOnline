@@ -31,6 +31,12 @@ namespace Nakajima.Player
             myRig = GetComponent<Rigidbody>();
             myMovement = GetComponent<MovementComponetBase>();
             weaponCreate = GetComponent<WeaponCreate>();
+
+            // イベントをバインド
+            myHand[0].grabWeapon += SetDominant;
+            myHand[1].grabWeapon += SetDominant;
+            myHand[1].oppositeWeapon += SetOpposite;
+            myHand[1].oppositeWeapon += SetOpposite;
         }
         
         void Update()
@@ -49,6 +55,15 @@ namespace Nakajima.Player
             if (OVRInput.GetDown(OVRInput.RawButton.X))
             {
                 weaponCreate.Create();
+            }
+            if (OVRInput.GetDown(OVRInput.RawButton.Y))
+            {
+                foreach(PlayerHand _hand in myHand)
+                {
+                    if (_hand.DeleteWeapon()){
+                        weaponCreate.CanCreate = true;
+                    }
+                }
             }
         }
 
@@ -75,6 +90,37 @@ namespace Nakajima.Player
             myMovement.Move(inputVec);
             // 移動
             myRig.velocity = myMovement.Velocity;
+        }
+
+        /// <summary>
+        /// 利き手の設定
+        /// </summary>
+        /// <param name="_hand">利き手</param>
+        /// <param name="_weapon">武器</param>
+        private void SetDominant(PlayerHand _hand, GameObject _weapon)
+        {
+            
+        }
+
+        /// <summary>
+        /// 反対の手の設定
+        /// </summary>
+        /// <param name="_hand">利き手</param>
+        /// <param name="_weapon">武器</param>
+        private void SetOpposite(PlayerHand _hand, GameObject _weapon)
+        {
+            if (_weapon == null) return;
+
+            if (_hand.myTouch == OVRInput.RawButton.LHandTrigger)
+            {
+                myHand[0].SetWeapon(_weapon);
+            }
+            else if (_hand.myTouch == OVRInput.RawButton.RHandTrigger)
+            {
+                myHand[1].SetWeapon(_weapon);
+            }
+
+            weaponCreate.CanCreate = false;
         }
     }
 }

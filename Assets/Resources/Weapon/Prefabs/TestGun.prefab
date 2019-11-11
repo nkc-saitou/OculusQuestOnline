@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3074368199521956848}
   - component: {fileID: 7775335077187220459}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: TestGun
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -49,8 +49,7 @@ MonoBehaviour:
   _weaponData: {fileID: 11400000, guid: 36d851d3983d5ef42a6ffacb55a1a71b, type: 2}
   _weaponModules:
   - {fileID: 2552468536194577489, guid: 28aaeaae80c4e30469de7c05478147a7, type: 3}
-  _otherWeapon: {fileID: 2063658209161802891, guid: c15bb3e6d112d5042b95bff34b23dd47,
-    type: 3}
+  _otherWeapon: {fileID: 7775335077187220459}
 --- !u!1 &272615529343246696
 GameObject:
   m_ObjectHideFlags: 0
@@ -63,7 +62,7 @@ GameObject:
   - component: {fileID: 2208349374681755651}
   - component: {fileID: 9186348891510701158}
   - component: {fileID: 1971681839831440511}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Cube (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -154,7 +153,7 @@ GameObject:
   - component: {fileID: 1332588531499098073}
   - component: {fileID: 532348060471771826}
   - component: {fileID: 7255571077477021756}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Cube
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -242,7 +241,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8403012932325861857}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: '[ShotAnchor]'
   m_TagString: Untagged
   m_Icon: {fileID: 0}
