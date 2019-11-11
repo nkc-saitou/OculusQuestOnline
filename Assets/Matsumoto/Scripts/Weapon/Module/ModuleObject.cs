@@ -6,7 +6,7 @@ namespace Matsumoto.Weapon {
 	public abstract class ModuleObject : MonoBehaviour {
 
 		public abstract WeaponModuleData ModuleData {
-				get; set;
+			get; set;
 		}
 	}
 

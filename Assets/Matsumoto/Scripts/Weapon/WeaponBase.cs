@@ -18,6 +18,15 @@ namespace Matsumoto.Weapon {
 			get { return _weaponModules; }
 		}
 
+		[SerializeField]
+		protected WeaponBase _otherWeapon;
+		public WeaponBase OtherWeapon {
+			get { return _otherWeapon; }
+			set { _otherWeapon = value; }
+		}
+
+		public virtual void Initialize() { }
+
 		public virtual UniTask Destroy() {
 			Destroy(gameObject);
 			return new UniTask();
@@ -48,6 +57,7 @@ namespace Matsumoto.Weapon {
 		public virtual void OnStickAnalogValue(OVRInput.Axis2D type, Vector2 axis) {}
 
 		public virtual void OnTriggerAnalogValue(OVRInput.Axis1D type, float axis) {}
+
 	}
 }
 
