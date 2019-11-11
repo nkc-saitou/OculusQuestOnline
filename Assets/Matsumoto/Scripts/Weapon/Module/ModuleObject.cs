@@ -9,9 +9,9 @@ namespace Matsumoto.Weapon {
 			get; set;
 		}
 
-		public abstract WeaponModuleData MagnificationData {
-			get; set;
-		}
+		public virtual ModuleDataModular Modular {
+			get;
+		} = new ModuleDataModular();
 
 	}
 

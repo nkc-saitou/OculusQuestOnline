@@ -16,14 +16,12 @@ namespace Matsumoto.Weapon {
 			get; set;
 		}
 
-		public override WeaponModuleData MagnificationData {
-			get; set;
-		}
+
 
 		private void Start() {
 
 			Destroy(gameObject, LifeTime);
-			_rigidbody.AddForce(transform.forward * ModuleData.Speed * MagnificationData.Speed);
+			_rigidbody.AddForce(transform.forward * ModuleData.Speed * Modular.Speed);
 		}
 
 		private void Update() {

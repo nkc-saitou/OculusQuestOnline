@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 868784991734430658}
   - component: {fileID: 6244768592357236839}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: ThrowModule
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -44,5 +44,5 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _moduleData: {fileID: 11400000, guid: b4dfd31f6d99c654fb9466ae823de780, type: 2}
-  _bomb: {fileID: 0}
+  _bomb: {fileID: 3240199284442222847, guid: 2fda9fca5eecefc41af8db07a49f4afd, type: 3}
   _sampleCount: 10

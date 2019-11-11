@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 1501399415822569855}
   - component: {fileID: 8368140351752896530}
   - component: {fileID: 7853155505656965402}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Sphere
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -87,7 +87,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2517432234520250422}
   - component: {fileID: 2486608213641274039}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: TestBomb
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -134,7 +134,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1826153445985286373}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Body
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -170,7 +170,7 @@ GameObject:
   - component: {fileID: 7277258267231920860}
   - component: {fileID: 8678657658671651953}
   - component: {fileID: 3219115096213846932}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Cube (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -247,7 +247,7 @@ GameObject:
   - component: {fileID: 7255279222675527029}
   - component: {fileID: 239052928800193632}
   - component: {fileID: 6693155406368917749}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Cube
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -322,7 +322,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7266978106082399627}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: '[ShotAnchor]'
   m_TagString: Untagged
   m_Icon: {fileID: 0}

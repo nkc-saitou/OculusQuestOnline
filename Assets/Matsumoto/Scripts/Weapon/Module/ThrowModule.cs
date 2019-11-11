@@ -15,7 +15,7 @@ namespace Matsumoto.Weapon {
 
 		private Transform _throwAnchor;
 		private Vector3 _prevPosition;
-		private List<Vector3> _samples;
+		private List<Vector3> _samples = new List<Vector3>();
 
 		private void Update() {
 
@@ -62,8 +62,7 @@ namespace Matsumoto.Weapon {
 
 			var b = Instantiate(_bomb, _throwAnchor.position, _throwAnchor.rotation);
 			b.ModuleData = _moduleData;
-			b.MagnificationData = new WeaponModuleData();
-			b.MagnificationData.Speed = throwVector.magnitude;
+			b.Modular.Speed = throwVector.magnitude;
 		}
 
 		private Vector3 CalcThrowVector() {
