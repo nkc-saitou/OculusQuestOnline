@@ -147,31 +147,20 @@ namespace Nakajima.Weapon
             if (WeaponUnfold == false) {
                 spawnObj = Instantiate(weaponList[0], spawnOriginObj_Display.transform);
             }
+            else {
+                spawnObj.transform.position = spawnOriginObj_Display.transform.position;
+            }
 
             // コントローラーの角度を実際の角度に
             float angle = 180.0f * controllerAngle;
             int angleState = (int)angle / (int)angleDiff;
-            switch (angleState) {
-                case 0:
-                    if(spawnObj != weaponList[0]) {
-                        Destroy(spawnObj);
-                        spawnObj = Instantiate(weaponList[0], spawnOriginObj_Display.transform);
-                    }
-                    break;
-                case 1:
-                    if (spawnObj != weaponList[1]) {
-                        Destroy(spawnObj);
-                        spawnObj = Instantiate(weaponList[1], spawnOriginObj_Display.transform);
-                    }
-                    break;
-                case 2:
-                    if (spawnObj != weaponList[2]) {
-                        Destroy(spawnObj);
-                        spawnObj = Instantiate(weaponList[2], spawnOriginObj_Display.transform);
-                    }
-                    break;
-                default:
-                    break;
+            if(angleState <= weaponList.Count) {
+                if (angleState < 0) angleState = angleState + 6;
+                Destroy(spawnObj);
+                createWeaponList.Remove(spawnObj);
+
+                spawnObj = Instantiate(weaponList[angleState], spawnOriginObj_Display.transform.position, Quaternion.identity);
+                createWeaponList.Add(spawnObj);
             }
             WeaponUnfold = true;
         }

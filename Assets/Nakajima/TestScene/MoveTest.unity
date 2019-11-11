@@ -133,9 +133,9 @@ GameObject:
   - component: {fileID: 6670116}
   - component: {fileID: 6670115}
   - component: {fileID: 6670120}
-  - component: {fileID: 6670114}
   - component: {fileID: 6670119}
   - component: {fileID: 6670121}
+  - component: {fileID: 6670114}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -152,9 +152,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 6670113}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d85a3e02da0053f46982da327cfb464d, type: 3}
+  m_Script: {fileID: 11500000, guid: 8e84d4cc5ab159c4cbba53108a5899ed, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  myHand:
+  - {fileID: 551617714}
+  - {fileID: 376930505}
 --- !u!65 &6670115
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -163,7 +166,7 @@ BoxCollider:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6670113}
   m_Material: {fileID: 0}
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
   m_Size: {x: 1, y: 1, z: 1}
@@ -275,7 +278,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 72589c3757a35fa45a36659c7560b34c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  currentState: 0
+  currentState: 1
   spawnOriginObj_Circle: {fileID: 1303944857}
   spawnOriginObj_Display: {fileID: 376930504}
   weaponList:
@@ -482,12 +485,36 @@ GameObject:
     type: 3}
   m_PrefabInstance: {fileID: 1422088560039094007}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &376930505 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 1422088560769224798, guid: 5818a0a4ea58332419d00a698b4bd4cd,
+    type: 3}
+  m_PrefabInstance: {fileID: 1422088560039094007}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 376930504}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e564c9f0f31e88c4c895a738d5e2f5fa, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &376941718 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 1422088560272558689, guid: 5818a0a4ea58332419d00a698b4bd4cd,
     type: 3}
   m_PrefabInstance: {fileID: 1422088560039094007}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &551617714 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 1422088560098973095, guid: 5818a0a4ea58332419d00a698b4bd4cd,
+    type: 3}
+  m_PrefabInstance: {fileID: 1422088560039094007}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e564c9f0f31e88c4c895a738d5e2f5fa, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &705507993
 GameObject:
   m_ObjectHideFlags: 0
@@ -983,26 +1010,6 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 1422088560098973112, guid: 5818a0a4ea58332419d00a698b4bd4cd,
-        type: 3}
-      propertyPath: m_IsTrigger
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1422088560098973112, guid: 5818a0a4ea58332419d00a698b4bd4cd,
-        type: 3}
-      propertyPath: m_Radius
-      value: 0.1
-      objectReference: {fileID: 0}
-    - target: {fileID: 1422088560769224797, guid: 5818a0a4ea58332419d00a698b4bd4cd,
-        type: 3}
-      propertyPath: m_IsTrigger
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1422088560769224797, guid: 5818a0a4ea58332419d00a698b4bd4cd,
-        type: 3}
-      propertyPath: m_Radius
-      value: 0.1
-      objectReference: {fileID: 0}
     - target: {fileID: 1422088560769224798, guid: 5818a0a4ea58332419d00a698b4bd4cd,
         type: 3}
       propertyPath: myTouch
@@ -1025,5 +1032,25 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 151061625077218210, guid: 5877dc5a617738a4996842db317be39c,
         type: 3}
+    - target: {fileID: 1422088560098973112, guid: 5818a0a4ea58332419d00a698b4bd4cd,
+        type: 3}
+      propertyPath: m_IsTrigger
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1422088560098973112, guid: 5818a0a4ea58332419d00a698b4bd4cd,
+        type: 3}
+      propertyPath: m_Radius
+      value: 0.1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1422088560769224797, guid: 5818a0a4ea58332419d00a698b4bd4cd,
+        type: 3}
+      propertyPath: m_IsTrigger
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1422088560769224797, guid: 5818a0a4ea58332419d00a698b4bd4cd,
+        type: 3}
+      propertyPath: m_Radius
+      value: 0.2
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 5818a0a4ea58332419d00a698b4bd4cd, type: 3}
