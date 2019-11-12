@@ -73,6 +73,15 @@ namespace Matsumoto.Extensions {
 			// 行列数（Vector3データの解析なので3x3行列）
 			int N = aMatrix.GetLength(0);
 
+			Debug.Log("aMatrix");
+			for(int i = 0;i < N;i++) {
+				var str = "";
+				for(int j = 0;j < N;j++) {
+					str += aMatrix[i, j] + " ";
+				}
+				Debug.Log(str);
+			}
+
 			// L行列(零行列に初期化)
 			float[,] lMatrix = new float[N, N];
 			for(int i = 0;i < N;i++) {
@@ -102,6 +111,7 @@ namespace Matsumoto.Extensions {
 				int n = N - i - 1;
 
 				float l0 = lMatrix[i, i] = aMatrix[0, 0];
+				Debug.Log("l0 :" + l0);
 
 				// l1成分をコピー
 				float[] l1 = new float[n];
@@ -132,6 +142,22 @@ namespace Matsumoto.Extensions {
 
 				// A1を新しいaMatrixとして利用する
 				aMatrix = A1;
+			}
+
+			for(int i = 0;i < N;i++) {
+				var str = "";
+				for(int j = 0;j < N;j++) {
+					str += lMatrix[i, j] + " ";
+				}
+				Debug.Log(str);
+			}
+			Debug.Log("");
+			for(int i = 0;i < N;i++) {
+				var str = "";
+				for(int j = 0;j < N;j++) {
+					str += uMatrix[i, j] + " ";
+				}
+				Debug.Log(str);
 			}
 
 			// 求めたLU行列を使って連立方程式を解く

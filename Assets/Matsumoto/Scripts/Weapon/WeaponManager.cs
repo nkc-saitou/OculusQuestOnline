@@ -85,6 +85,26 @@ namespace Matsumoto.Weapon {
 		public void OverrideData() {
 			WeaponDataDownloader.OverrideDataAll().Forget();
 		}
+
+		[ContextMenu("Calc")]
+		public void Calc() {
+			var data = Extensions.MathExtensions.LUDecomposition(new float[,] {
+				{ 8, 16, 24 ,32 },
+				{ 2, 7, 12 ,17 },
+				{ 6, 17, 32 ,59 },
+				{ 7, 22, 46 ,105 }},
+				new float[] {
+					160, 70, 198, 291
+				});
+
+			var str = "";
+			for(int i = 0;i < data.Length;i++) {
+				str += data[i] + " ";
+			}
+			Debug.Log(str);
+
+		}
+
 	}
 
 

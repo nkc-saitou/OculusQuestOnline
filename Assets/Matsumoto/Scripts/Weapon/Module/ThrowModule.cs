@@ -20,7 +20,8 @@ namespace Matsumoto.Weapon {
 		private void Update() {
 
 			// Sample Vec
-			_samples.Add(transform.position - _prevPosition);
+			_samples.Add((transform.position - _prevPosition));
+			_prevPosition = transform.position;
 
 			if(_samples.Count > _sampleCount) {
 				_samples.RemoveAt(0);
@@ -57,8 +58,10 @@ namespace Matsumoto.Weapon {
 				return;
 			}
 
-			var throwVector = CalcThrowVector();
+			var throwVector = CalcThrowVector() * 10;
+			Debug.Log("throwVec :" + throwVector);
 			_throwAnchor.forward = throwVector;
+			Debug.DrawLine(_throwAnchor.position, _throwAnchor.position + throwVector, Color.red, 1);
 
 			var b = Instantiate(_bomb, _throwAnchor.position, _throwAnchor.rotation);
 			b.ModuleData = _moduleData;
@@ -69,18 +72,23 @@ namespace Matsumoto.Weapon {
 
 			var lastVector = _samples.Last();
 
+			DebugLine(_samples.ToArray(), Color.white);
+
 			// 計算に使うベクトルを求める
 			var tmpSamples = _samples
 				// 最後から見て後ろ向きのベクトルを除外
 				.Where(item => Vector3.Dot(item, lastVector) > 0)
 				.Select(item => (item, item.sqrMagnitude));
 
+			DebugLine(tmpSamples.Select(item => item.item).ToArray(), Color.red);
+
+
 			// 標準偏差を求める
 			var sum = 0.0f;
 			var sum2 = 0.0f;
 			foreach(var item in tmpSamples) {
-				sum += item.sqrMagnitude;
-				sum2 += item.sqrMagnitude * item.sqrMagnitude;
+				sum += item.Item2;
+				sum2 += item.Item2 * item.Item2;
 			}
 
 			var avg = sum / tmpSamples.Count();
@@ -90,7 +98,7 @@ namespace Matsumoto.Weapon {
 				// 偏差値を求め、一定の偏差値を持つものを信頼するベクトルとして採用する
 				.Where(item => {
 
-					var diffSum = item.sqrMagnitude - avg;
+					var diffSum = item.Item2 - avg;
 					var diffDev = Mathf.Abs(diffSum) * 10 / normalDev;
 
 					// 偏差値を求める
@@ -101,31 +109,64 @@ namespace Matsumoto.Weapon {
 					else if(diffSum < 0) {
 						dev -= diffDev;
 					}
+					Debug.Log("dev" + dev);
 
 					// 偏差値60以上の値のみを利用
-					return dev >= 60;
+					return dev >= 55;
 				})
 				.Select(item => item.item)
 				.ToArray();
 
+			DebugLine(filteredSamples.ToArray(), Color.yellow);
+
 			// ローパスフィルター
-			var ratio = 0.8f;
-			for(int i = 1;i < filteredSamples.Length;i++) {
-				filteredSamples[i] = ratio * filteredSamples[i - 1] + (1 - ratio) * filteredSamples[i];
-				filteredSamples[i - 1] = filteredSamples[i];
+			//var ratio = 0.8f;
+			//for(int i = 1;i < filteredSamples.Length;i++) {
+			//	filteredSamples[i] = ratio * filteredSamples[i - 1] + (1 - ratio) * filteredSamples[i];
+			//	filteredSamples[i - 1] = filteredSamples[i];
+			//}
+
+			DebugLine(filteredSamples, Color.green);
+			Debug.Log("count : " + filteredSamples.Length);
+			for(int i = 0;i < filteredSamples.Length;i++) {
+				Debug.Log("item[" + i + "] : " + filteredSamples[i]);
 			}
 
 			// 最小二乗平面を用いた推測値を元に速度を求める
-			float[] result = Extensions.MathExtensions.CalcLeastSquaresPlane(filteredSamples);
-			float a = result[0];
-			float b = result[1];
-			float c = result[2];
+			var result = Extensions.MathExtensions.CalcLeastSquaresPlane(filteredSamples);
+			var a = result[0];
+			var b = result[1];
+			var c = result[2];
+
+			Debug.Log($"{a},{b},{c}");
 
 			// サンプリングした最後のデータを用いて、理想平面の値を求める
-			float y = a + (b * lastVector.x) + (c * lastVector.z);
+			//var v = filteredSamples.Last();
+
+			//if(float.IsNaN(y)) {
+			//	y = 0;
+			//}
+
+			var plane = new Vector3(a, b, c);
+			var last = filteredSamples.Last();
+			var y = a + (b * last.x) + (c * last.z);
+			Debug.DrawLine(new Vector3(), last, Color.magenta, 1);
+			Debug.DrawLine(new Vector3(), plane, Color.blue, 1);
+			var throwVec = Vector3.ProjectOnPlane(last, plane);
+			Debug.DrawLine(new Vector3(), throwVec, Color.cyan, 1);
+			Debug.DrawLine(new Vector3(), new Vector3(last.x, y, last.z), Color.white, 1);
+
 
 			// 実際に利用したいデータ
-			return new Vector3(lastVector.x, y, lastVector.z);
+			return throwVec;
+		}
+
+		private void DebugLine(Vector3[] points, Color color) {
+
+			for(int i = 0;i < points.Length;i++) {
+				Debug.DrawLine(new Vector3(), points[i], color, 1);
+			}
+
 		}
 	}
 }

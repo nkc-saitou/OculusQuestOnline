@@ -150,6 +150,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   RotateSpeed: 0
+  SinSpeed: 0
   RotateVec: {x: 0, y: 0, z: 0}
 --- !u!4 &79606151
 Transform:
