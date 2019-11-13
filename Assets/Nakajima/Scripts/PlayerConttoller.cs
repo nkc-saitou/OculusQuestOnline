@@ -119,8 +119,6 @@ namespace Nakajima.Player
             {
                 myHand[1].SetWeapon(_weapon);
             }
-
-            weaponCreate.CanCreate = false;
         }
     }
 }

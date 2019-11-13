@@ -282,10 +282,10 @@ MonoBehaviour:
   spawnOriginObj_Circle: {fileID: 1303944857}
   spawnOriginObj_Display: {fileID: 376930504}
   weaponList:
-  - {fileID: 277980463488806656, guid: 7898a344b9039534f87123c48aa2495c, type: 3}
-  - {fileID: 4664926140785632432, guid: 8ed867df5e327e94aa3086dda6a362be, type: 3}
-  - {fileID: 2774092841041856841, guid: ae900dcbf3690cb44a53187ed9bff796, type: 3}
-  - {fileID: 6041041907838705981, guid: 000719c32141d19429d12c2f7eb37b35, type: 3}
+  - {fileID: 7736314363512946226, guid: e764e101858569c46ae3ccb193c0da19, type: 3}
+  - {fileID: 7736314363512946226, guid: e764e101858569c46ae3ccb193c0da19, type: 3}
+  - {fileID: 7736314363512946226, guid: e764e101858569c46ae3ccb193c0da19, type: 3}
+  - {fileID: 7736314363512946226, guid: e764e101858569c46ae3ccb193c0da19, type: 3}
   - {fileID: 1353050716332709435, guid: 87acb058fbc9a34449a5dd79d6186898, type: 3}
   - {fileID: 1448808920471177366, guid: b353011f4b2272349a26fcdb6e73790a, type: 3}
   createWeaponList: []

@@ -100,6 +100,7 @@ namespace Nakajima.Player
                     hasObj.transform.localRotation = Quaternion.identity;
 
                     HasWeapon = true;
+                    weaponCreate.CanCreate = false;
                     oppositeWeapon(this, handList[1].GetBody());
                     break;
                 }
