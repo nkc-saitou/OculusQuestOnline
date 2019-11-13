@@ -114,23 +114,28 @@ namespace Saitou.Network
             JoinOrCreateRoom().Forget();
         }
 
+        public override void OnJoinedRoom()
+        {
+            Debug.Log("ルームへ入室しました。");
+
+            TestOnlineData.PlayerID = PhotonNetwork.PlayerList.Length;
+
+            text.text = "ルーム入室済";
+            onInRoomSub.OnNext(Unit.Default);
+        }
+
         /// <summary>
         ///  2. 部屋に入室する （存在しなければ作成して入室する）
         /// </summary>
         public async UniTask JoinOrCreateRoom()
         {
-            Debug.Log("ルームへ入室しました。");
             IsInRoom.Value = true;
 
             // 入室 (存在しなければ部屋を作成して入室する)
             if (PhotonNetwork.InLobby)
             {
-                Debug.Log("ルーム存在しません。ルームを作成します。");
                 await UniTask.WaitUntil(() => PhotonNetwork.JoinOrCreateRoom(roomName, roomOptions, TypedLobby.Default));
             }
-
-            text.text = "ルーム入室済";
-            onInRoomSub.OnNext(Unit.Default);
         }
     }
 }
