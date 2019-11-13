@@ -9,6 +9,12 @@ public class Player_test : MonoBehaviourPunCallbacks
     List<GameObject> primitivelist =new List<GameObject>();
 
     public Text testText;
+    Sanoki.Online.GameStartSystem gs;
+
+    private void Start()
+    {
+        gs = FindObjectOfType<Sanoki.Online.GameStartSystem>();
+    }
 
     // 部屋に入室した時
     public override void OnJoinedRoom()
@@ -28,6 +34,11 @@ public class Player_test : MonoBehaviourPunCallbacks
     void Update()
     {
         testText.text = "入室人数: " + PhotonNetwork.PlayerList.Length.ToString() + " / 2";
+
+        if (Input.GetKeyDown(KeyCode.G))
+        {
+            gs.Entry();
+        }
 
         if (Input.GetKeyDown(KeyCode.Z))
         {

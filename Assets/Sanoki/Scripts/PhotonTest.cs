@@ -32,9 +32,6 @@ public class PhotonTest : MonoBehaviourPunCallbacks, IPunObservable
         switch(_value)
         {
             case int n:
-                //ValueType tmpValue = new ValueType();
-                //tmpValue._int = n;
-                //type.Add(tmpValue);
                 _int.Add(n);
                 break;
 
@@ -69,29 +66,11 @@ public class PhotonTest : MonoBehaviourPunCallbacks, IPunObservable
     {
         if (stream.IsWriting)
         {
-            if (_int.Count != 0)
-            {
-                foreach (int n in _int)
-                {
-                    stream.SendNext(n);
-                }
-            }
-            foreach (float f in _float)
-            {
-                stream.SendNext(f);
-            }
-            foreach (bool flg in _bool)
-            {
-                stream.SendNext(flg);
-            }
-            foreach (char c in _char)
-            {
-                stream.SendNext(c);
-            }
-            foreach (Vector3 vec in _vec)
-            {
-                stream.SendNext(vec);
-            }
+            foreach (int n in _int)         stream.SendNext(n);
+            foreach (float f in _float)     stream.SendNext(f);
+            foreach (bool flg in _bool)     stream.SendNext(flg);
+            foreach (char c in _char)       stream.SendNext(c);
+            foreach (Vector3 vec in _vec)   stream.SendNext(vec);
         }
         else
         {
@@ -103,39 +82,17 @@ public class PhotonTest : MonoBehaviourPunCallbacks, IPunObservable
             {
                 _float[i] = (float)stream.ReceiveNext();
             }
-        }
-    }
-     
-    void SetValue<T>(List<T> _value)
-    {
-        if (_value.Count != 0)
-        {
-            switch (_value)
+            for(int i = 0; i < _bool.Count; i++)
             {
-                case List<int> n:
-                    foreach (int i in n)
-                    {
-                    }
-                    break;
-
-                case float f:
-                    _float.Add(f);
-                    break;
-
-                case bool flg:
-                    _bool.Add(flg);
-                    break;
-
-                case char c:
-                    _char.Add(c);
-                    break;
-
-                case Vector3 vec:
-                    _vec.Add(vec);
-                    break;
-
-                default:
-                    break;
+                _bool[i] = (bool)stream.ReceiveNext();
+            }
+            for(int i = 0; i < _char.Count; i++)
+            {
+                _char[i] = (char)stream.ReceiveNext();
+            }
+            for(int i=0; i < _vec.Count; i++)
+            {
+                _vec[i] = (Vector3)stream.ReceiveNext();
             }
         }
     }

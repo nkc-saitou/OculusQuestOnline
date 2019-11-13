@@ -3,6 +3,7 @@ using Photon.Pun;
 using Photon.Realtime;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 /// <summary>
 /// 
@@ -14,7 +15,7 @@ using UnityEngine;
 /// 
 /// </summary>
 
-namespace Sanoki.OnlineManager
+namespace Sanoki.Online
 {
     public class NetworkManager : MonoBehaviourPunCallbacks
     {
@@ -45,6 +46,8 @@ namespace Sanoki.OnlineManager
         // ルームリスト
         private List<RoomInfo> roomInfoList = new List<RoomInfo>();
 
+        public Text PlayerID;
+        public Text connect_text;
 
         /////////////////////////////////////////////////////////////////////////////////////
         // Awake & Start ////////////////////////////////////////////////////////////////////
@@ -344,7 +347,8 @@ namespace Sanoki.OnlineManager
         public override void OnJoinedLobby()
         {
             Debug.Log("OnJoinedLobby");
-            JoinOrCreateRoom();
+            connect_text.text = "ロビー接続完了";
+            //JoinOrCreateRoom();
         }
 
 
@@ -383,6 +387,10 @@ namespace Sanoki.OnlineManager
                 Debug.Log("Difficulty: " + PhotonNetwork.CurrentRoom.CustomProperties["Difficulty"] as string);
                 Debug.Log("Slots: " + PhotonNetwork.CurrentRoom.PlayerCount + " / " + PhotonNetwork.CurrentRoom.MaxPlayers);
             }
+
+            Sanoki.Online.OnlineData.PlayerID = PhotonNetwork.PlayerList.Length;
+            Debug.Log(Sanoki.Online.OnlineData.PlayerID);
+            PlayerID.text = "Player" + Sanoki.Online.OnlineData.PlayerID;
         }
 
 
