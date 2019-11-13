@@ -13,6 +13,9 @@ namespace Matsumoto.Weapon {
 		[SerializeField]
 		private int _sampleCount;
 
+		[SerializeField]
+		private float _throwPower = 100;
+
 		private Transform _throwAnchor;
 		private Vector3 _prevPosition;
 		private List<Vector3> _samples = new List<Vector3>();
@@ -58,7 +61,7 @@ namespace Matsumoto.Weapon {
 				return;
 			}
 
-			var throwVector = CalcThrowVector() * 10;
+			var throwVector = CalcThrowVector() * _throwPower;
 			Debug.Log("throwVec :" + throwVector);
 			_throwAnchor.forward = throwVector;
 			Debug.DrawLine(_throwAnchor.position, _throwAnchor.position + throwVector, Color.red, 1);
@@ -120,11 +123,11 @@ namespace Matsumoto.Weapon {
 			DebugLine(filteredSamples.ToArray(), Color.yellow);
 
 			// ローパスフィルター
-			//var ratio = 0.8f;
-			//for(int i = 1;i < filteredSamples.Length;i++) {
-			//	filteredSamples[i] = ratio * filteredSamples[i - 1] + (1 - ratio) * filteredSamples[i];
-			//	filteredSamples[i - 1] = filteredSamples[i];
-			//}
+			var ratio = 0.8f;
+			for(int i = 1;i < filteredSamples.Length;i++) {
+				filteredSamples[i] = ratio * filteredSamples[i - 1] + (1 - ratio) * filteredSamples[i];
+				filteredSamples[i - 1] = filteredSamples[i];
+			}
 
 			DebugLine(filteredSamples, Color.green);
 			Debug.Log("count : " + filteredSamples.Length);
@@ -150,6 +153,9 @@ namespace Matsumoto.Weapon {
 			//var plane = new Vector3(a, b, c);
 			var last = filteredSamples.Last();
 			var y = a + (b * last.x) + (c * last.z);
+
+			if(float.IsNaN(y)) y = 0;
+
 			//Debug.DrawLine(new Vector3(), last, Color.magenta, 1);
 			//Debug.DrawLine(new Vector3(), plane, Color.blue, 1);
 			//Debug.DrawLine(new Vector3(), throwVec, Color.cyan, 1);
