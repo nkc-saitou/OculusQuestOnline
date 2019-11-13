@@ -147,16 +147,14 @@ namespace Matsumoto.Weapon {
 			//	y = 0;
 			//}
 
-			var plane = new Vector3(a, b, c);
+			//var plane = new Vector3(a, b, c);
 			var last = filteredSamples.Last();
 			var y = a + (b * last.x) + (c * last.z);
-			Debug.DrawLine(new Vector3(), last, Color.magenta, 1);
-			Debug.DrawLine(new Vector3(), plane, Color.blue, 1);
-			var throwVec = Vector3.ProjectOnPlane(last, plane);
-			Debug.DrawLine(new Vector3(), throwVec, Color.cyan, 1);
-			Debug.DrawLine(new Vector3(), new Vector3(last.x, y, last.z), Color.white, 1);
-
-
+			//Debug.DrawLine(new Vector3(), last, Color.magenta, 1);
+			//Debug.DrawLine(new Vector3(), plane, Color.blue, 1);
+			//Debug.DrawLine(new Vector3(), throwVec, Color.cyan, 1);
+			//Debug.DrawLine(new Vector3(), new Vector3(last.x, y, last.z), Color.white, 1);
+			var throwVec = new Vector3(last.x, y, last.z);
 			// 実際に利用したいデータ
 			return throwVec;
 		}
