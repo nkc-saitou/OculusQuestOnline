@@ -53,15 +53,16 @@ namespace Matsumoto.Weapon {
 		}
 
 		public void Update() {
-			//if(Input.GetKeyDown(KeyCode.I)) {
-			//	OnButtonDown(OVRInput.Button.One);
-			//}
 
 			if(Input.GetKeyUp(KeyCode.I)) {
 				OnButtonUp(OVRInput.Button.One);
 			}
 		}
 
+		[ContextMenu("DownOne")]
+		private void DownOne() {
+			OnButtonDown(OVRInput.Button.One);
+		}
 
 		public override void OnButton(OVRInput.Button button) {
 			_onButton.OnNext(button);
