@@ -11,7 +11,10 @@ namespace Matsumoto.Weapon {
 
 		[SerializeField]
 		private Rigidbody _rigidbody;
-		
+
+		[SerializeField]
+		private EffectObject _hitEffect;
+
 
 		private EffectObject _effect;
 
@@ -37,11 +40,16 @@ namespace Matsumoto.Weapon {
 
 		private void OnCollisionEnter(Collision collision) {
 			_effect.DestroyEffect();
+			var e = Instantiate(_hitEffect, transform.position, transform.rotation);
+			e.Invoke(nameof(e.DestroyEffect), 3);
+
 			Destroy(gameObject);
 		}
 
 		private void OnTriggerEnter(Collider other) {
 			_effect.DestroyEffect();
+			var e = Instantiate(_hitEffect, transform.position, transform.rotation);
+			e.Invoke(nameof(e.DestroyEffect), 3);
 			Destroy(gameObject);
 		}
 	}

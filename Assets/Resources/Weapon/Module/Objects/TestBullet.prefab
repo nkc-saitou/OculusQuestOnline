@@ -70,6 +70,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   LifeTime: 10
   _rigidbody: {fileID: -3099233191794227935}
+  _hitEffect: {fileID: 3730289525931832095, guid: 23ab1574a61efe247900f71616dc7b8a,
+    type: 3}
 --- !u!54 &-3099233191794227935
 Rigidbody:
   m_ObjectHideFlags: 0

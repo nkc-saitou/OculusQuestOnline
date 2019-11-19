@@ -4902,7 +4902,7 @@ TrailRenderer:
     textureMode: 0
     shadowBias: 0.5
     generateLightingData: 0
-  m_MinVertexDistance: 3
+  m_MinVertexDistance: 0.2
   m_Autodestruct: 0
   m_Emitting: 1
 --- !u!1 &6037839348682643576
@@ -4951,5 +4951,4 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Effects:
-  - {fileID: 6037839348626668835}
-  - {fileID: 6037839347422120266}
+  - {fileID: 6037839347422120311}

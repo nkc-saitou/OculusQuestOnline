@@ -4,21 +4,26 @@ using UnityEngine;
 
 public class EffectObject : MonoBehaviour
 {
-    public GameObject[] Effects;
+    public ParticleSystem[] Effects;
 
-    public void DestroyEffect()
+	public void PlayEffect() {
+		foreach(var item in Effects) {
+			item.Play();
+		}
+	}
+
+	public void DestroyEffect()
     {
-        foreach (var item in Effects)
-        {
-            item.transform.SetParent(null);
+		Destroy(gameObject, 10);
+		foreach(Transform item in transform) {
+			item.transform.SetParent(null);
+			Destroy(item.gameObject, 10);
+		}
 
-			var particle = item.GetComponent<ParticleSystem>();
-			if(particle) {
-				particle.Stop();
-			}
-
-			Destroy(item,10);
-        }
-    }
+		foreach(var item in Effects) {
+			item.transform.SetParent(null);
+			item.Stop();
+		}
+	}
 }
   

@@ -199,8 +199,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Effects:
-  - {fileID: 5705906908883684928}
-  - {fileID: 5705906909551917609}
+  - {fileID: 5705906909551917588}
 --- !u!1 &5705906909551917609
 GameObject:
   m_ObjectHideFlags: 0

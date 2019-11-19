@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using UniRx;
 
 namespace Matsumoto.Weapon {
 
@@ -7,6 +8,9 @@ namespace Matsumoto.Weapon {
 
 		[SerializeField]
 		private ModuleObject _bullet;
+
+		[SerializeField]
+		EffectObject _muzzle;
 
 		private Transform _shotAnchor;
 
@@ -38,6 +42,14 @@ namespace Matsumoto.Weapon {
 
 			var b = Instantiate(_bullet, _shotAnchor.position, _shotAnchor.rotation);
 			b.ModuleData = _moduleData;
+
+			var e = Instantiate(_muzzle, _shotAnchor);
+			e.transform.localPosition = new Vector3();
+			e.PlayEffect();
+
+			Observable.Timer(System.TimeSpan.FromSeconds(1)).Subscribe(_ => {
+				e.DestroyEffect();
+			}).AddTo(this);
 		}
 	}
 }
