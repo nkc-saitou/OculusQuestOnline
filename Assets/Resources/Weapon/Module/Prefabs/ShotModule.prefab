@@ -45,3 +45,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _moduleData: {fileID: 11400000, guid: 72ff831a437df4f4f8e386e3f19977ec, type: 2}
   _bullet: {fileID: 6287824836626435742, guid: 48e836ecbf3e27d4c94ba47f175260cf, type: 3}
+  _muzzle: {fileID: 7236786618123525392, guid: 51a7d7f90587c7343931009d1928fc00, type: 3}
