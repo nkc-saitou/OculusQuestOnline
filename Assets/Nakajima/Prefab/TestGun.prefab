@@ -51,6 +51,7 @@ MonoBehaviour:
   _weaponData: {fileID: 11400000, guid: 36d851d3983d5ef42a6ffacb55a1a71b, type: 2}
   _weaponModules:
   - {fileID: 2552468536194577489, guid: 28aaeaae80c4e30469de7c05478147a7, type: 3}
+  _otherWeapon: {fileID: 0}
 --- !u!114 &-1339367279162408989
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -64,8 +65,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   targetObj: {fileID: 0}
-  rotateSpeed: 0
-  offset: {x: 0, y: 0, z: 0}
+  rotateSpeed: 0.5
+  offset: {x: 0, y: 1, z: 0}
 --- !u!65 &154739930
 BoxCollider:
   m_ObjectHideFlags: 0
