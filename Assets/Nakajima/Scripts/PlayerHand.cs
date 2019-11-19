@@ -60,8 +60,8 @@ namespace Nakajima.Player
             {
                 if (HasWeapon) return;
 
-                GrabWeapon();
-                //photonView.RPC(nameof(GrabWeapon), RpcTarget.All);
+                //GrabWeapon();
+                photonView.RPC(nameof(GrabWeapon), RpcTarget.All);
             }
 
             WeaponAction();
@@ -81,11 +81,12 @@ namespace Nakajima.Player
         /// <summary>
         /// 武器を掴む
         /// </summary>
-        //[PunRPC]
+        [PunRPC]
         public void GrabWeapon()
         {
             // 何も触れていないならリターン
             if (hasObj == null) return;
+
 
             // 生成中の武器だったら装備する
             foreach (GameObject weapon in weaponCreate.createWeaponList)

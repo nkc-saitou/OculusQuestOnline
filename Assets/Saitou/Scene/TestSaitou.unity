@@ -834,5 +834,5 @@ MonoBehaviour:
   CreatePos:
   - {fileID: 1613653781}
   - {fileID: 811492678}
-  playerPrefab: {fileID: 1772957824174694589, guid: 663b7990e484e4e4c8e19a507b3dad8e,
+  playerPrefab: {fileID: 4843531762562746774, guid: f82b6345fae197b499cd6fb50233b3cc,
     type: 3}
