@@ -9,6 +9,10 @@ namespace Matsumoto.Weapon {
 
 		public float LifeTime = 10;
 
+		[SerializeField]
+		private Rigidbody _rigidbody;
+		
+
 		private EffectObject _effect;
 
 		public override WeaponModuleData ModuleData {
@@ -27,7 +31,18 @@ namespace Matsumoto.Weapon {
 		}
 
 		private void Update() {
-			transform.position += transform.forward * ModuleData.Speed * Time.deltaTime;
+			var pos = transform.position + transform.forward * ModuleData.Speed * Time.deltaTime;
+			_rigidbody.MovePosition(pos);
+		}
+
+		private void OnCollisionEnter(Collision collision) {
+			_effect.DestroyEffect();
+			Destroy(gameObject);
+		}
+
+		private void OnTriggerEnter(Collider other) {
+			_effect.DestroyEffect();
+			Destroy(gameObject);
 		}
 	}
 }

@@ -91,12 +91,6 @@ namespace Matsumoto.Weapon {
 
 		public override void OnButtonDown(OVRInput.Button button) {
 			base.OnButtonDown(button);
-
-
-			// 0番目のモジュールを使用
-			if(button == OVRInput.Button.One) {
-				_weaponModules[0].OnUseModule(this);
-			}
 		}
 
 		private void OnTriggerEnter(Collider other) {
