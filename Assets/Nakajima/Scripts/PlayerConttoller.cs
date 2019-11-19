@@ -51,11 +51,16 @@ namespace Nakajima.Player
         /// </summary>
         private void Actoin()
         {
-            // Xボタンで生成
-            if (OVRInput.GetDown(OVRInput.RawButton.X))
-            {
+            // Aボタンで生成法の切り替え
+            if (OVRInput.GetDown(OVRInput.RawButton.A)) {
+                weaponCreate.ChangeCreateState();
+            }
+            // Xボタンで武器生成
+            if (OVRInput.GetDown(OVRInput.RawButton.X)) {
                 weaponCreate.Create();
             }
+
+            // Yボタンで所持中の武器の削除
             if (OVRInput.GetDown(OVRInput.RawButton.Y))
             {
                 foreach(PlayerHand _hand in myHand)
