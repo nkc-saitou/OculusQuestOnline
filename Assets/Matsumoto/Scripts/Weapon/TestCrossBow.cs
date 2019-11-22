@@ -64,7 +64,7 @@ namespace Matsumoto.Weapon {
 				var diff = pos - _bowBody.position;
 				var rad = Vector3.Angle(diff, _bowBody.forward) * Mathf.Deg2Rad;
 
-				_length = Mathf.Cos(rad) * diff.magnitude;
+				_length = Mathf.Cos(rad) * diff.magnitude * _bowBody.localScale.x;
 				if(_length <= _maxLength) {
 					_hasArrow = false;
 					_isSettedArrow = true;
