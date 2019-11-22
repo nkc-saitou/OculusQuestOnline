@@ -4,6 +4,8 @@ using UnityEngine;
 using UnityEngine.XR;
 using Nakajima.Movement;
 using Nakajima.Weapon;
+using Saitou.Network;
+
 
 /// <summary>
 /// プレイヤークラス
@@ -16,7 +18,7 @@ namespace Nakajima.Player
         private MovementComponetBase myMovement;
 
         // 自身の手(0 右手、1 左手)
-        [SerializeField, Header("<自分の手(0 右手 1 左手)>")]
+        //[SerializeField, Header("<自分の手(0 右手 1 左手)>")]
         private PlayerHand[] myHand;
 
         // 武器生成
@@ -25,18 +27,35 @@ namespace Nakajima.Player
         private Rigidbody myRig;
         // 入力ベクター
         private Vector3 inputVec;
+
+        // オンライン用のプレイヤーの生成
+        private TestPlayerCreate testPlayerCreate;
         
         void Start()
         {
             myRig = GetComponent<Rigidbody>();
             myMovement = GetComponent<MovementComponetBase>();
             weaponCreate = GetComponent<WeaponCreate>();
+            testPlayerCreate = FindObjectOfType<TestPlayerCreate>();
 
-            // イベントをバインド
-            myHand[0].grabWeapon += SetDominant;
-            myHand[1].grabWeapon += SetDominant;
-            myHand[1].oppositeWeapon += SetOpposite;
-            myHand[1].oppositeWeapon += SetOpposite;
+            testPlayerCreate.OnPlayerCreate = (myHandArray) =>
+            {
+                myHand = myHandArray;
+
+                // イベントをバインド
+                myHand[0].grabWeapon += SetDominant;
+                myHand[1].grabWeapon += SetDominant;
+                myHand[0].oppositeWeapon += SetOpposite;
+                myHand[1].oppositeWeapon += SetOpposite;
+
+                Debug.Log("aaaa");
+            };
+
+            //// イベントをバインド
+            //myHand[0].grabWeapon += SetDominant;
+            //myHand[1].grabWeapon += SetDominant;
+            //myHand[1].oppositeWeapon += SetOpposite;
+            //myHand[1].oppositeWeapon += SetOpposite;
         }
         
         void Update()
