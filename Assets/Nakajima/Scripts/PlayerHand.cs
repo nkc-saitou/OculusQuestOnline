@@ -60,8 +60,8 @@ namespace Nakajima.Player
             {
                 if (HasWeapon) return;
 
-                //GrabWeapon();
-                photonView.RPC(nameof(GrabWeapon), RpcTarget.All);
+                GrabWeapon();
+                //photonView.RPC(nameof(GrabWeapon), RpcTarget.All);
             }
 
             WeaponAction();
@@ -81,7 +81,7 @@ namespace Nakajima.Player
         /// <summary>
         /// 武器を掴む
         /// </summary>
-        [PunRPC]
+        //[PunRPC]
         public void GrabWeapon()
         {
             // 何も触れていないならリターン
@@ -107,8 +107,10 @@ namespace Nakajima.Player
 
                     HasWeapon = true;
                     weaponCreate.CanCreate = false;
-                    var obj = handList[1].GetBody();
-                    oppositeWeapon?.Invoke(this, obj);
+                    if (handList.Length > 1) {
+                        var obj = handList[1].GetBody();
+                        oppositeWeapon?.Invoke(this, obj);
+                    }
                     break;
                 }
             }

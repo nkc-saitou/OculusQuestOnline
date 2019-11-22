@@ -18,7 +18,7 @@ namespace Nakajima.Player
         private MovementComponetBase myMovement;
 
         // 自身の手(0 右手、1 左手)
-        //[SerializeField, Header("<自分の手(0 右手 1 左手)>")]
+        [SerializeField, Header("<自分の手(0 右手 1 左手)>")]
         private PlayerHand[] myHand;
 
         // 武器生成
@@ -38,24 +38,26 @@ namespace Nakajima.Player
             weaponCreate = GetComponent<WeaponCreate>();
             testPlayerCreate = FindObjectOfType<TestPlayerCreate>();
 
-            testPlayerCreate.OnPlayerCreate = (myHandArray) =>
-            {
-                myHand = myHandArray;
+            // イベントをバインド
+            myHand[0].grabWeapon += SetDominant;
+            myHand[1].grabWeapon += SetDominant;
+            myHand[0].oppositeWeapon += SetOpposite;
+            myHand[1].oppositeWeapon += SetOpposite;
 
-                // イベントをバインド
-                myHand[0].grabWeapon += SetDominant;
-                myHand[1].grabWeapon += SetDominant;
-                myHand[0].oppositeWeapon += SetOpposite;
-                myHand[1].oppositeWeapon += SetOpposite;
+            //testPlayerCreate.OnPlayerCreate = (myHandArray) =>
+            //{
+            //    myHand = myHandArray;
 
-                Debug.Log("aaaa");
-            };
+            //    // イベントをバインド
+            //    myHand[0].grabWeapon += SetDominant;
+            //    myHand[1].grabWeapon += SetDominant;
+            //    myHand[0].oppositeWeapon += SetOpposite;
+            //    myHand[1].oppositeWeapon += SetOpposite;
 
-            //// イベントをバインド
-            //myHand[0].grabWeapon += SetDominant;
-            //myHand[1].grabWeapon += SetDominant;
-            //myHand[1].oppositeWeapon += SetOpposite;
-            //myHand[1].oppositeWeapon += SetOpposite;
+            //    Debug.Log("aaaa");
+            //};
+
+
         }
         
         void Update()
