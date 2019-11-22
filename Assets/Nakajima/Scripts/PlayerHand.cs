@@ -107,7 +107,8 @@ namespace Nakajima.Player
 
                     HasWeapon = true;
                     weaponCreate.CanCreate = false;
-                    oppositeWeapon(this, handList[1].GetBody());
+                    var obj = handList[1].GetBody();
+                    oppositeWeapon?.Invoke(this, obj);
                     break;
                 }
             }
