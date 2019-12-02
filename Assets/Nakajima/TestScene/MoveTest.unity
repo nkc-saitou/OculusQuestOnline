@@ -772,6 +772,16 @@ PrefabInstance:
       propertyPath: m_Name
       value: PlayerPod
       objectReference: {fileID: 0}
+    - target: {fileID: 2418936529340333378, guid: f82b6345fae197b499cd6fb50233b3cc,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8890896102997544264, guid: f82b6345fae197b499cd6fb50233b3cc,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 2973586410962714445, guid: f82b6345fae197b499cd6fb50233b3cc,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -844,15 +854,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 8890954303500915444, guid: 0ac331b5bb7e4724ab5ad2fb30e167ae,
         type: 3}
-    - target: {fileID: 2418936529340333378, guid: f82b6345fae197b499cd6fb50233b3cc,
+    - target: {fileID: 9012804805990284109, guid: f82b6345fae197b499cd6fb50233b3cc,
         type: 3}
-      propertyPath: m_Enabled
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 8890896102997544264, guid: f82b6345fae197b499cd6fb50233b3cc,
-        type: 3}
-      propertyPath: m_Enabled
-      value: 1
+      propertyPath: currentState
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 1032476366971235930, guid: f82b6345fae197b499cd6fb50233b3cc,
         type: 3}

@@ -17,6 +17,10 @@ namespace Nakajima.Player
         public event Action<PlayerHand, GameObject> grabWeapon;
         // 判定の手にも武器をもたせる
         public event Action<PlayerHand, GameObject> oppositeWeapon;
+        // 自身の状態を送る
+        public event Action<PlayerHand> updateHandStatus;
+
+
 
         // WeaponCreateの参照
         private WeaponCreate weaponCreate;
@@ -55,13 +59,16 @@ namespace Nakajima.Player
         /// </summary>
         void Update()
         {
-            // 武器を掴む
-            if (OVRInput.GetDown(myTouch))
-            {
-                if (HasWeapon) return;
+            // 武器所持時のみ実行
+            if (HasWeapon) return;
 
-                GrabWeapon();
-                //photonView.RPC(nameof(GrabWeapon), RpcTarget.All);
+            // イベント実行
+            updateHandStatus?.Invoke(this);
+
+            // 武器を掴む
+            if (OVRInput.GetDown(myTouch)) {
+                //GrabWeapon();
+                photonView.RPC(nameof(GrabWeapon), RpcTarget.All,TestOnlineData.PlayerID);
             }
 
             WeaponAction();
@@ -82,11 +89,11 @@ namespace Nakajima.Player
         /// 武器を掴む
         /// </summary>
         //[PunRPC]
-        public void GrabWeapon()
+        public void GrabWeapon(int _playerID)
         {
+            
             // 何も触れていないならリターン
             if (hasObj == null) return;
-
 
             // 生成中の武器だったら装備する
             foreach (GameObject weapon in weaponCreate.createWeaponList)
