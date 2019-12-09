@@ -34,7 +34,7 @@ namespace Saitou.Network
 
             this.UpdateAsObservable()
                 .TakeUntilDestroy(this)
-                .Where(_ => PhotonNetwork.PlayerList.Length >= 1)
+                .Where(_ => PhotonNetwork.PlayerList.Length >= 2)
                 .Take(1)
                 .Subscribe(async _ =>
                 {
@@ -43,6 +43,7 @@ namespace Saitou.Network
                     // オブジェクトの生成
                     GameObject obj = Instantiate(playerPrefab, pos.position, pos.rotation);
                     GameObject displayObj = PhotonNetwork.Instantiate("DisplayPlayer", pos.position, pos.rotation);
+                    displayObj.GetComponent<DisplayPlayerProvider>().MyID = TestOnlineData.PlayerID;
 
                     SetDisplay setDisp = obj.GetComponent<SetDisplay>();
                     GameObject[] setPos = setDisp.Display;

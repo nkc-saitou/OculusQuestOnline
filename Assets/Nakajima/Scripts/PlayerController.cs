@@ -44,7 +44,7 @@ namespace Nakajima.Player
             //myHand[0].oppositeWeapon += SetOpposite;
             //myHand[1].oppositeWeapon += SetOpposite;
 
-            testPlayerCreate.OnPlayerCreate = (myHandArray) =>
+            testPlayerCreate.OnPlayerCreate += (myHandArray) =>
             {
                 myHand = myHandArray;
 
@@ -80,6 +80,9 @@ namespace Nakajima.Player
             if (OVRInput.GetDown(OVRInput.RawButton.X)) {
                 weaponCreate.ActiveHand = myHand[1];
                 weaponCreate.Create();
+            }
+            if (OVRInput.GetUp(OVRInput.RawButton.X)) {
+                weaponCreate.DeleteWeapon();
             }
 
             // Yボタンで所持中の武器の削除

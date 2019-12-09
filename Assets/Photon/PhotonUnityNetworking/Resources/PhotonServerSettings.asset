@@ -35,5 +35,7 @@ MonoBehaviour:
   - Fire
   - RespawnSpaceship
   - GrabWeapon
+  - OutputLog
+  - PlayerGrab
   DisableAutoOpenWizard: 1
   ShowSettings: 1

@@ -760,6 +760,50 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1866844617}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!1 &1991509346
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1991509348}
+  - component: {fileID: 1991509347}
+  m_Layer: 0
+  m_Name: Manager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1991509347
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1991509346}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bd6488cba0183d94589552b053df27f6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  HandList: []
+--- !u!4 &1991509348
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1991509346}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 4
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &4843531762560274103
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -846,7 +890,7 @@ PrefabInstance:
         type: 3}
       propertyPath: weaponList.Array.data[3]
       value: 
-      objectReference: {fileID: 7736314363512946226, guid: e764e101858569c46ae3ccb193c0da19,
+      objectReference: {fileID: 1448808920471177366, guid: b353011f4b2272349a26fcdb6e73790a,
         type: 3}
     - target: {fileID: 9012804805990284109, guid: f82b6345fae197b499cd6fb50233b3cc,
         type: 3}
@@ -857,8 +901,14 @@ PrefabInstance:
     - target: {fileID: 9012804805990284109, guid: f82b6345fae197b499cd6fb50233b3cc,
         type: 3}
       propertyPath: currentState
-      value: 3
+      value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 9012804805990284109, guid: f82b6345fae197b499cd6fb50233b3cc,
+        type: 3}
+      propertyPath: weaponList.Array.data[2]
+      value: 
+      objectReference: {fileID: 1353050716332709435, guid: 87acb058fbc9a34449a5dd79d6186898,
+        type: 3}
     - target: {fileID: 1032476366971235930, guid: f82b6345fae197b499cd6fb50233b3cc,
         type: 3}
       propertyPath: myHand.Array.size
