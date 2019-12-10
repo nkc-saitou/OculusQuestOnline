@@ -7,7 +7,7 @@ namespace Nakajima.Player
     public class DisplayPlayerProvider : MonoBehaviour
     {
         // オブジェクトリスト
-        private Dictionary<string, GameObject> objList = new Dictionary<string, GameObject>();
+        private Dictionary<string, PlayerHand> objList = new Dictionary<string, PlayerHand>();
 
         // 自身のID
         public int MyID {
@@ -18,9 +18,9 @@ namespace Nakajima.Player
         [SerializeField]
         GameObject myHead;
         [SerializeField]
-        GameObject myHand_R;
+        PlayerHand myHand_R;
         [SerializeField]
-        GameObject myHand_L;
+        PlayerHand myHand_L;
 
         // Start is called before the first frame update
         void Start()
@@ -33,7 +33,7 @@ namespace Nakajima.Player
         /// </summary>
         private void Register()
         {
-            objList.Add("Head", myHead);
+            //objList.Add("Head", myHead);
             objList.Add("Hand_R", myHand_R);
             objList.Add("Hand_L", myHand_L);
         }
@@ -43,7 +43,7 @@ namespace Nakajima.Player
         /// </summary>
         /// <param name="_key">Key</param>
         /// <returns></returns>
-        public GameObject GetMyObj(string _key)
+        public PlayerHand GetMyHand(string _key)
         {
             Debug.Log("指定したオブジェクトがあるかどうか" + objList.ContainsKey(_key));
             if (objList.ContainsKey(_key)) {

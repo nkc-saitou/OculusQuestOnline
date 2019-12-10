@@ -806,7 +806,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bd6488cba0183d94589552b053df27f6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  HandList: []
 --- !u!4 &1718925912
 Transform:
   m_ObjectHideFlags: 0

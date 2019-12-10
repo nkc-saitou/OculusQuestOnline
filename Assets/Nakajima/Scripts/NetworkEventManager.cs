@@ -14,7 +14,7 @@ public class NetworkEventManager : MonoBehaviourPunCallbacks
 
     // Hand
     PlayerHand[] HandList = new PlayerHand[4];
-    //public List<PlayerHand> HandList = new List<PlayerHand>();
+    private GameObject weapon;
 
     private PhotonView myPhotonView;
 
@@ -43,22 +43,22 @@ public class NetworkEventManager : MonoBehaviourPunCallbacks
                     case 0:
                         if(TestOnlineData.PlayerID == 1) {
                             player.MyID = 2;
-                            HandList[2] = player.GetMyObj("Hand_R").GetComponent<PlayerHand>();
-                            HandList[3] = player.GetMyObj("Hand_L").GetComponent<PlayerHand>();
+                            HandList[2] = player.GetMyHand("Hand_R");
+                            HandList[3] = player.GetMyHand("Hand_L");
                         }
                         else {
                             player.MyID = 1;
-                            HandList[0] = player.GetMyObj("Hand_R").GetComponent<PlayerHand>();
-                            HandList[1] = player.GetMyObj("Hand_L").GetComponent<PlayerHand>();
+                            HandList[0] = player.GetMyHand("Hand_R");
+                            HandList[1] = player.GetMyHand("Hand_L");
                         }
                         break;
                     case 1:
-                        HandList[0] = player.GetMyObj("Hand_R").GetComponent<PlayerHand>();
-                        HandList[1] = player.GetMyObj("Hand_L").GetComponent<PlayerHand>();
+                        HandList[0] = player.GetMyHand("Hand_R");
+                        HandList[1] = player.GetMyHand("Hand_L");
                         break;
                     case 2:
-                        HandList[2] = player.GetMyObj("Hand_R").GetComponent<PlayerHand>();
-                        HandList[3] = player.GetMyObj("Hand_L").GetComponent<PlayerHand>();
+                        HandList[2] = player.GetMyHand("Hand_R");
+                        HandList[3] = player.GetMyHand("Hand_L");
                         break;
                 }
             }
@@ -84,6 +84,8 @@ public class NetworkEventManager : MonoBehaviourPunCallbacks
             hand.syncWeapon += (ID, weaponName) => {
                 myPhotonView.RPC(nameof(PlayerGrab), RpcTarget.All, ID, weaponName);
             };
+
+            hand.setOppesite += SetOpposite;
         }
     }
 
@@ -96,9 +98,21 @@ public class NetworkEventManager : MonoBehaviourPunCallbacks
     public void PlayerGrab(int _playerID, string _weaponName)
     {
         // IDで処理分け
-        var handHash = new ExitGames.Client.Photon.Hashtable();
-        handHash[_playerID + "_left"] = _weaponName;
-        PhotonNetwork.LocalPlayer.SetCustomProperties(handHash);
+        hand[_playerID + "_left"] = _weaponName;
+        PhotonNetwork.LocalPlayer.SetCustomProperties(hand);
+    }
+
+    /// <summary>
+    /// 反対の手の設定
+    /// </summary>
+    /// <param name="_hand">利き手</param>
+    /// <param name="_weapon">武器</param>
+    [PunRPC]
+    private void SetOpposite(int _playerID, GameObject _weapon, string _weaponName)
+    {
+        weapon = _weapon;
+        hand[_playerID + "_right"] = _weaponName;
+        PhotonNetwork.LocalPlayer.SetCustomProperties(hand);
     }
 
     /// <summary>
@@ -111,27 +125,64 @@ public class NetworkEventManager : MonoBehaviourPunCallbacks
         // 更新されたキーと値のペアを、デバッグログに出力する
         foreach (var p in changedProps)
         {
-            // IDを抜き出す
-            string ID = SplitID(p.Key.ToString());
-
-            switch (ID)
-            {
-                case "1":
-                    HandList[1].GrabWeapon(p.Value.ToString());
-                    break;
-                case "2":
-                    HandList[3].GrabWeapon(p.Value.ToString());
-                    break;
-            }
+            SetPlayerWeapon(p);
         }
     }
 
-    private string SplitID(string _name)
+    private void SetPlayerWeapon(DictionaryEntry _dic)
+    {
+        // IDを抜き出す
+        string[] hash = SplitID(_dic.Key.ToString());
+        Debug.Log(hash[1]);
+
+        if(hash[1] == "right")
+        {
+            switch (hash[0])
+            {
+                case "1":
+                    if (_dic.Value != hand[hash[0] + "_left"])
+                        HandList[0].GrabWeapon(_dic.Value.ToString());
+                    else
+                        HandList[0].SetWeapon(weapon);
+                    break;
+                case "2":
+                    if (_dic.Value != hand[hash[0] + "_left"])
+                        HandList[2].GrabWeapon(_dic.Value.ToString());
+                    else
+                        HandList[2].SetWeapon(weapon);
+                    break;
+            }
+        }
+        else if(hash[1] == "left")
+        {
+            switch (hash[0])
+            {
+                case "1":
+                    if (_dic.Value != hand[hash[0] + "_right"])
+                        HandList[1].GrabWeapon(_dic.Value.ToString());
+                    else
+                        HandList[1].SetWeapon(weapon);
+                    break;
+                case "2":
+                    if (_dic.Value != hand[hash[0] + "_right"])
+                        HandList[3].GrabWeapon(_dic.Value.ToString());
+                    else
+                        HandList[3].SetWeapon(weapon);
+                    break;
+            }
+        }
+        
+    }
+
+    /// <summary>
+    /// IDを抜き出す
+    /// </summary>
+    /// <param name="_name"></param>
+    /// <returns></returns>
+    private string[] SplitID(string _name)
     {
         // ID抜き出し
-        string ID = _name.Split('_')[0];
-        if (ID != "") return ID;
-
-        return "";
+        string[] hash = _name.Split('_');
+        return hash;
     }
 }

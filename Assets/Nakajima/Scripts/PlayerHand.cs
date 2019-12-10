@@ -21,6 +21,7 @@ namespace Nakajima.Player
         public event Action<PlayerHand> updateHandStatus;
         // 同期したい
         public event Action<int, string> syncWeapon;
+        public event Action<int, GameObject, string> setOppesite;
 
         // WeaponCreateの参照
         private WeaponCreate weaponCreate;
@@ -53,7 +54,7 @@ namespace Nakajima.Player
             weaponMgr = FindObjectOfType<WeaponManager>();
             photonView = GetComponent<PhotonView>();
 
-            //var manager = FindObjectOfType<NetworkEventManager>();
+            var manager = FindObjectOfType<NetworkEventManager>();
             //manager.EventBind(this);
         }
 
@@ -112,6 +113,7 @@ namespace Nakajima.Player
             {
                 var obj = handList[1].GetBody();
                 oppositeWeapon?.Invoke(this, obj);
+                setOppesite?.Invoke(TestOnlineData.PlayerID, obj, GetWeaponName(hasObj.name));
             }
 
             // 同期したい
@@ -126,8 +128,7 @@ namespace Nakajima.Player
         {
             // 武器を持っているならリターン
             if (HasWeapon) return;
-
-            Debug.LogWarning(_weaponName);
+            
             weaponMgr.LoadWeapon();
             var handList = weaponMgr.CreateWeapon(_weaponName);
             hasObj = handList[0].GetBody();
@@ -141,7 +142,9 @@ namespace Nakajima.Player
             {
                 var obj = handList[1].GetBody();
                 oppositeWeapon?.Invoke(this, obj);
+                setOppesite?.Invoke(TestOnlineData.PlayerID, obj, GetWeaponName(hasObj.name));
             }
+            syncWeapon?.Invoke(TestOnlineData.PlayerID, GetWeaponName(hasObj.name));
         }
 
         /// <summary>
@@ -151,9 +154,9 @@ namespace Nakajima.Player
         public void SetWeapon(GameObject _weapon)
         {
             hasObj = _weapon;
-            _weapon.transform.parent = transform;
-            _weapon.transform.localPosition = Vector3.zero;
-            _weapon.transform.localRotation = Quaternion.identity;
+            hasObj.transform.parent = transform;
+            hasObj.transform.localPosition = Vector3.zero;
+            hasObj.transform.localRotation = Quaternion.identity;
             HasWeapon = true;
         }
 
@@ -162,7 +165,7 @@ namespace Nakajima.Player
         /// </summary>
         /// <param name="_objName">武器のオブジェクト</param>
         /// <returns>武器の名前</returns>
-        private string GetWeaponName(string _objName)
+        public string GetWeaponName(string _objName)
         {
             // オブジェクト名から(Clone)を抜く
             string[] weaponName = _objName.Split('(');
@@ -178,8 +181,6 @@ namespace Nakajima.Player
             if (HasWeapon == false || hasObj == null) { Debug.Log("リターン"); return; }
 
             var weapon = hasObj.GetComponent<IWeapon>();
-
-            Debug.Log("きた");
 
             // 武器使用
             switch (myTouch) {

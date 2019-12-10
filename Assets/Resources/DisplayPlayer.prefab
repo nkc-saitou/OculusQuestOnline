@@ -94,8 +94,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   myHead: {fileID: 6693596931115751193}
-  myHand_R: {fileID: 6693596931262445532}
-  myHand_L: {fileID: 6693596930728794350}
+  myHand_R: {fileID: 822861405}
+  myHand_L: {fileID: 822861403}
 --- !u!1 &6693596930728794350
 GameObject:
   m_ObjectHideFlags: 0
