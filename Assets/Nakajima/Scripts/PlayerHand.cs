@@ -29,6 +29,9 @@ namespace Nakajima.Player
 
         private PhotonView photonView;
 
+        // 自身のProvider
+        public DisplayPlayerProvider myProvider;
+
         // どっちの手か
         public OVRInput.RawButton myTouch;
 
@@ -73,7 +76,7 @@ namespace Nakajima.Player
             updateHandStatus?.Invoke(this);
 
             // 武器を掴む
-            if (OVRInput.GetDown(myTouch)) {
+            if (OVRInput.GetDown(myTouch) && HasWeapon == false) {
                 GrabWeapon();
             }
         }
@@ -108,16 +111,18 @@ namespace Nakajima.Player
             hasObj.transform.localRotation = Quaternion.identity;
 
             HasWeapon = true;
-            weaponCreate.CanCreate = false;
+            if (photonView.IsMine) weaponCreate.CanCreate = false;
+
+            // 同期したい
+            Debug.Log("ID ; " + TestOnlineData.PlayerID + " 通過");
+            syncWeapon?.Invoke(myProvider.MyID, GetWeaponName(hasObj.name));
+
             if (handList.Length > 1)
             {
                 var obj = handList[1].GetBody();
                 oppositeWeapon?.Invoke(this, obj);
-                setOppesite?.Invoke(TestOnlineData.PlayerID, obj, GetWeaponName(hasObj.name));
+                setOppesite?.Invoke(myProvider.MyID, obj, GetWeaponName(hasObj.name));
             }
-
-            // 同期したい
-            syncWeapon?.Invoke(TestOnlineData.PlayerID, GetWeaponName(hasObj.name));
         }
 
         /// <summary>
@@ -127,8 +132,8 @@ namespace Nakajima.Player
         public void GrabWeapon(string _weaponName)
         {
             // 武器を持っているならリターン
-            if (HasWeapon) return;
-            
+            if (HasWeapon || photonView.IsMine) return;
+
             weaponMgr.LoadWeapon();
             var handList = weaponMgr.CreateWeapon(_weaponName);
             hasObj = handList[0].GetBody();
@@ -137,14 +142,16 @@ namespace Nakajima.Player
             hasObj.transform.localRotation = Quaternion.identity;
 
             HasWeapon = true;
-            weaponCreate.CanCreate = false;
+            if(photonView.IsMine) weaponCreate.CanCreate = false;
+            syncWeapon?.Invoke(myProvider.MyID, GetWeaponName(hasObj.name));
+
+            // 反対の手にも装備
             if (handList.Length > 1)
             {
                 var obj = handList[1].GetBody();
                 oppositeWeapon?.Invoke(this, obj);
-                setOppesite?.Invoke(TestOnlineData.PlayerID, obj, GetWeaponName(hasObj.name));
+                setOppesite?.Invoke(myProvider.MyID, obj, GetWeaponName(hasObj.name));
             }
-            syncWeapon?.Invoke(TestOnlineData.PlayerID, GetWeaponName(hasObj.name));
         }
 
         /// <summary>

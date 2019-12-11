@@ -51,8 +51,8 @@ namespace Nakajima.Player
                 // イベントをバインド
                 //myHand[0].grabWeapon += SetDominant;
                 //myHand[1].grabWeapon += SetDominant;
-                //myHand[0].oppositeWeapon += SetOpposite;
-                //myHand[1].oppositeWeapon += SetOpposite;
+                myHand[0].oppositeWeapon += SetOpposite;
+                myHand[1].oppositeWeapon += SetOpposite;
 
                 Debug.Log("aaaa");
             };

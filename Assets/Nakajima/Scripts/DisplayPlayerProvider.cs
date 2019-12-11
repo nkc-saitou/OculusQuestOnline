@@ -33,8 +33,9 @@ namespace Nakajima.Player
         /// </summary>
         private void Register()
         {
-            //objList.Add("Head", myHead);
+            myHand_R.myProvider = this;
             objList.Add("Hand_R", myHand_R);
+            myHand_L.myProvider = this;
             objList.Add("Hand_L", myHand_L);
         }
 
