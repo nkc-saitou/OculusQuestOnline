@@ -17,6 +17,8 @@ namespace Nakajima.Player
         public event Action<PlayerHand, GameObject> grabWeapon;
         // 判定の手にも武器をもたせる
         public event Action<PlayerHand, GameObject> oppositeWeapon;
+        // 武器の削除
+        public event Action<PlayerHand, int> deleteWeapon;
         // 自身の状態を送る
         public event Action<PlayerHand> updateHandStatus;
         // 同期したい
@@ -56,9 +58,6 @@ namespace Nakajima.Player
             weaponCreate = FindObjectOfType<WeaponCreate>();
             weaponMgr = FindObjectOfType<WeaponManager>();
             photonView = GetComponent<PhotonView>();
-
-            var manager = FindObjectOfType<NetworkEventManager>();
-            //manager.EventBind(this);
         }
 
         /// <summary>
@@ -128,11 +127,11 @@ namespace Nakajima.Player
         /// <summary>
         /// 武器のセット
         /// </summary>
-        /// <param name="_weaponName"></param>
+        /// <param name="_weaponName">武器の名前</param>
         public void GrabWeapon(string _weaponName)
         {
             // 武器を持っているならリターン
-            if (HasWeapon || photonView.IsMine) return;
+            if (HasWeapon || photonView.IsMine || hasObj != null) return;
 
             weaponMgr.LoadWeapon();
             var handList = weaponMgr.CreateWeapon(_weaponName);
@@ -142,7 +141,7 @@ namespace Nakajima.Player
             hasObj.transform.localRotation = Quaternion.identity;
 
             HasWeapon = true;
-            if(photonView.IsMine) weaponCreate.CanCreate = false;
+            if (photonView.IsMine) weaponCreate.CanCreate = false;
             syncWeapon?.Invoke(myProvider.MyID, GetWeaponName(hasObj.name));
 
             // 反対の手にも装備
@@ -157,9 +156,11 @@ namespace Nakajima.Player
         /// <summary>
         /// 武器をセットする(両手武器用)
         /// </summary>
-        /// <param name="_weapon">セットする武器</param>
+        /// <param name="_weapon">セットする武器オブジェクト</param>
         public void SetWeapon(GameObject _weapon)
         {
+            if (HasWeapon) return;
+
             hasObj = _weapon;
             hasObj.transform.parent = transform;
             hasObj.transform.localPosition = Vector3.zero;
@@ -170,7 +171,7 @@ namespace Nakajima.Player
         /// <summary>
         /// 武器の名前を抜き出す
         /// </summary>
-        /// <param name="_objName">武器のオブジェクト</param>
+        /// <param name="_objName">武器オブジェクト名</param>
         /// <returns>武器の名前</returns>
         public string GetWeaponName(string _objName)
         {
@@ -219,6 +220,7 @@ namespace Nakajima.Player
             if (HasWeapon == false) return false;
 
             Destroy(hasObj);
+            deleteWeapon(this, TestOnlineData.PlayerID);
             HasWeapon = false;
             return true;
         }

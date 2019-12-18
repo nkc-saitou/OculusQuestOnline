@@ -1567,6 +1567,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e564c9f0f31e88c4c895a738d5e2f5fa, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  myProvider: {fileID: 0}
   myTouch: 536870912
   GunObj: {fileID: 151061625077218210, guid: 5877dc5a617738a4996842db317be39c, type: 3}
   hasObj: {fileID: 0}
@@ -4323,9 +4324,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8e84d4cc5ab159c4cbba53108a5899ed, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  myHand:
-  - {fileID: 2418936529340333378}
-  - {fileID: 8890896102997544264}
+  myHand: []
 --- !u!114 &8533763573901080786
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6762,6 +6761,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e564c9f0f31e88c4c895a738d5e2f5fa, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  myProvider: {fileID: 0}
   myTouch: 134217728
   GunObj: {fileID: 151061625077218210, guid: 5877dc5a617738a4996842db317be39c, type: 3}
   hasObj: {fileID: 0}

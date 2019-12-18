@@ -88,6 +88,10 @@ public class NetworkEventManager : MonoBehaviourPunCallbacks
             hand.setOppesite += (ID, obj, weaponName) => {
                 SetOpposite(ID, obj, weaponName);
             };
+
+            hand.deleteWeapon += (Hand, ID) => {
+                SetDestroy(Hand, ID);
+            };
         }
     }
 
@@ -115,6 +119,7 @@ public class NetworkEventManager : MonoBehaviourPunCallbacks
     private void SetOpposite(int _playerID, GameObject _weapon, string _weaponName)
     {
         Debug.Log("ID : " + _playerID);
+        // IDで処理分け
         weapon = _weapon;
         var handHash = new ExitGames.Client.Photon.Hashtable();
         handHash[_playerID + "_right"] = _weaponName;
@@ -122,10 +127,24 @@ public class NetworkEventManager : MonoBehaviourPunCallbacks
     }
 
     /// <summary>
+    /// 武器の削除
+    /// </summary>
+    /// <param name="_hand">武器を所持している手</param>
+    /// <param name="_playerID">ID</param>
+    [PunRPC]
+    private void SetDestroy(PlayerHand _hand, int _playerID)
+    {
+        var handHash = new ExitGames.Client.Photon.Hashtable();
+        if(_hand.myTouch == OVRInput.RawButton.RHandTrigger) handHash[_playerID + "_right"] = "None";
+        else handHash[_playerID + "_left"] = "None";
+        PhotonNetwork.LocalPlayer.SetCustomProperties(handHash);
+    }
+
+    /// <summary>
     /// カスタムPropertiesに変更があった際のCallback
     /// </summary>
     /// <param name="target"></param>
-    /// <param name="changedProps"></param>
+    /// <param name="changedProps">ハッシュテーブル</param>
     public override void OnPlayerPropertiesUpdate(Player target, ExitGames.Client.Photon.Hashtable changedProps)
     {
         // 更新されたキーと値のペアを、デバッグログに出力する
@@ -135,44 +154,56 @@ public class NetworkEventManager : MonoBehaviourPunCallbacks
         }
     }
 
+    /// <summary>
+    /// 武器のセッティング
+    /// </summary>
+    /// <param name="_dic">ハッシュテーブル</param>
     private void SetPlayerWeapon(DictionaryEntry _dic)
     {
         // IDを抜き出す
         string[] hash = SplitID(_dic.Key.ToString());
 
         var handL = PhotonNetwork.LocalPlayer.CustomProperties[hash[0] + "_left"];
+        Debug.Log(handL.ToString());
         var handR = PhotonNetwork.LocalPlayer.CustomProperties[hash[0] + "_right"];
+        Debug.Log(_dic.Value.ToString());
 
-        if (hash[1] == "right")
-        {
+        // 武器削除
+        if (_dic.Value.ToString() == "None") {
+            DeletePlayerWeapon(_dic);
+            return;
+        }
+
+        // 右手の処理
+        if (hash[1] == "right") {
             switch (hash[0])
             {
                 case "1":
-                    if (_dic.Value != handL)
+                    if (HandList[1].HasWeapon == false)
                         HandList[0].GrabWeapon(_dic.Value.ToString());
                     else
                         HandList[0].SetWeapon(weapon);
                     break;
                 case "2":
-                    if (_dic.Value != handL)
+                    if (HandList[3].HasWeapon == false)
                         HandList[2].GrabWeapon(_dic.Value.ToString());
                     else
                         HandList[2].SetWeapon(weapon);
                     break;
             }
         }
-        else if(hash[1] == "left")
-        {
+        // 左手の処理
+        else if(hash[1] == "left") {
             switch (hash[0])
             {
                 case "1":
-                    if (_dic.Value != handR)
+                    if (HandList[0].HasWeapon == false)
                         HandList[1].GrabWeapon(_dic.Value.ToString());
                     else
                         HandList[1].SetWeapon(weapon);
                     break;
                 case "2":
-                    if (_dic.Value != handR)
+                    if (HandList[2].HasWeapon == false)
                         HandList[3].GrabWeapon(_dic.Value.ToString());
                     else
                         HandList[3].SetWeapon(weapon);
@@ -180,6 +211,46 @@ public class NetworkEventManager : MonoBehaviourPunCallbacks
             }
         }
         
+    }
+
+    /// <summary>
+    /// 武器の削除
+    /// </summary>
+    /// <param name="_dic">ハッシュテーブル</param>
+    private void DeletePlayerWeapon(DictionaryEntry _dic)
+    {
+        // IDを抜き出す
+        string[] hash = SplitID(_dic.Key.ToString());
+
+        var handL = PhotonNetwork.LocalPlayer.CustomProperties[hash[0] + "_left"];
+        var handR = PhotonNetwork.LocalPlayer.CustomProperties[hash[0] + "_right"];
+
+        // 右手の処理
+        if (hash[1] == "right") {
+            // IDで処理わけ
+            switch (hash[0])
+            {
+                case "1":
+                    HandList[0].DeleteWeapon();
+                    break;
+                case "2":
+                    HandList[2].DeleteWeapon();
+                    break;
+            }
+        }
+        // 左手の処理
+        else if (hash[1] == "left") {
+            // IDで処理わけ
+            switch (hash[0])
+            {
+                case "1":
+                    HandList[1].DeleteWeapon();
+                    break;
+                case "2":
+                    HandList[3].DeleteWeapon();
+                    break;
+            }
+        }
     }
 
     /// <summary>
