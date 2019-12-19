@@ -12,7 +12,7 @@ using Saitou.Network;
 /// </summary>
 namespace Nakajima.Player
 {
-    public class PlayerConttoller : MonoBehaviour
+    public class PlayerController : MonoBehaviour
     {
         // 自身のMovement;
         private MovementComponetBase myMovement;
@@ -38,24 +38,24 @@ namespace Nakajima.Player
             weaponCreate = GetComponent<WeaponCreate>();
             testPlayerCreate = FindObjectOfType<TestPlayerCreate>();
 
-            // イベントをバインド
-            myHand[0].grabWeapon += SetDominant;
-            myHand[1].grabWeapon += SetDominant;
-            myHand[0].oppositeWeapon += SetOpposite;
-            myHand[1].oppositeWeapon += SetOpposite;
+            //// イベントをバインド
+            //myHand[0].grabWeapon += SetDominant;
+            //myHand[1].grabWeapon += SetDominant;
+            //myHand[0].oppositeWeapon += SetOpposite;
+            //myHand[1].oppositeWeapon += SetOpposite;
 
-            //testPlayerCreate.OnPlayerCreate = (myHandArray) =>
-            //{
-            //    myHand = myHandArray;
+            testPlayerCreate.OnPlayerCreate += (myHandArray) =>
+            {
+                myHand = myHandArray;
 
-            //    // イベントをバインド
-            //    myHand[0].grabWeapon += SetDominant;
-            //    myHand[1].grabWeapon += SetDominant;
-            //    myHand[0].oppositeWeapon += SetOpposite;
-            //    myHand[1].oppositeWeapon += SetOpposite;
+                // イベントをバインド
+                //myHand[0].grabWeapon += SetDominant;
+                //myHand[1].grabWeapon += SetDominant;
+                myHand[0].oppositeWeapon += SetOpposite;
+                myHand[1].oppositeWeapon += SetOpposite;
 
-            //    Debug.Log("aaaa");
-            //};
+                Debug.Log("aaaa");
+            };
 
 
         }
@@ -73,12 +73,16 @@ namespace Nakajima.Player
         private void Actoin()
         {
             // Aボタンで生成法の切り替え
-            if (OVRInput.GetDown(OVRInput.RawButton.A)) {
-                weaponCreate.ChangeCreateState();
-            }
+            //if (OVRInput.GetDown(OVRInput.RawButton.A)) {
+            //    weaponCreate.ChangeCreateState();
+            //}
             // Xボタンで武器生成
             if (OVRInput.GetDown(OVRInput.RawButton.X)) {
+                weaponCreate.ActiveHand = myHand[1];
                 weaponCreate.Create();
+            }
+            if (OVRInput.GetUp(OVRInput.RawButton.X)) {
+                weaponCreate.DeleteWeapon();
             }
 
             // Yボタンで所持中の武器の削除
@@ -116,6 +120,15 @@ namespace Nakajima.Player
             myMovement.Move(inputVec);
             // 移動
             myRig.velocity = myMovement.Velocity;
+        }
+
+        /// <summary>
+        /// 手の状態を更新
+        /// </summary>
+        /// <param name="_hand"></param>
+        private void UpdateHand(PlayerHand _hand)
+        {
+            weaponCreate.UnfoldUpdate(_hand);
         }
 
         /// <summary>
