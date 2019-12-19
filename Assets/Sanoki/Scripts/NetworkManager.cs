@@ -4,6 +4,7 @@ using Photon.Realtime;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 /// <summary>
 /// 
@@ -43,11 +44,14 @@ namespace Sanoki.Online
         // 難易度
         [SerializeField] private string stageDifficulty = "Easy";
 
+        bool IsConnect = false;
+
         // ルームリスト
         private List<RoomInfo> roomInfoList = new List<RoomInfo>();
 
         public Text PlayerID;
         public Text connect_text;
+        string entrySceneName = "Entry_test";
 
         /////////////////////////////////////////////////////////////////////////////////////
         // Awake & Start ////////////////////////////////////////////////////////////////////
@@ -69,6 +73,14 @@ namespace Sanoki.Online
             Connect("1.0");
         }
 
+        void Update()
+        {
+            if (IsConnect && SceneManager.GetActiveScene().name == "Title_test" &&OVRInput.GetDown(OVRInput.RawButton.A) 
+                || IsConnect && SceneManager.GetActiveScene().name == "Title_test" && Input.GetKeyDown(KeyCode.Z))
+            {
+                SceneChanger.Instance.MoveScene(entrySceneName, 1.0f, 1.0f, SceneChangeType.BlackFade, true);
+            }
+        }
 
         /////////////////////////////////////////////////////////////////////////////////////
         // Connect //////////////////////////////////////////////////////////////////////////
@@ -348,7 +360,7 @@ namespace Sanoki.Online
         {
             Debug.Log("OnJoinedLobby");
             connect_text.text = "ロビー接続完了";
-            //JoinOrCreateRoom();
+            JoinOrCreateRoom();
         }
 
 
@@ -391,6 +403,7 @@ namespace Sanoki.Online
             Sanoki.Online.OnlineData.PlayerID = PhotonNetwork.PlayerList.Length;
             Debug.Log(Sanoki.Online.OnlineData.PlayerID);
             PlayerID.text = "Player" + Sanoki.Online.OnlineData.PlayerID;
+            IsConnect = true;
         }
 
 

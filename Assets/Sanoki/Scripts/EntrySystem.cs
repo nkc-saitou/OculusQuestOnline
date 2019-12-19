@@ -10,10 +10,10 @@ using UniRx;
 
 namespace Sanoki.Online
 {
-    public class GameStartSystem : MonoBehaviourPunCallbacks
+    public class EntrySystem : MonoBehaviourPunCallbacks
     {
         PhotonView photonView;
-        public NetworkManager networkManager;
+        NetworkManager networkManager;
         bool[] isStart = new bool[2];
 
         public Text[] flgText = new Text[2];
@@ -21,7 +21,7 @@ namespace Sanoki.Online
         private void Start()
         {
             networkManager = FindObjectOfType<NetworkManager>();
-            photonView = networkManager.GetComponent<PhotonView>();
+            photonView = GetComponent<PhotonView>();
 
             // すべてのクライアントが準備完了したら、ゲームシーンに移行
             this.UpdateAsObservable()
@@ -30,20 +30,20 @@ namespace Sanoki.Online
                 .Take(1)
                 .Subscribe(_ => 
                 {
-                    SceneChange();
+                    photonView.RPC(nameof(SceneChange), RpcTarget.All);
                 });
         }
 
         private void Update()
         {
             if (Input.GetKeyDown(KeyCode.G)) Entry();
-            if (Input.GetKeyDown(KeyCode.F))
-            {
-                networkManager.JoinOrCreateRoom();
-            }
+            //if (Input.GetKeyDown(KeyCode.F))
+            //{
+            //    networkManager.JoinOrCreateRoom();
+            //}
             flgText[0].text = "マスタークライアント：" + isStart[0].ToString();
             flgText[1].text = "その他：" + isStart[1].ToString();
-
+            if (OVRInput.GetDown(OVRInput.RawButton.A)) Entry();
 
         }
         
@@ -74,7 +74,7 @@ namespace Sanoki.Online
         [PunRPC]
         void SceneChange()
         {
-            SceneManager.LoadScene("Online_test");
+            SceneChanger.Instance.MoveScene("Online_test", 1.0f, 1.0f, SceneChangeType.BlackFade, true);
         }
 
         /// <summary>

@@ -9,11 +9,12 @@ public class Player_test : MonoBehaviourPunCallbacks
     List<GameObject> primitivelist =new List<GameObject>();
 
     public Text testText;
-    Sanoki.Online.GameStartSystem gs;
+    public Text PlayerID;
+    Sanoki.Online.EntrySystem es;
 
     private void Start()
     {
-        gs = FindObjectOfType<Sanoki.Online.GameStartSystem>();
+        es = FindObjectOfType<Sanoki.Online.EntrySystem>();
     }
 
     // 部屋に入室した時
@@ -34,10 +35,11 @@ public class Player_test : MonoBehaviourPunCallbacks
     void Update()
     {
         testText.text = "入室人数: " + PhotonNetwork.PlayerList.Length.ToString() + " / 2";
+        PlayerID.text = "ID:" + Sanoki.Online.OnlineData.PlayerID + "Player";
 
         if (Input.GetKeyDown(KeyCode.G))
         {
-            gs.Entry();
+            es.Entry();
         }
 
         if (Input.GetKeyDown(KeyCode.Z))
