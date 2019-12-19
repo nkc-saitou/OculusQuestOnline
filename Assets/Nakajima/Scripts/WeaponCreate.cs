@@ -65,8 +65,8 @@ namespace Nakajima.Weapon
         int weaponState;
 
         // アクティブな手(武器生成)
-        private PlayerHand activeHand;
-        public PlayerHand ActiveHand
+        private HandMaster activeHand;
+        public HandMaster ActiveHand
         {
             set { activeHand = value; }
             get { return activeHand; }
@@ -169,7 +169,7 @@ namespace Nakajima.Weapon
         /// <summary>
         /// 展開中の更新処理
         /// </summary>
-        public void UnfoldUpdate(PlayerHand _hand)
+        public void UnfoldUpdate(HandMaster _hand)
         {
             // 武器を展開中でないならリターン
             if (WeaponUnfold == false) return;
@@ -194,7 +194,7 @@ namespace Nakajima.Weapon
         /// <summary>
         /// 手の角度から武器を生成
         /// </summary>
-        private void Create_Display(PlayerHand _hand)
+        private void Create_Display(HandMaster _hand)
         {
             // 武器が対応されている角度検知
             float angleDiff = 360.0f / weaponList.Count;
@@ -237,7 +237,7 @@ namespace Nakajima.Weapon
         /// <summary>
         /// 手の方向から生成
         /// </summary>
-        private void Create_Forward(PlayerHand _hand)
+        private void Create_Forward(HandMaster _hand)
         {
             // コントローラーの方向を取得
             Vector3 controllerDir = _hand.transform.forward;

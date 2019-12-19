@@ -1,0 +1,56 @@
+﻿using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+using Nakajima.Weapon;
+
+namespace Nakajima.Player
+{
+    public class PlayerMaster : MonoBehaviour
+    {
+        // 武器生成
+        protected WeaponCreate weaponCreate;
+        // 自身のRigidbody
+        protected Rigidbody myRig;
+        // 入力ベクター
+        protected Vector3 inputVec;
+        
+        /// <summary>
+        /// 初回処理
+        /// </summary>
+        public virtual void Start()
+        {
+
+        }
+        
+        /// <summary>
+        /// 更新処理
+        /// </summary>
+        public virtual void Update()
+        {
+
+        }
+
+        /// <summary>
+        /// アクション
+        /// </summary>
+        public virtual void Actoin() { }
+
+        /// <summary>
+        /// 移動
+        /// </summary>
+        public virtual void Move() { }
+
+        /// <summary>
+        /// 手の状態を更新
+        /// </summary>
+        /// <param name="_hand"></param>
+        protected void UpdateHand(PlayerHand _hand) { weaponCreate.UnfoldUpdate(_hand); }
+
+        /// <summary>
+        /// 反対の手の設定
+        /// </summary>
+        /// <param name="_hand">利き手</param>
+        /// <param name="_weapon">武器</param>
+        public virtual void SetOpposite(HandMaster _hand, GameObject _weapon) { }
+    }
+}

@@ -4,55 +4,29 @@ using UnityEngine;
 using UnityEngine.XR;
 using Nakajima.Movement;
 using Nakajima.Weapon;
-using Saitou.Network;
 
-
-/// <summary>
-/// プレイヤークラス
-/// </summary>
 namespace Nakajima.Player
 {
-    public class PlayerController : PlayerMaster
+    public class DemoPlayerController : PlayerMaster
     {
         // 自身の手(0 右手、1 左手)
         [SerializeField, Header("<自分の手(0 右手 1 左手)>")]
-        protected PlayerHand[] myHand;
+        protected DemoHand[] myHand;
 
         // 自身のMovement;
         private MovementComponetBase myMovement;
 
-        // オンライン用のプレイヤーの生成
-        private TestPlayerCreate testPlayerCreate;
-
-        /// <summary>
-        /// 初回処理
-        /// </summary>
         public override void Start()
         {
             myRig = GetComponent<Rigidbody>();
             myMovement = GetComponent<MovementComponetBase>();
             weaponCreate = GetComponent<WeaponCreate>();
-            testPlayerCreate = FindObjectOfType<TestPlayerCreate>();
 
-            //// イベントをバインド
-            //myHand[0].oppositeWeapon += SetOpposite;
-            //myHand[1].oppositeWeapon += SetOpposite;
-
-            testPlayerCreate.OnPlayerCreate += (myHandArray) =>
-            {
-                myHand = myHandArray;
-
-                // イベントをバインド
-                myHand[0].oppositeWeapon += SetOpposite;
-                myHand[1].oppositeWeapon += SetOpposite;
-
-                Debug.Log("aaaa");
-            };
+            // イベントをバインド
+            myHand[0].oppositeWeapon += SetOpposite;
+            myHand[1].oppositeWeapon += SetOpposite;
         }
-        
-        /// <summary>
-        /// 更新処理
-        /// </summary>
+
         public override void Update()
         {
             Move();
@@ -104,7 +78,7 @@ namespace Nakajima.Player
             // Yボタンで所持中の武器の削除
             if (OVRInput.GetDown(OVRInput.RawButton.Y))
             {
-                foreach (PlayerHand _hand in myHand)
+                foreach (DemoHand _hand in myHand)
                 {
                     if (_hand.DeleteWeapon())
                     {
@@ -134,3 +108,4 @@ namespace Nakajima.Player
         }
     }
 }
+
