@@ -18,7 +18,8 @@ namespace Nakajima.Player
         // 判定の手にも武器をもたせる
         public event Action<HandMaster, GameObject> oppositeWeapon;
         // 武器の削除
-        public event Action<PlayerHand, int> deleteWeapon;
+        public event Action<HandMaster> deleteWeapon;
+        public event Action<HandMaster, int> netDeleteWeapon;
         // 自身の状態を送る
         public event Action<PlayerHand> updateHandStatus;
         // 同期したい
@@ -55,8 +56,8 @@ namespace Nakajima.Player
         public override void Start()
         {
             HasWeapon = false;
-            weaponCreate = FindObjectOfType<WeaponCreate>();
             weaponMgr = FindObjectOfType<WeaponManager>();
+            weaponCreate = GetComponent<WeaponCreate>();
             photonView = GetComponent<PhotonView>();
         }
 
@@ -180,14 +181,21 @@ namespace Nakajima.Player
         /// <summary>
         /// 所持中の武器を破棄する
         /// </summary>
-        public override bool DeleteWeapon()
+        public override bool DeleteWeapon(bool _flag)
         {
             // 武器を所持していないならfalse
             if (HasWeapon == false) return false;
 
+            // 両手武器の場合逆の手も削除する
+            if (_flag && weaponMgr.HasOtherWeapon(GetWeaponName(hasObj.name))) {
+                deleteWeapon?.Invoke(this);
+            }
+
+            // 削除
             Destroy(hasObj);
-            deleteWeapon(this, TestOnlineData.PlayerID);
+            netDeleteWeapon?.Invoke(this, myProvider.MyID);
             HasWeapon = false;
+            weaponCreate.Reset();
             return true;
         }
 

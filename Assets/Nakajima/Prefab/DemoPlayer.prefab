@@ -1105,7 +1105,6 @@ GameObject:
   - component: {fileID: 5481655349601841466}
   - component: {fileID: 8757679868426048410}
   - component: {fileID: 1296919598806532861}
-  - component: {fileID: 2717873684657576193}
   - component: {fileID: 6670114}
   m_Layer: 0
   m_Name: DemoPlayer
@@ -1222,31 +1221,6 @@ MonoBehaviour:
   halfSpeed: 3
   maxSpeed: 6
   accelSpeed: 0.5
---- !u!114 &2717873684657576193
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1987098945855269850}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 72589c3757a35fa45a36659c7560b34c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  currentState: 1
-  spawnOriginObj_Circle: {fileID: 0}
-  spawnOriginObj_Display: {fileID: 5507831258224636482}
-  weaponList:
-  - {fileID: 8890954303500915444, guid: 0ac331b5bb7e4724ab5ad2fb30e167ae, type: 3}
-  - {fileID: 7736314363512946226, guid: e764e101858569c46ae3ccb193c0da19, type: 3}
-  - {fileID: 1353050716332709435, guid: 87acb058fbc9a34449a5dd79d6186898, type: 3}
-  - {fileID: 1448808920471177366, guid: b353011f4b2272349a26fcdb6e73790a, type: 3}
-  - {fileID: 1353050716332709435, guid: 87acb058fbc9a34449a5dd79d6186898, type: 3}
-  - {fileID: 1448808920471177366, guid: b353011f4b2272349a26fcdb6e73790a, type: 3}
-  createWeaponList: []
-  radius: 0.8
-  rotateSpeed: 0.5
 --- !u!114 &6670114
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1961,6 +1935,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8230257814677601962}
   - component: {fileID: 3639932573735010633}
+  - component: {fileID: 3661983210279422752}
   m_Layer: 0
   m_Name: LeftEyeAnchor
   m_TagString: MainCamera
@@ -2018,13 +1993,31 @@ Camera:
   m_TargetTexture: {fileID: 0}
   m_TargetDisplay: 0
   m_TargetEye: 1
-  m_HDR: 0
+  m_HDR: 1
   m_AllowMSAA: 1
   m_AllowDynamicResolution: 0
   m_ForceIntoRT: 0
   m_OcclusionCulling: 1
   m_StereoConvergence: 10
   m_StereoSeparation: 0.022
+--- !u!114 &3661983210279422752
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2973059261451610084}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e90b7bd6b19560544a6e86851574b098, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _iteration: 9
+  _threshold: 100
+  _softThreshold: 1
+  _intensity: 1.83
+  _debug: 0
+  _material: {fileID: 2100000, guid: 68ac5bcde5622874b83f351045f4727b, type: 2}
 --- !u!1 &3143171978600203708
 GameObject:
   m_ObjectHideFlags: 0
@@ -2229,6 +2222,7 @@ GameObject:
   - component: {fileID: 4473699576258652867}
   - component: {fileID: 2491043145882580039}
   - component: {fileID: 8295161813257291763}
+  - component: {fileID: 5759566402938685587}
   - component: {fileID: 3919709587313486844}
   m_Layer: 0
   m_Name: RightHandAnchor
@@ -2281,6 +2275,31 @@ SphereCollider:
   serializedVersion: 2
   m_Radius: 0.1
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &5759566402938685587
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3311848786810570496}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 72589c3757a35fa45a36659c7560b34c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  currentState: 1
+  spawnOriginObj_Circle: {fileID: 0}
+  spawnOriginObj_Display: {fileID: 0}
+  weaponList:
+  - {fileID: 8890954303500915444, guid: 0ac331b5bb7e4724ab5ad2fb30e167ae, type: 3}
+  - {fileID: 7736314363512946226, guid: e764e101858569c46ae3ccb193c0da19, type: 3}
+  - {fileID: 1353050716332709435, guid: 87acb058fbc9a34449a5dd79d6186898, type: 3}
+  - {fileID: 1448808920471177366, guid: b353011f4b2272349a26fcdb6e73790a, type: 3}
+  - {fileID: 1353050716332709435, guid: 87acb058fbc9a34449a5dd79d6186898, type: 3}
+  - {fileID: 1448808920471177366, guid: b353011f4b2272349a26fcdb6e73790a, type: 3}
+  createWeaponList: []
+  radius: 0.8
+  rotateSpeed: 0.5
 --- !u!114 &3919709587313486844
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3973,6 +3992,7 @@ GameObject:
   - component: {fileID: 611741421537509002}
   - component: {fileID: 4156034758031937499}
   - component: {fileID: 4982066902287000874}
+  - component: {fileID: 996467286512522737}
   - component: {fileID: 6339987105038589626}
   m_Layer: 0
   m_Name: LeftHandAnchor
@@ -4025,6 +4045,31 @@ SphereCollider:
   serializedVersion: 2
   m_Radius: 0.2
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &996467286512522737
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5507831258224636482}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 72589c3757a35fa45a36659c7560b34c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  currentState: 1
+  spawnOriginObj_Circle: {fileID: 0}
+  spawnOriginObj_Display: {fileID: 0}
+  weaponList:
+  - {fileID: 8890954303500915444, guid: 0ac331b5bb7e4724ab5ad2fb30e167ae, type: 3}
+  - {fileID: 7736314363512946226, guid: e764e101858569c46ae3ccb193c0da19, type: 3}
+  - {fileID: 1353050716332709435, guid: 87acb058fbc9a34449a5dd79d6186898, type: 3}
+  - {fileID: 1448808920471177366, guid: b353011f4b2272349a26fcdb6e73790a, type: 3}
+  - {fileID: 1353050716332709435, guid: 87acb058fbc9a34449a5dd79d6186898, type: 3}
+  - {fileID: 1448808920471177366, guid: b353011f4b2272349a26fcdb6e73790a, type: 3}
+  createWeaponList: []
+  radius: 0.8
+  rotateSpeed: 0.5
 --- !u!114 &6339987105038589626
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4807,6 +4852,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3792162353756730844}
   - component: {fileID: 3530188454226293381}
+  - component: {fileID: 5649418862103907820}
   m_Layer: 0
   m_Name: RightEyeAnchor
   m_TagString: Untagged
@@ -4864,13 +4910,31 @@ Camera:
   m_TargetTexture: {fileID: 0}
   m_TargetDisplay: 0
   m_TargetEye: 2
-  m_HDR: 0
+  m_HDR: 1
   m_AllowMSAA: 1
   m_AllowDynamicResolution: 0
   m_ForceIntoRT: 0
   m_OcclusionCulling: 1
   m_StereoConvergence: 10
   m_StereoSeparation: 0.022
+--- !u!114 &5649418862103907820
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6193948618022199568}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e90b7bd6b19560544a6e86851574b098, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _iteration: 9
+  _threshold: 100
+  _softThreshold: 1
+  _intensity: 1.83
+  _debug: 0
+  _material: {fileID: 2100000, guid: 68ac5bcde5622874b83f351045f4727b, type: 2}
 --- !u!1 &6207167597746725010
 GameObject:
   m_ObjectHideFlags: 0
@@ -4882,6 +4946,7 @@ GameObject:
   - component: {fileID: 732973805985262556}
   - component: {fileID: 1639864100963651029}
   - component: {fileID: 3380464892775249531}
+  - component: {fileID: 5600188742974721130}
   m_Layer: 0
   m_Name: CenterEyeAnchor
   m_TagString: MainCamera
@@ -4947,13 +5012,31 @@ Camera:
   m_TargetTexture: {fileID: 0}
   m_TargetDisplay: 0
   m_TargetEye: 3
-  m_HDR: 0
+  m_HDR: 1
   m_AllowMSAA: 1
   m_AllowDynamicResolution: 0
   m_ForceIntoRT: 0
   m_OcclusionCulling: 1
   m_StereoConvergence: 10
   m_StereoSeparation: 0.022
+--- !u!114 &5600188742974721130
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6207167597746725010}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e90b7bd6b19560544a6e86851574b098, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _iteration: 1
+  _threshold: 0
+  _softThreshold: 0
+  _intensity: 4.22
+  _debug: 0
+  _material: {fileID: 2100000, guid: 68ac5bcde5622874b83f351045f4727b, type: 2}
 --- !u!1 &6216352074255216828
 GameObject:
   m_ObjectHideFlags: 0

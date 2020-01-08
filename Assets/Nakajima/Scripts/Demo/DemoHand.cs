@@ -11,6 +11,7 @@ namespace Nakajima.Player
     public class DemoHand : HandMaster
     {
         public event Action<HandMaster, GameObject> oppositeWeapon;
+        public event Action<HandMaster> deleteWeapon;
 
         /// <summary>
         /// 初回処理
@@ -18,7 +19,7 @@ namespace Nakajima.Player
         public override void Start()
         {
             HasWeapon = false;
-            weaponCreate = FindObjectOfType<WeaponCreate>();
+            weaponCreate = GetComponent<WeaponCreate>();
             weaponMgr = FindObjectOfType<WeaponManager>();
         }
 
@@ -28,17 +29,13 @@ namespace Nakajima.Player
         public override void Update()
         {
             // 武器所持時のみ実行
-            if (HasWeapon)
-            {
+            if (HasWeapon) {
                 WeaponAction();
                 return;
             }
 
             // 武器を掴む
-            if (OVRInput.GetDown(myTouch) && HasWeapon == false)
-            {
-                GrabWeapon();
-            }
+            if (OVRInput.GetDown(myTouch) && HasWeapon == false) GrabWeapon();
         }
 
         /// <summary>
@@ -76,7 +73,8 @@ namespace Nakajima.Player
             // 同期したい
             Debug.Log("ID ; " + TestOnlineData.PlayerID + " 通過");
 
-            if (handList.Length > 1)
+            // 両手武器の場合装備
+            if (weaponMgr.HasOtherWeapon(GetWeaponName(hasObj.name)))
             {
                 var obj = handList[1].GetBody();
                 oppositeWeapon?.Invoke(this, obj);
@@ -89,8 +87,9 @@ namespace Nakajima.Player
         /// <param name="_weapon">セットする武器オブジェクト</param>
         public override void SetWeapon(GameObject _weapon)
         {
-            if (HasWeapon) return;
+            if (HasWeapon && hasObj == _weapon) return;
 
+            DeleteWeapon(true);
             hasObj = _weapon;
             hasObj.transform.parent = transform;
             hasObj.transform.localPosition = Vector3.zero;
@@ -99,15 +98,33 @@ namespace Nakajima.Player
         }
 
         /// <summary>
-        /// 所持中の武器を破棄する
+        /// 武器生成(まだ所持ではない)
         /// </summary>
-        public override bool DeleteWeapon()
+        public override void Create()
+        {
+            weaponCreate.ActiveHand = this;
+            weaponCreate.Create();
+        }
+
+        /// <summary>
+        /// 武器の削除
+        /// </summary>
+        /// <param name="_flag">逆の手をチェックするか</param>
+        /// <returns></returns>
+        public override bool DeleteWeapon(bool _flag)
         {
             // 武器を所持していないならfalse
             if (HasWeapon == false) return false;
 
+            // 両手武器の場合逆の手も削除する
+            if(_flag && weaponMgr.HasOtherWeapon(GetWeaponName(hasObj.name))) {
+                deleteWeapon?.Invoke(this);
+            }
+
+            // 削除
             Destroy(hasObj);
             HasWeapon = false;
+            weaponCreate.Reset();
             return true;
         }
 

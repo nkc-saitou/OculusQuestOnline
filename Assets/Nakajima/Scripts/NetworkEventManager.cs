@@ -89,7 +89,7 @@ public class NetworkEventManager : MonoBehaviourPunCallbacks
                 SetOpposite(ID, obj, weaponName);
             };
 
-            hand.deleteWeapon += (Hand, ID) => {
+            hand.netDeleteWeapon += (Hand, ID) => {
                 SetDestroy(Hand, ID);
             };
         }
@@ -132,7 +132,7 @@ public class NetworkEventManager : MonoBehaviourPunCallbacks
     /// <param name="_hand">武器を所持している手</param>
     /// <param name="_playerID">ID</param>
     [PunRPC]
-    private void SetDestroy(PlayerHand _hand, int _playerID)
+    private void SetDestroy(HandMaster _hand, int _playerID)
     {
         var handHash = new ExitGames.Client.Photon.Hashtable();
         if(_hand.myTouch == OVRInput.RawButton.RHandTrigger) handHash[_playerID + "_right"] = "None";
@@ -231,10 +231,10 @@ public class NetworkEventManager : MonoBehaviourPunCallbacks
             switch (hash[0])
             {
                 case "1":
-                    HandList[0].DeleteWeapon();
+                    HandList[0].DeleteWeapon(true);
                     break;
                 case "2":
-                    HandList[2].DeleteWeapon();
+                    HandList[2].DeleteWeapon(true);
                     break;
             }
         }
@@ -244,10 +244,10 @@ public class NetworkEventManager : MonoBehaviourPunCallbacks
             switch (hash[0])
             {
                 case "1":
-                    HandList[1].DeleteWeapon();
+                    HandList[1].DeleteWeapon(true);
                     break;
                 case "2":
-                    HandList[3].DeleteWeapon();
+                    HandList[3].DeleteWeapon(true);
                     break;
             }
         }
