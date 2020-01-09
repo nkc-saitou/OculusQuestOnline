@@ -4,57 +4,32 @@ using UnityEngine;
 using UnityEngine.XR;
 using Nakajima.Movement;
 using Nakajima.Weapon;
-using Saitou.Network;
+using Matsumoto.Weapon;
 
-
-/// <summary>
-/// プレイヤークラス
-/// </summary>
 namespace Nakajima.Player
 {
-    public class PlayerController : PlayerMaster
+    public class DemoPlayerController : PlayerMaster
     {
         // 自身の手(0 右手、1 左手)
         [SerializeField, Header("<自分の手(0 右手 1 左手)>")]
-        protected PlayerHand[] myHand;
+        protected DemoHand[] myHand;
 
         // 自身のMovement;
         private MovementComponetBase myMovement;
 
-        // オンライン用のプレイヤーの生成
-        private TestPlayerCreate testPlayerCreate;
-
-        /// <summary>
-        /// 初回処理
-        /// </summary>
         public override void Start()
         {
             myRig = GetComponent<Rigidbody>();
             myMovement = GetComponent<MovementComponetBase>();
-            weaponCreate = GetComponent<WeaponCreate>();
-            testPlayerCreate = FindObjectOfType<TestPlayerCreate>();
+            weaponMgr = FindObjectOfType<WeaponManager>();
 
-            //// イベントをバインド
-            //myHand[0].oppositeWeapon += SetOpposite;
-            //myHand[1].oppositeWeapon += SetOpposite;
-
-            testPlayerCreate.OnPlayerCreate += (myHandArray) =>
-            {
-                myHand = myHandArray;
-
-                // イベントをバインド
-                myHand[0].oppositeWeapon += SetOpposite;
-                myHand[0].deleteWeapon += CheckDelete;
-                myHand[1].oppositeWeapon += SetOpposite;
-                myHand[1].deleteWeapon += CheckDelete;
-
-                Debug.Log("aaaa");
-            };
+            // イベントをバインド
+            myHand[0].oppositeWeapon += SetOpposite;
+            myHand[0].deleteWeapon += CheckDelete;
+            myHand[1].oppositeWeapon += SetOpposite;
+            myHand[1].deleteWeapon += CheckDelete;
         }
 
-        /// <summary>
-        /// 更新処理
-        /// </summary>
         public override void Update()
         {
             Move();
@@ -141,3 +116,4 @@ namespace Nakajima.Player
         }
     }
 }
+

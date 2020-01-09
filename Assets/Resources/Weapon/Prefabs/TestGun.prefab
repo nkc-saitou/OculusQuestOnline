@@ -49,7 +49,7 @@ MonoBehaviour:
   _weaponData: {fileID: 11400000, guid: 36d851d3983d5ef42a6ffacb55a1a71b, type: 2}
   _weaponModules:
   - {fileID: 4427101607777204413, guid: 28aaeaae80c4e30469de7c05478147a7, type: 3}
-  _otherWeapon: {fileID: 7775335077187220459}
+  _otherWeapon: {fileID: 0}
 --- !u!1 &272615529343246696
 GameObject:
   m_ObjectHideFlags: 0
