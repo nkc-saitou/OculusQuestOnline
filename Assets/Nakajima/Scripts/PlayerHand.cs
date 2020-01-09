@@ -23,8 +23,8 @@ namespace Nakajima.Player
         // 自身の状態を送る
         public event Action<PlayerHand> updateHandStatus;
         // 同期したい
-        public event Action<int, string> syncWeapon;
-        public event Action<int, GameObject, string> setOppesite;
+        public event Action<int, HandMaster, string> syncWeapon;
+        public event Action<int, HandMaster, GameObject, string> setOppesite;
 
         // WeaponCreateの参照
         //private WeaponCreate weaponCreate;
@@ -112,13 +112,13 @@ namespace Nakajima.Player
 
             // 同期したい
             Debug.Log("ID ; " + TestOnlineData.PlayerID + " 通過");
-            syncWeapon?.Invoke(myProvider.MyID, GetWeaponName(hasObj.name));
+            syncWeapon?.Invoke(myProvider.MyID, this, GetWeaponName(hasObj.name));
 
             if (handList.Length > 1)
             {
                 var obj = handList[1].GetBody();
                 oppositeWeapon?.Invoke(this, obj);
-                setOppesite?.Invoke(myProvider.MyID, obj, GetWeaponName(hasObj.name));
+                setOppesite?.Invoke(myProvider.MyID, this, obj, GetWeaponName(hasObj.name));
             }
         }
 
@@ -140,14 +140,14 @@ namespace Nakajima.Player
 
             HasWeapon = true;
             if (photonView.IsMine) weaponCreate.CanCreate = false;
-            syncWeapon?.Invoke(myProvider.MyID, GetWeaponName(hasObj.name));
+            syncWeapon?.Invoke(myProvider.MyID, this, GetWeaponName(hasObj.name));
 
             // 反対の手にも装備
             if (handList.Length > 1)
             {
                 var obj = handList[1].GetBody();
                 oppositeWeapon?.Invoke(this, obj);
-                setOppesite?.Invoke(myProvider.MyID, obj, GetWeaponName(hasObj.name));
+                setOppesite?.Invoke(myProvider.MyID, this, obj, GetWeaponName(hasObj.name));
             }
         }
 
@@ -177,6 +177,15 @@ namespace Nakajima.Player
         //    string[] weaponName = _objName.Split('(');
         //    return weaponName[0];
         //}
+
+        /// <summary>
+        /// 武器生成(まだ所持ではない)
+        /// </summary>
+        public override void Create()
+        {
+            weaponCreate.ActiveHand = this;
+            weaponCreate.Create();
+        }
 
         /// <summary>
         /// 所持中の武器を破棄する

@@ -1567,10 +1567,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e564c9f0f31e88c4c895a738d5e2f5fa, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  myProvider: {fileID: 0}
+  weaponCreate: {fileID: 0}
   myTouch: 536870912
-  GunObj: {fileID: 151061625077218210, guid: 5877dc5a617738a4996842db317be39c, type: 3}
   hasObj: {fileID: 0}
+  myProvider: {fileID: 0}
+  GunObj: {fileID: 151061625077218210, guid: 5877dc5a617738a4996842db317be39c, type: 3}
 --- !u!1 &1584709178961547289
 GameObject:
   m_ObjectHideFlags: 0
@@ -4169,7 +4170,6 @@ GameObject:
   - component: {fileID: 1492655136021762934}
   - component: {fileID: 2390776983563907542}
   - component: {fileID: 5286007771052204209}
-  - component: {fileID: 9012804805990284109}
   - component: {fileID: 1032476366971235930}
   - component: {fileID: 8533763573901080786}
   m_Layer: 0
@@ -4287,31 +4287,6 @@ MonoBehaviour:
   halfSpeed: 3
   maxSpeed: 6
   accelSpeed: 0.5
---- !u!114 &9012804805990284109
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4843531762562746774}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 72589c3757a35fa45a36659c7560b34c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  currentState: 1
-  spawnOriginObj_Circle: {fileID: 0}
-  spawnOriginObj_Display: {fileID: 1498439562125103118}
-  weaponList:
-  - {fileID: 7736314363512946226, guid: e764e101858569c46ae3ccb193c0da19, type: 3}
-  - {fileID: 7736314363512946226, guid: e764e101858569c46ae3ccb193c0da19, type: 3}
-  - {fileID: 7736314363512946226, guid: e764e101858569c46ae3ccb193c0da19, type: 3}
-  - {fileID: 7736314363512946226, guid: e764e101858569c46ae3ccb193c0da19, type: 3}
-  - {fileID: 1353050716332709435, guid: 87acb058fbc9a34449a5dd79d6186898, type: 3}
-  - {fileID: 1448808920471177366, guid: b353011f4b2272349a26fcdb6e73790a, type: 3}
-  createWeaponList: []
-  radius: 0.8
-  rotateSpeed: 0.5
 --- !u!114 &1032476366971235930
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6761,10 +6736,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e564c9f0f31e88c4c895a738d5e2f5fa, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  myProvider: {fileID: 0}
+  weaponCreate: {fileID: 0}
   myTouch: 134217728
-  GunObj: {fileID: 151061625077218210, guid: 5877dc5a617738a4996842db317be39c, type: 3}
   hasObj: {fileID: 0}
+  myProvider: {fileID: 0}
+  GunObj: {fileID: 151061625077218210, guid: 5877dc5a617738a4996842db317be39c, type: 3}
 --- !u!1 &8568337434573501952
 GameObject:
   m_ObjectHideFlags: 0
