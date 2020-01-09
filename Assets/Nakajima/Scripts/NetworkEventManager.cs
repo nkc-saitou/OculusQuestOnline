@@ -81,12 +81,12 @@ public class NetworkEventManager : MonoBehaviourPunCallbacks
 
         foreach(var hand in _hand)
         {
-            hand.syncWeapon += (ID, weaponName) => {
-                myPhotonView.RPC(nameof(PlayerGrab), RpcTarget.All, ID, weaponName);
+            hand.syncWeapon += (ID, Hand, weaponName) => {
+                myPhotonView.RPC(nameof(PlayerGrab), RpcTarget.All, ID, Hand, weaponName);
             };
 
-            hand.setOppesite += (ID, obj, weaponName) => {
-                SetOpposite(ID, obj, weaponName);
+            hand.setOppesite += (ID, Hand, obj, weaponName) => {
+                SetOpposite(ID, Hand, obj, weaponName);
             };
 
             hand.netDeleteWeapon += (Hand, ID) => {
@@ -101,12 +101,14 @@ public class NetworkEventManager : MonoBehaviourPunCallbacks
     /// <param name="_playerID"></param>
     /// <param name="_weaponName"></param>
     [PunRPC]
-    public void PlayerGrab(int _playerID, string _weaponName)
+    public void PlayerGrab(int _playerID, HandMaster _hand, string _weaponName)
     {
         Debug.Log( "ID : " + _playerID);
         // IDで処理分け
         var handHash = new ExitGames.Client.Photon.Hashtable();
-        handHash[_playerID + "_left"] = _weaponName;
+        Debug.Log(_hand.myTouch);
+        if (_hand.myTouch == OVRInput.RawButton.RHandTrigger) handHash[_playerID + "_right"] = _weaponName;
+        else handHash[_playerID + "_left"] = _weaponName;
         PhotonNetwork.LocalPlayer.SetCustomProperties(handHash);
     }
 
@@ -116,13 +118,15 @@ public class NetworkEventManager : MonoBehaviourPunCallbacks
     /// <param name="_hand">利き手</param>
     /// <param name="_weapon">武器</param>
     [PunRPC]
-    private void SetOpposite(int _playerID, GameObject _weapon, string _weaponName)
+    private void SetOpposite(int _playerID, HandMaster _hand, GameObject _weapon, string _weaponName)
     {
         Debug.Log("ID : " + _playerID);
         // IDで処理分け
         weapon = _weapon;
         var handHash = new ExitGames.Client.Photon.Hashtable();
-        handHash[_playerID + "_right"] = _weaponName;
+        Debug.Log(_hand.myTouch);
+        if (_hand.myTouch == OVRInput.RawButton.RHandTrigger) handHash[_playerID + "_left"] = _weaponName;
+        else handHash[_playerID + "_right"] = _weaponName;
         PhotonNetwork.LocalPlayer.SetCustomProperties(handHash);
     }
 
