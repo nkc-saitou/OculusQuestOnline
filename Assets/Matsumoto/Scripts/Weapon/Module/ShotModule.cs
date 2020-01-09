@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using UniRx;
+using Nakajima.Player;
 
 namespace Matsumoto.Weapon {
 
@@ -21,7 +22,7 @@ namespace Matsumoto.Weapon {
 			base.ModuleInitialize(weapon);
 
 
-			var playerID = 1; // 1 or 2
+            var playerID = GetComponentInParent<DisplayPlayerProvider>().MyID;
 			manager.AddSyncEvent(playerID, EventID, (data) => {
 				var t = (TransformStamp)data;
 				var b = Instantiate(_bullet, t.Position, t.Rotation);

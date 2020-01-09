@@ -151,6 +151,7 @@ public class NetworkEventManager : MonoBehaviourPunCallbacks
 	/// <param name="action">実行されるイベント</param>
 	public void AddSyncEvent(int playerID, int eventID, System.Action<object> action) {
 		_syncEventTable.Add((playerID, eventID), action);
+        Debug.Log($"AddSyncEvent playerID:{playerID}, eventID:{eventID}");
 	}
 
 	/// <summary>
@@ -159,21 +160,25 @@ public class NetworkEventManager : MonoBehaviourPunCallbacks
 	/// <param name="eventID">呼び出すイベント番号(固有)</param>
 	public void CallSyncEvent(int eventID, object data) {
 		myPhotonView.RPC(nameof(ExecSyncEvent), RpcTarget.All, TestOnlineData.PlayerID, eventID, data);
-	}
+        Debug.Log($"CallSyncEvent eventID:{eventID}");
+    }
 
-	/// <summary>
-	/// 全プレイヤーにイベントを実行させる
-	/// </summary>
-	/// <param name="eventID">呼び出すイベント番号(固有)</param>
-	[PunRPC]
+    /// <summary>
+    /// 全プレイヤーにイベントを実行させる
+    /// </summary>
+    /// <param name="eventID">呼び出すイベント番号(固有)</param>
+    [PunRPC]
 	private void ExecSyncEvent(int playerID, int eventID, object data) {
 
-		var eventPair = (playerID, eventID);
+        Debug.Log($"ExecSyncEvent playerID:{playerID}, eventID:{eventID}");
+
+        var eventPair = (playerID, eventID);
 		// eventPairで参照するイベントは必ず存在するはず
 		if(_syncEventTable.ContainsKey(eventPair)) {
 			_syncEventTable[eventPair]?.Invoke(data);
-		}
-	}
+             Debug.Log($"ExecSyncEvent success");
+        }
+    }
 
 	/// <summary>
 	/// カスタムPropertiesに変更があった際のCallback
