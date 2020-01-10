@@ -120,7 +120,18 @@ namespace Nakajima.Player
         /// <summary>
         /// 所持中の武器を破棄する
         /// </summary>
-        public virtual bool DeleteWeapon(bool _flag) { return false; }
+        public virtual bool CheckDelete() { return false; }
+
+        /// <summary>
+        /// 武器の削除
+        /// </summary>
+        public virtual void DeleteWeapon(bool _flag) { }
+
+        /// <summary>
+        /// 武器の削除
+        /// </summary>
+        public virtual void DeleteWeapon() { }
+
     }
 }
 

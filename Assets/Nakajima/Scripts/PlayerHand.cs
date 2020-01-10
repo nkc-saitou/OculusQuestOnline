@@ -13,42 +13,31 @@ namespace Nakajima.Player
 {
     public class PlayerHand : HandMaster
     {
-        // 武器を掴んだイベント
-        public event Action<PlayerHand, GameObject> grabWeapon;
         // 判定の手にも武器をもたせる
         public event Action<HandMaster, GameObject> oppositeWeapon;
         // 武器の削除
         public event Action<HandMaster> deleteWeapon;
-        public event Action<HandMaster, int> netDeleteWeapon;
-        // 自身の状態を送る
-        public event Action<PlayerHand> updateHandStatus;
+        public event Action<int, string, bool> netDeleteWeapon;
         // 同期したい
-        public event Action<int, HandMaster, string> syncWeapon;
-        public event Action<int, HandMaster, GameObject, string> setOppesite;
+        public event Action<int, string, string> syncWeapon;
+        public event Action<int, string, GameObject, string> setOppesite;
 
-        // WeaponCreateの参照
-        //private WeaponCreate weaponCreate;
-        //private WeaponManager weaponMgr;
-
+        // PhotonView
         private PhotonView photonView;
 
         // 自身のProvider
         public DisplayPlayerProvider myProvider;
 
-        // どっちの手か
-        //public OVRInput.RawButton myTouch;
-
         [SerializeField]
         private GameObject GunObj;
 
-        // 触れたオブジェクト
-        [HideInInspector]
-        //public GameObject hasObj;
+        // 右手か左手か
+        private string handName;
 
-        // 武器を所持しているか
-        //public bool HasWeapon {
-        //    get; private set;
-        //}
+        // 両手武器かどうか
+        public bool isBoth;
+
+        int temp = 0;
 
         /// <summary>
         /// 初回処理
@@ -59,6 +48,9 @@ namespace Nakajima.Player
             weaponMgr = FindObjectOfType<WeaponManager>();
             weaponCreate = GetComponent<WeaponCreate>();
             photonView = GetComponent<PhotonView>();
+
+            if (myTouch == OVRInput.RawButton.RHandTrigger) handName = "_right";
+            else if(myTouch == OVRInput.RawButton.LHandTrigger) handName = "_left";
         }
 
         /// <summary>
@@ -111,14 +103,13 @@ namespace Nakajima.Player
             if (photonView.IsMine) weaponCreate.CanCreate = false;
 
             // 同期したい
-            Debug.Log("ID ; " + TestOnlineData.PlayerID + " 通過");
-            syncWeapon?.Invoke(myProvider.MyID, this, GetWeaponName(hasObj.name));
+            Debug.Log("ID : " + TestOnlineData.PlayerID + " 通過");
+            syncWeapon?.Invoke(myProvider.MyID, handName, GetWeaponName(hasObj.name));
 
-            if (handList.Length > 1)
+            if (weaponMgr.HasOtherWeapon(GetWeaponName(hasObj.name)))
             {
                 var obj = handList[1].GetBody();
                 oppositeWeapon?.Invoke(this, obj);
-                setOppesite?.Invoke(myProvider.MyID, this, obj, GetWeaponName(hasObj.name));
             }
         }
 
@@ -129,7 +120,7 @@ namespace Nakajima.Player
         public override void GrabWeapon(string _weaponName)
         {
             // 武器を持っているならリターン
-            if (HasWeapon || photonView.IsMine || hasObj != null) return;
+            if (HasWeapon || photonView.IsMine) return;
 
             weaponMgr.LoadWeapon();
             var handList = weaponMgr.CreateWeapon(_weaponName);
@@ -140,14 +131,12 @@ namespace Nakajima.Player
 
             HasWeapon = true;
             if (photonView.IsMine) weaponCreate.CanCreate = false;
-            syncWeapon?.Invoke(myProvider.MyID, this, GetWeaponName(hasObj.name));
 
             // 反対の手にも装備
-            if (handList.Length > 1)
+            if (weaponMgr.HasOtherWeapon(GetWeaponName(hasObj.name)))
             {
                 var obj = handList[1].GetBody();
-                oppositeWeapon?.Invoke(this, obj);
-                setOppesite?.Invoke(myProvider.MyID, this, obj, GetWeaponName(hasObj.name));
+                setOppesite?.Invoke(myProvider.MyID, handName, obj, GetWeaponName(hasObj.name));
             }
         }
 
@@ -157,26 +146,19 @@ namespace Nakajima.Player
         /// <param name="_weapon">セットする武器オブジェクト</param>
         public override void SetWeapon(GameObject _weapon)
         {
-            if (HasWeapon) return;
-
+            // 武器を持っているなら削除
+            if(HasWeapon) DeleteWeapon(CheckDelete());
+            
             hasObj = _weapon;
             hasObj.transform.parent = transform;
             hasObj.transform.localPosition = Vector3.zero;
             hasObj.transform.localRotation = Quaternion.identity;
             HasWeapon = true;
-        }
+            isBoth = true;
 
-        /// <summary>
-        /// 武器の名前を抜き出す
-        /// </summary>
-        /// <param name="_objName">武器オブジェクト名</param>
-        /// <returns>武器の名前</returns>
-        //public string GetWeaponName(string _objName)
-        //{
-        //    // オブジェクト名から(Clone)を抜く
-        //    string[] weaponName = _objName.Split('(');
-        //    return weaponName[0];
-        //}
+            temp++;
+            Debug.Log("SetWeapon : " + HasWeapon + " : " + temp);
+        }
 
         /// <summary>
         /// 武器生成(まだ所持ではない)
@@ -190,22 +172,50 @@ namespace Nakajima.Player
         /// <summary>
         /// 所持中の武器を破棄する
         /// </summary>
-        public override bool DeleteWeapon(bool _flag)
+        public override bool CheckDelete()
         {
             // 武器を所持していないならfalse
-            if (HasWeapon == false) return false;
+            if (HasWeapon == false || hasObj == null) return false;
 
             // 両手武器の場合逆の手も削除する
-            if (_flag && weaponMgr.HasOtherWeapon(GetWeaponName(hasObj.name))) {
-                deleteWeapon?.Invoke(this);
-            }
+            if (weaponMgr.HasOtherWeapon(GetWeaponName(hasObj.name))) return true;
+
+            return false;
+        }
+
+        /// <summary>
+        /// 武器の削除
+        /// </summary>
+        /// <param name="_flag">両手武器かどうか</param>
+        public override void DeleteWeapon(bool _flag)
+        {
+            // なにもないならリターン
+            if (HasWeapon == false) return;
+
+            // 両手武器の場合
+            if (_flag) deleteWeapon?.Invoke(this);
 
             // 削除
             Destroy(hasObj);
-            netDeleteWeapon?.Invoke(this, myProvider.MyID);
+            if(photonView.IsMine) netDeleteWeapon?.Invoke(myProvider.MyID, handName, _flag);
             HasWeapon = false;
+            isBoth = false;
             weaponCreate.Reset();
-            return true;
+        }
+
+        /// <summary>
+        /// 武器の削除
+        /// </summary>
+        public override void DeleteWeapon()
+        {
+            // なにもないならリターン
+            if (HasWeapon == false || photonView.IsMine) return;
+
+            // 削除
+            Destroy(hasObj);
+            HasWeapon = false;
+            isBoth = false;
+            weaponCreate.Reset();
         }
 
         /// <summary>

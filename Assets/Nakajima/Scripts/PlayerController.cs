@@ -99,10 +99,10 @@ namespace Nakajima.Player
                 myHand[0].Create();
 
             // Y/Bボタンで所持中の武器の削除
-            if (OVRInput.GetDown(OVRInput.RawButton.Y))
-                myHand[1].DeleteWeapon(true);
-            if (OVRInput.GetDown(OVRInput.RawButton.B))
-                myHand[0].DeleteWeapon(true);
+            if (OVRInput.GetDown(OVRInput.RawButton.Y) && myHand[1].isBoth == false)
+                myHand[1].DeleteWeapon(myHand[1].CheckDelete());
+            if (OVRInput.GetDown(OVRInput.RawButton.B) && myHand[0].isBoth == false)
+                myHand[0].DeleteWeapon(myHand[0].CheckDelete());
             // X/Aボタンを離したら武器の削除
             if (OVRInput.GetUp(OVRInput.RawButton.X))
                 myHand[1].weaponCreate.DeleteWeapon();

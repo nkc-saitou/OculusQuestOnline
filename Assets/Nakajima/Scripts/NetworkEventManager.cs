@@ -89,8 +89,8 @@ public class NetworkEventManager : MonoBehaviourPunCallbacks
                 SetOpposite(ID, Hand, obj, weaponName);
             };
 
-            hand.netDeleteWeapon += (Hand, ID) => {
-                SetDestroy(Hand, ID);
+            hand.netDeleteWeapon += (ID, handName, Flag) => {
+                SetDestroy(ID, handName, Flag);
             };
         }
     }
@@ -101,14 +101,13 @@ public class NetworkEventManager : MonoBehaviourPunCallbacks
     /// <param name="_playerID"></param>
     /// <param name="_weaponName"></param>
     [PunRPC]
-    public void PlayerGrab(int _playerID, HandMaster _hand, string _weaponName)
+    public void PlayerGrab(int _playerID, string _handName, string _weaponName)
     {
-        Debug.Log( "ID : " + _playerID);
+        weapon = null;
+
         // IDで処理分け
         var handHash = new ExitGames.Client.Photon.Hashtable();
-        Debug.Log(_hand.myTouch);
-        if (_hand.myTouch == OVRInput.RawButton.RHandTrigger) handHash[_playerID + "_right"] = _weaponName;
-        else handHash[_playerID + "_left"] = _weaponName;
+        handHash[_playerID + _handName] = _weaponName;
         PhotonNetwork.LocalPlayer.SetCustomProperties(handHash);
     }
 
@@ -118,15 +117,13 @@ public class NetworkEventManager : MonoBehaviourPunCallbacks
     /// <param name="_hand">利き手</param>
     /// <param name="_weapon">武器</param>
     [PunRPC]
-    private void SetOpposite(int _playerID, HandMaster _hand, GameObject _weapon, string _weaponName)
+    private void SetOpposite(int _playerID, string _handName, GameObject _weapon, string _weaponName)
     {
-        Debug.Log("ID : " + _playerID);
         // IDで処理分け
         weapon = _weapon;
         var handHash = new ExitGames.Client.Photon.Hashtable();
-        Debug.Log(_hand.myTouch);
-        if (_hand.myTouch == OVRInput.RawButton.RHandTrigger) handHash[_playerID + "_left"] = _weaponName;
-        else handHash[_playerID + "_right"] = _weaponName;
+        if (_handName == "_right") handHash[_playerID + "_left"] = _weaponName;
+        else if (_handName == "_left") handHash[_playerID + "_right"] = _weaponName;
         PhotonNetwork.LocalPlayer.SetCustomProperties(handHash);
     }
 
@@ -136,11 +133,10 @@ public class NetworkEventManager : MonoBehaviourPunCallbacks
     /// <param name="_hand">武器を所持している手</param>
     /// <param name="_playerID">ID</param>
     [PunRPC]
-    private void SetDestroy(HandMaster _hand, int _playerID)
+    private void SetDestroy(int _playerID, string _handName, bool _flag)
     {
         var handHash = new ExitGames.Client.Photon.Hashtable();
-        if(_hand.myTouch == OVRInput.RawButton.RHandTrigger) handHash[_playerID + "_right"] = "None";
-        else handHash[_playerID + "_left"] = "None";
+        handHash[_playerID + _handName] = "None";
         PhotonNetwork.LocalPlayer.SetCustomProperties(handHash);
     }
 
@@ -167,11 +163,6 @@ public class NetworkEventManager : MonoBehaviourPunCallbacks
         // IDを抜き出す
         string[] hash = SplitID(_dic.Key.ToString());
 
-        var handL = PhotonNetwork.LocalPlayer.CustomProperties[hash[0] + "_left"];
-        Debug.Log(handL.ToString());
-        var handR = PhotonNetwork.LocalPlayer.CustomProperties[hash[0] + "_right"];
-        Debug.Log(_dic.Value.ToString());
-
         // 武器削除
         if (_dic.Value.ToString() == "None") {
             DeletePlayerWeapon(_dic);
@@ -185,14 +176,18 @@ public class NetworkEventManager : MonoBehaviourPunCallbacks
                 case "1":
                     if (HandList[1].HasWeapon == false)
                         HandList[0].GrabWeapon(_dic.Value.ToString());
-                    else
+                    else if(HandList[1].HasWeapon && weapon != null)
                         HandList[0].SetWeapon(weapon);
+                    else if(HandList[1].HasWeapon && weapon == null)
+                        HandList[0].GrabWeapon(_dic.Value.ToString());
                     break;
                 case "2":
                     if (HandList[3].HasWeapon == false)
                         HandList[2].GrabWeapon(_dic.Value.ToString());
-                    else
+                    else if (HandList[3].HasWeapon && weapon != null)
                         HandList[2].SetWeapon(weapon);
+                    else if (HandList[3].HasWeapon && weapon == null)
+                        HandList[2].GrabWeapon(_dic.Value.ToString());
                     break;
             }
         }
@@ -203,18 +198,21 @@ public class NetworkEventManager : MonoBehaviourPunCallbacks
                 case "1":
                     if (HandList[0].HasWeapon == false)
                         HandList[1].GrabWeapon(_dic.Value.ToString());
-                    else
+                    else if (HandList[0].HasWeapon && weapon != null)
                         HandList[1].SetWeapon(weapon);
+                    else if (HandList[0].HasWeapon && weapon == null)
+                        HandList[1].GrabWeapon(_dic.Value.ToString());
                     break;
                 case "2":
                     if (HandList[2].HasWeapon == false)
                         HandList[3].GrabWeapon(_dic.Value.ToString());
-                    else
+                    else if (HandList[2].HasWeapon && weapon != null)
                         HandList[3].SetWeapon(weapon);
+                    else if (HandList[2].HasWeapon && weapon == null)
+                        HandList[3].GrabWeapon(_dic.Value.ToString());
                     break;
             }
         }
-        
     }
 
     /// <summary>
@@ -226,19 +224,16 @@ public class NetworkEventManager : MonoBehaviourPunCallbacks
         // IDを抜き出す
         string[] hash = SplitID(_dic.Key.ToString());
 
-        var handL = PhotonNetwork.LocalPlayer.CustomProperties[hash[0] + "_left"];
-        var handR = PhotonNetwork.LocalPlayer.CustomProperties[hash[0] + "_right"];
-
         // 右手の処理
         if (hash[1] == "right") {
             // IDで処理わけ
             switch (hash[0])
             {
                 case "1":
-                    HandList[0].DeleteWeapon(true);
+                    HandList[0].DeleteWeapon();
                     break;
                 case "2":
-                    HandList[2].DeleteWeapon(true);
+                    HandList[2].DeleteWeapon();
                     break;
             }
         }
@@ -248,10 +243,10 @@ public class NetworkEventManager : MonoBehaviourPunCallbacks
             switch (hash[0])
             {
                 case "1":
-                    HandList[1].DeleteWeapon(true);
+                    HandList[1].DeleteWeapon();
                     break;
                 case "2":
-                    HandList[3].DeleteWeapon(true);
+                    HandList[3].DeleteWeapon();
                     break;
             }
         }

@@ -75,9 +75,9 @@ namespace Nakajima.Player
 
             // Y/Bボタンで所持中の武器の削除
             if (OVRInput.GetDown(OVRInput.RawButton.Y))
-                myHand[1].DeleteWeapon(true);
+                myHand[1].DeleteWeapon(myHand[1].CheckDelete());
             if (OVRInput.GetDown(OVRInput.RawButton.B))
-                myHand[0].DeleteWeapon(true);
+                myHand[0].DeleteWeapon(myHand[0].CheckDelete());
             // X/Aボタンを離したら武器の削除
             if (OVRInput.GetUp(OVRInput.RawButton.X))
                 myHand[1].weaponCreate.DeleteWeapon();
@@ -110,9 +110,9 @@ namespace Nakajima.Player
         {
             // 逆の手の武器も削除する
             if (_hand.myTouch == OVRInput.RawButton.LHandTrigger)
-                myHand[0].DeleteWeapon(false);
+                myHand[0].CheckDelete();
             else if (_hand.myTouch == OVRInput.RawButton.RHandTrigger)
-                myHand[1].DeleteWeapon(false);
+                myHand[1].CheckDelete();
         }
     }
 }

@@ -111,13 +111,13 @@ namespace Nakajima.Player
         /// </summary>
         /// <param name="_flag">逆の手をチェックするか</param>
         /// <returns></returns>
-        public override bool DeleteWeapon(bool _flag)
+        public override bool CheckDelete()
         {
             // 武器を所持していないならfalse
             if (HasWeapon == false) return false;
 
             // 両手武器の場合逆の手も削除する
-            if(_flag && weaponMgr.HasOtherWeapon(GetWeaponName(hasObj.name))) {
+            if(weaponMgr.HasOtherWeapon(GetWeaponName(hasObj.name))) {
                 deleteWeapon?.Invoke(this);
             }
 
@@ -126,6 +126,11 @@ namespace Nakajima.Player
             HasWeapon = false;
             weaponCreate.Reset();
             return true;
+        }
+
+        public override void DeleteWeapon(bool _flag)
+        {
+
         }
 
         /// <summary>

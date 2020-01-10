@@ -232,6 +232,7 @@ MonoBehaviour:
   hasObj: {fileID: 0}
   myProvider: {fileID: 0}
   GunObj: {fileID: 151061625077218210, guid: 5877dc5a617738a4996842db317be39c, type: 3}
+  isBoth: 0
 --- !u!114 &6399080613318361179
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -523,6 +524,7 @@ MonoBehaviour:
   hasObj: {fileID: 0}
   myProvider: {fileID: 0}
   GunObj: {fileID: 151061625077218210, guid: 5877dc5a617738a4996842db317be39c, type: 3}
+  isBoth: 0
 --- !u!114 &6544453511463257247
 MonoBehaviour:
   m_ObjectHideFlags: 0
