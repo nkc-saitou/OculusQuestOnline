@@ -189,8 +189,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   targetObj: {fileID: 0}
-  rotateSpeed: 0
-  offset: {x: 0, y: 0, z: 0}
+  rotateSpeed: 0.5
+  offset: {x: 0, y: 1, z: 0}
 --- !u!65 &7800610975394686657
 BoxCollider:
   m_ObjectHideFlags: 0

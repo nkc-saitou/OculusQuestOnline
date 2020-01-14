@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System;
 using UnityEngine;
+using Photon.Pun;
 using Nakajima.Weapon;
 using Matsumoto.Weapon;
 
@@ -20,6 +21,8 @@ namespace Nakajima.Player
         // WeaponCreateの参照
         private WeaponCreate weaponCreate;
         private WeaponManager weaponMgr;
+
+        private PhotonView photonView;
 
         // どっちの手か
         public OVRInput.RawButton myTouch;
@@ -44,6 +47,7 @@ namespace Nakajima.Player
             HasWeapon = false;
             weaponCreate = FindObjectOfType<WeaponCreate>();
             weaponMgr = FindObjectOfType<WeaponManager>();
+            photonView = GetComponent<PhotonView>();
         }
 
         /// <summary>
@@ -56,7 +60,8 @@ namespace Nakajima.Player
             {
                 if (HasWeapon) return;
 
-                GrabWeapon(); 
+                GrabWeapon();
+                //photonView.RPC(nameof(GrabWeapon), RpcTarget.All);
             }
 
             WeaponAction();
@@ -76,11 +81,12 @@ namespace Nakajima.Player
         /// <summary>
         /// 武器を掴む
         /// </summary>
-        /// <param name="_index">利き手かどうか</param>
+        //[PunRPC]
         public void GrabWeapon()
         {
             // 何も触れていないならリターン
             if (hasObj == null) return;
+
 
             // 生成中の武器だったら装備する
             foreach (GameObject weapon in weaponCreate.createWeaponList)
@@ -101,7 +107,10 @@ namespace Nakajima.Player
 
                     HasWeapon = true;
                     weaponCreate.CanCreate = false;
-                    oppositeWeapon(this, handList[1].GetBody());
+                    if (handList.Length > 1) {
+                        var obj = handList[1].GetBody();
+                        oppositeWeapon?.Invoke(this, obj);
+                    }
                     break;
                 }
             }

@@ -75,6 +75,23 @@ namespace Nakajima.Weapon
         }
 
         /// <summary>
+        /// 武器の生成方法の切り替え
+        /// </summary>
+        public void ChangeCreateState()
+        {
+            // 生成方法の切り替え
+            switch (currentState)
+            {
+                case CreateState.PLAYER_CIRCLE:
+                    currentState = CreateState.HAND_DISPLAY;
+                    break;
+                case CreateState.HAND_DISPLAY:
+                    currentState = CreateState.PLAYER_CIRCLE;
+                    break;
+            }
+        }
+
+        /// <summary>
         /// 武器を生成(自分の周りに)
         /// </summary>
         public void Create()
