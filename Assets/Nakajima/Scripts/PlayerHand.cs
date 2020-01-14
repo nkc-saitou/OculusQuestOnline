@@ -99,6 +99,8 @@ namespace Nakajima.Player
             hasObj.transform.localPosition = Vector3.zero;
             hasObj.transform.localRotation = Quaternion.identity;
 
+            handList[0].SetOwner(this);
+
             HasWeapon = true;
             if (photonView.IsMine) weaponCreate.CanCreate = false;
 
@@ -129,6 +131,8 @@ namespace Nakajima.Player
             hasObj.transform.localPosition = Vector3.zero;
             hasObj.transform.localRotation = Quaternion.identity;
 
+            handList[0].SetOwner(this);
+
             HasWeapon = true;
             if (photonView.IsMine) weaponCreate.CanCreate = false;
 
@@ -155,6 +159,8 @@ namespace Nakajima.Player
             hasObj.transform.localRotation = Quaternion.identity;
             HasWeapon = true;
             isBoth = true;
+
+            _weapon.GetComponent<IWeapon>().SetOwner(this);
 
             temp++;
             Debug.Log("SetWeapon : " + HasWeapon + " : " + temp);

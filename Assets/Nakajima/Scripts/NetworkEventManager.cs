@@ -21,8 +21,8 @@ public class NetworkEventManager : MonoBehaviourPunCallbacks
     // オンライン用のプレイヤーの生成
     private TestPlayerCreate testPlayerCreate;
 
-	private Dictionary<(int playerID, int eventID), System.Action<object>> _syncEventTable
-		= new Dictionary<(int playerID, int eventID), System.Action<object>>();
+	private Dictionary<(int playerID, string eventID), System.Action<object[]>> _syncEventTable
+		= new Dictionary<(int playerID, string eventID), System.Action<object[]>>();
 
     // Start is called before the first frame update
     void Start()
@@ -149,7 +149,7 @@ public class NetworkEventManager : MonoBehaviourPunCallbacks
 	/// <param name="playerID">呼び出されるときに判断するプレイヤーID</param>
 	/// <param name="eventID">呼び出すためのイベント番号(固有)</param>
 	/// <param name="action">実行されるイベント</param>
-	public void AddSyncEvent(int playerID, int eventID, System.Action<object> action) {
+	public void AddSyncEvent(int playerID, string eventID, System.Action<object[]> action) {
 		_syncEventTable.Add((playerID, eventID), action);
         Debug.Log($"AddSyncEvent playerID:{playerID}, eventID:{eventID}");
 	}
@@ -158,8 +158,8 @@ public class NetworkEventManager : MonoBehaviourPunCallbacks
 	/// 全プレイヤーにイベントを実行させる
 	/// </summary>
 	/// <param name="eventID">呼び出すイベント番号(固有)</param>
-	public void CallSyncEvent(int eventID, object data) {
-		myPhotonView.RPC(nameof(ExecSyncEvent), RpcTarget.All, TestOnlineData.PlayerID, eventID, data);
+	public void CallSyncEvent(string eventID, object[] data) {
+		myPhotonView.RPC(nameof(ExecSyncEvent), RpcTarget.All, TestOnlineData.PlayerID, eventID, data as object);
         Debug.Log($"CallSyncEvent eventID:{eventID}");
     }
 
@@ -168,7 +168,7 @@ public class NetworkEventManager : MonoBehaviourPunCallbacks
     /// </summary>
     /// <param name="eventID">呼び出すイベント番号(固有)</param>
     [PunRPC]
-	private void ExecSyncEvent(int playerID, int eventID, object data) {
+	private void ExecSyncEvent(int playerID, string eventID, object[] data) {
 
         Debug.Log($"ExecSyncEvent playerID:{playerID}, eventID:{eventID}");
 

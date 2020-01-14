@@ -3,12 +3,11 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Nakajima.Player;
+using UniRx;
 
 namespace Matsumoto.Weapon {
 
 	public class ThrowModule : WeaponModuleBase {
-
-        private const int EventID = 1001;
 
         [SerializeField]
 		private ModuleObject _bomb;
@@ -19,7 +18,10 @@ namespace Matsumoto.Weapon {
 		[SerializeField]
 		private float _throwPower = 100;
 
-		private Transform _throwAnchor;
+        private static int _createCount = 0;
+        private int _myID = _createCount++;
+
+        private Transform _throwAnchor;
 		private Vector3 _prevPosition;
 		private List<Vector3> _samples = new List<Vector3>();
         private NetworkEventManager manager;
@@ -39,7 +41,7 @@ namespace Matsumoto.Weapon {
 		public override void ModuleInitialize(WeaponBase weapon) {
 			base.ModuleInitialize(weapon);
 
-			var transforms = weapon.transform.GetComponentsInChildren<Transform>();
+            var transforms = weapon.transform.GetComponentsInChildren<Transform>();
 			foreach(Transform item in transforms) {
 				if(item.name == "[ShotAnchor]") {
 					_throwAnchor = item;
@@ -47,21 +49,28 @@ namespace Matsumoto.Weapon {
 				}
 			}
 
-			_prevPosition = transform.position;
+            _prevPosition = transform.position;
 			_samples = new List<Vector3>();
 
-            var playerID = GetComponentInParent<DisplayPlayerProvider>().MyID;
-            manager.AddSyncEvent(playerID, EventID, (data) => {
-                var t = (TransformVectorStamp)data;
-                var b = Instantiate(_bomb, t.Position, t.Rotation);
-                b.ModuleData = _moduleData;
-                b.Modular.Speed =t.Vector.magnitude;
+            Owner.Subscribe(item =>
+            {
+                if (!item) return;
+                var playerID = item.myProvider.MyID;
+                manager = FindObjectOfType<NetworkEventManager>();
+                manager.AddSyncEvent(playerID, "ThrowModule_Throw" + _myID, (data) => {
+                    var p = (Vector3)(data[0]);
+                    var r = (Quaternion)(data[1]);
+                    var v = (Vector3)(data[2]);
+                    var b = Instantiate(_bomb, p, r);
+                    b.ModuleData = _moduleData;
+                    b.Modular.Speed = v.magnitude;
+                });
             });
 
             Debug.LogWarning("not found child object. name : [ShotAnchor]");
 		}
 
-		public override void OnUseModule(WeaponBase weapon) {
+        public override void OnUseModule(WeaponBase weapon) {
 			base.OnUseModule(weapon);
 
 			if(!_throwAnchor) {
@@ -78,7 +87,7 @@ namespace Matsumoto.Weapon {
 			_throwAnchor.forward = throwVector;
 			Debug.DrawLine(_throwAnchor.position, _throwAnchor.position + throwVector, Color.red, 1);
 
-            manager.CallSyncEvent(EventID, new TransformVectorStamp(System.DateTime.Now, _throwAnchor.position, _throwAnchor.rotation, throwVector));
+            manager.CallSyncEvent("ThrowModule_Throw" + _myID, new object[] { _throwAnchor.position, _throwAnchor.rotation, throwVector });
 
 		}
 

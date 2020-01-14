@@ -7,27 +7,33 @@ namespace Matsumoto.Weapon {
 
 	public class ShotModule : WeaponModuleBase {
 
-		private const int EventID = 1000;
-
 		[SerializeField]
 		private ModuleObject _bullet;
 
 		[SerializeField]
 		EffectObject _muzzle;
 
-		private Transform _shotAnchor;
+        private static int _createCount = 0;
+        private int _myID = _createCount++;
+
+        private Transform _shotAnchor;
 		private NetworkEventManager manager;
 
 		public override void ModuleInitialize(WeaponBase weapon) {
 			base.ModuleInitialize(weapon);
 
-
-            var playerID = GetComponentInParent<DisplayPlayerProvider>().MyID;
-			manager.AddSyncEvent(playerID, EventID, (data) => {
-				var t = (TransformStamp)data;
-				var b = Instantiate(_bullet, t.Position, t.Rotation);
-				b.ModuleData = _moduleData;
-			});
+            Owner.Subscribe(item =>
+            {
+                if (!item) return;
+                var playerID = item.myProvider.MyID;
+                manager = FindObjectOfType<NetworkEventManager>();
+                manager.AddSyncEvent(playerID, "ShotModule_Shot" + _myID, (data) => {
+                    var p = (Vector3)(data[0]);
+                    var r = (Quaternion)(data[1]);
+                    var b = Instantiate(_bullet, p, r);
+                    b.ModuleData = _moduleData;
+                });
+            });
 
 			var transforms = weapon.transform.GetComponentsInChildren<Transform>();
 			foreach(Transform item in transforms) {
@@ -54,7 +60,7 @@ namespace Matsumoto.Weapon {
 
 			//var b = Instantiate(_bullet, _shotAnchor.position, _shotAnchor.rotation);
 			//b.ModuleData = _moduleData;
-			manager.CallSyncEvent(EventID, new TransformStamp(System.DateTime.Now, _shotAnchor.position, _shotAnchor.rotation));
+			manager.CallSyncEvent("ShotModule_Shot" + _myID, new object[] { _shotAnchor.position, _shotAnchor.rotation });
 
 			var e = Instantiate(_muzzle, _shotAnchor);
 			e.transform.localPosition = new Vector3();
