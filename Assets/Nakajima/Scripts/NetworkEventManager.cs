@@ -21,6 +21,9 @@ public class NetworkEventManager : MonoBehaviourPunCallbacks
     // オンライン用のプレイヤーの生成
     private TestPlayerCreate testPlayerCreate;
 
+	private Dictionary<(int playerID, int eventID), System.Action<object>> _syncEventTable
+		= new Dictionary<(int playerID, int eventID), System.Action<object>>();
+
     // Start is called before the first frame update
     void Start()
     {
@@ -140,12 +143,49 @@ public class NetworkEventManager : MonoBehaviourPunCallbacks
         PhotonNetwork.LocalPlayer.SetCustomProperties(handHash);
     }
 
+	/// <summary>
+	/// イベントを登録する
+	/// </summary>
+	/// <param name="playerID">呼び出されるときに判断するプレイヤーID</param>
+	/// <param name="eventID">呼び出すためのイベント番号(固有)</param>
+	/// <param name="action">実行されるイベント</param>
+	public void AddSyncEvent(int playerID, int eventID, System.Action<object> action) {
+		_syncEventTable.Add((playerID, eventID), action);
+        Debug.Log($"AddSyncEvent playerID:{playerID}, eventID:{eventID}");
+	}
+
+	/// <summary>
+	/// 全プレイヤーにイベントを実行させる
+	/// </summary>
+	/// <param name="eventID">呼び出すイベント番号(固有)</param>
+	public void CallSyncEvent(int eventID, object data) {
+		myPhotonView.RPC(nameof(ExecSyncEvent), RpcTarget.All, TestOnlineData.PlayerID, eventID, data);
+        Debug.Log($"CallSyncEvent eventID:{eventID}");
+    }
+
     /// <summary>
-    /// カスタムPropertiesに変更があった際のCallback
+    /// 全プレイヤーにイベントを実行させる
     /// </summary>
-    /// <param name="target"></param>
-    /// <param name="changedProps">ハッシュテーブル</param>
-    public override void OnPlayerPropertiesUpdate(Player target, ExitGames.Client.Photon.Hashtable changedProps)
+    /// <param name="eventID">呼び出すイベント番号(固有)</param>
+    [PunRPC]
+	private void ExecSyncEvent(int playerID, int eventID, object data) {
+
+        Debug.Log($"ExecSyncEvent playerID:{playerID}, eventID:{eventID}");
+
+        var eventPair = (playerID, eventID);
+		// eventPairで参照するイベントは必ず存在するはず
+		if(_syncEventTable.ContainsKey(eventPair)) {
+			_syncEventTable[eventPair]?.Invoke(data);
+             Debug.Log($"ExecSyncEvent success");
+        }
+    }
+
+	/// <summary>
+	/// カスタムPropertiesに変更があった際のCallback
+	/// </summary>
+	/// <param name="target"></param>
+	/// <param name="changedProps">ハッシュテーブル</param>
+	public override void OnPlayerPropertiesUpdate(Player target, ExitGames.Client.Photon.Hashtable changedProps)
     {
         // 更新されたキーと値のペアを、デバッグログに出力する
         foreach (var p in changedProps)

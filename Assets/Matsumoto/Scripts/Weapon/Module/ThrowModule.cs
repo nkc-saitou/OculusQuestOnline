@@ -2,12 +2,15 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using Nakajima.Player;
 
 namespace Matsumoto.Weapon {
 
 	public class ThrowModule : WeaponModuleBase {
 
-		[SerializeField]
+        private const int EventID = 1001;
+
+        [SerializeField]
 		private ModuleObject _bomb;
 
 		[SerializeField]
@@ -19,8 +22,9 @@ namespace Matsumoto.Weapon {
 		private Transform _throwAnchor;
 		private Vector3 _prevPosition;
 		private List<Vector3> _samples = new List<Vector3>();
+        private NetworkEventManager manager;
 
-		private void Update() {
+        private void Update() {
 
 			// Sample Vec
 			_samples.Add((transform.position - _prevPosition));
@@ -46,7 +50,15 @@ namespace Matsumoto.Weapon {
 			_prevPosition = transform.position;
 			_samples = new List<Vector3>();
 
-			Debug.LogWarning("not found child object. name : [ShotAnchor]");
+            var playerID = GetComponentInParent<DisplayPlayerProvider>().MyID;
+            manager.AddSyncEvent(playerID, EventID, (data) => {
+                var t = (TransformVectorStamp)data;
+                var b = Instantiate(_bomb, t.Position, t.Rotation);
+                b.ModuleData = _moduleData;
+                b.Modular.Speed =t.Vector.magnitude;
+            });
+
+            Debug.LogWarning("not found child object. name : [ShotAnchor]");
 		}
 
 		public override void OnUseModule(WeaponBase weapon) {
@@ -66,9 +78,8 @@ namespace Matsumoto.Weapon {
 			_throwAnchor.forward = throwVector;
 			Debug.DrawLine(_throwAnchor.position, _throwAnchor.position + throwVector, Color.red, 1);
 
-			var b = Instantiate(_bomb, _throwAnchor.position, _throwAnchor.rotation);
-			b.ModuleData = _moduleData;
-			b.Modular.Speed = throwVector.magnitude;
+            manager.CallSyncEvent(EventID, new TransformVectorStamp(System.DateTime.Now, _throwAnchor.position, _throwAnchor.rotation, throwVector));
+
 		}
 
 		private Vector3 CalcThrowVector() {

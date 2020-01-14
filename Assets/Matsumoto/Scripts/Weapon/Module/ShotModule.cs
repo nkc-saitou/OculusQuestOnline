@@ -1,10 +1,13 @@
 ﻿using UnityEngine;
 using System.Collections;
 using UniRx;
+using Nakajima.Player;
 
 namespace Matsumoto.Weapon {
 
 	public class ShotModule : WeaponModuleBase {
+
+		private const int EventID = 1000;
 
 		[SerializeField]
 		private ModuleObject _bullet;
@@ -13,9 +16,18 @@ namespace Matsumoto.Weapon {
 		EffectObject _muzzle;
 
 		private Transform _shotAnchor;
+		private NetworkEventManager manager;
 
 		public override void ModuleInitialize(WeaponBase weapon) {
 			base.ModuleInitialize(weapon);
+
+
+            var playerID = GetComponentInParent<DisplayPlayerProvider>().MyID;
+			manager.AddSyncEvent(playerID, EventID, (data) => {
+				var t = (TransformStamp)data;
+				var b = Instantiate(_bullet, t.Position, t.Rotation);
+				b.ModuleData = _moduleData;
+			});
 
 			var transforms = weapon.transform.GetComponentsInChildren<Transform>();
 			foreach(Transform item in transforms) {
@@ -40,8 +52,9 @@ namespace Matsumoto.Weapon {
 				return;
 			}
 
-			var b = Instantiate(_bullet, _shotAnchor.position, _shotAnchor.rotation);
-			b.ModuleData = _moduleData;
+			//var b = Instantiate(_bullet, _shotAnchor.position, _shotAnchor.rotation);
+			//b.ModuleData = _moduleData;
+			manager.CallSyncEvent(EventID, new TransformStamp(System.DateTime.Now, _shotAnchor.position, _shotAnchor.rotation));
 
 			var e = Instantiate(_muzzle, _shotAnchor);
 			e.transform.localPosition = new Vector3();
