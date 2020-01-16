@@ -39,5 +39,7 @@ MonoBehaviour:
   - PlayerGrab
   - SetOpposite
   - SetDestroy
+  - OtherClientEntry
+  - SceneChange
   DisableAutoOpenWizard: 1
   ShowSettings: 1
