@@ -44,12 +44,14 @@ namespace Nakajima.Player
 
                 // イベントをバインド
                 myHand[0].oppositeWeapon += SetOpposite;
+                myHand[0].deleteWeapon += CheckDelete;
                 myHand[1].oppositeWeapon += SetOpposite;
+                myHand[1].deleteWeapon += CheckDelete;
 
                 Debug.Log("aaaa");
             };
         }
-        
+
         /// <summary>
         /// 更新処理
         /// </summary>
@@ -90,28 +92,22 @@ namespace Nakajima.Player
         /// </summary>
         public override void Actoin()
         {
-            // Xボタンで武器生成
-            if (OVRInput.GetDown(OVRInput.RawButton.X))
-            {
-                weaponCreate.ActiveHand = myHand[1];
-                weaponCreate.Create();
-            }
-            if (OVRInput.GetUp(OVRInput.RawButton.X))
-            {
-                weaponCreate.DeleteWeapon();
-            }
+            // X/Aボタンで武器生成
+            if (OVRInput.GetDown(OVRInput.RawButton.X) && myHand[1].HasWeapon == false)
+                myHand[1].Create();
+            if (OVRInput.GetDown(OVRInput.RawButton.A) && myHand[0].HasWeapon == false)
+                myHand[0].Create();
 
-            // Yボタンで所持中の武器の削除
-            if (OVRInput.GetDown(OVRInput.RawButton.Y))
-            {
-                foreach (PlayerHand _hand in myHand)
-                {
-                    if (_hand.DeleteWeapon())
-                    {
-                        weaponCreate.CanCreate = true;
-                    }
-                }
-            }
+            // Y/Bボタンで所持中の武器の削除
+            if (OVRInput.GetDown(OVRInput.RawButton.Y) && myHand[1].isBoth == false)
+                myHand[1].DeleteWeapon(myHand[1].CheckDelete());
+            if (OVRInput.GetDown(OVRInput.RawButton.B) && myHand[0].isBoth == false)
+                myHand[0].DeleteWeapon(myHand[0].CheckDelete());
+            // X/Aボタンを離したら武器の削除
+            if (OVRInput.GetUp(OVRInput.RawButton.X))
+                myHand[1].weaponCreate.DeleteWeapon();
+            if (OVRInput.GetUp(OVRInput.RawButton.A))
+                myHand[0].weaponCreate.DeleteWeapon();
         }
 
         /// <summary>
@@ -121,16 +117,27 @@ namespace Nakajima.Player
         /// <param name="_weapon">武器オブジェクト</param>
         public override void SetOpposite(HandMaster _hand, GameObject _weapon)
         {
+            // nullチェック
             if (_weapon == null) return;
 
+            // 逆の手に武器を装備する
             if (_hand.myTouch == OVRInput.RawButton.LHandTrigger)
-            {
                 myHand[0].SetWeapon(_weapon);
-            }
             else if (_hand.myTouch == OVRInput.RawButton.RHandTrigger)
-            {
                 myHand[1].SetWeapon(_weapon);
-            }
+        }
+
+        /// <summary>
+        /// 逆の手を削除するかチェック
+        /// </summary>
+        /// <param name="_hand">現在所持中の手</param>
+        public override void CheckDelete(HandMaster _hand)
+        {
+            // 逆の手の武器も削除する
+            if (_hand.myTouch == OVRInput.RawButton.LHandTrigger)
+                myHand[0].DeleteWeapon(false);
+            else if (_hand.myTouch == OVRInput.RawButton.RHandTrigger)
+                myHand[1].DeleteWeapon(false);
         }
     }
 }

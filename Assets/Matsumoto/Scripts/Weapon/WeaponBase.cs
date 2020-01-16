@@ -40,7 +40,15 @@ namespace Matsumoto.Weapon {
 			return transform;
 		}
 
-		public virtual OVRHapticsClip GetHaptics() {
+        public virtual void SetOwner(Nakajima.Player.PlayerHand owner)
+        {
+            foreach (var item in WeaponModules)
+            {
+                item.Owner.Value = owner;
+            }
+        }
+
+        public virtual OVRHapticsClip GetHaptics() {
 			return null;
 		}
 
@@ -58,7 +66,7 @@ namespace Matsumoto.Weapon {
 
 		public virtual void OnTriggerAnalogValue(OVRInput.Axis1D type, float axis) {}
 
-	}
+    }
 }
 
 

@@ -50,6 +50,21 @@ namespace Matsumoto.Weapon {
 		}
 
 		/// <summary>
+		/// 両手武器か判断する
+		/// </summary>
+		/// <param name="name">武器の名前</param>
+		/// <returns>両手武器ならtrue</returns>
+		public bool HasOtherWeapon(string name) {
+
+			if(!_weaponBaseDictionary.ContainsKey(name)) {
+				return false;
+			}
+
+			var weapon = _weaponBaseDictionary[name];
+			return weapon.OtherWeapon;
+		}
+
+		/// <summary>
 		/// 武器を生成する
 		/// </summary>
 		/// <param name="name">武器の名前</param>

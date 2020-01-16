@@ -172,7 +172,7 @@ namespace Nakajima.Weapon
         public void UnfoldUpdate(HandMaster _hand)
         {
             // 武器を展開中でないならリターン
-            if (WeaponUnfold == false) return;
+            if (WeaponUnfold == false || ActiveHand == null) return;
 
             switch (currentState)
             {
@@ -199,13 +199,14 @@ namespace Nakajima.Weapon
             // 武器が対応されている角度検知
             float angleDiff = 360.0f / weaponList.Count;
             // 左コントローラーの角度検知
-            float controllerAngle = OVRInput.GetLocalControllerRotation(OVRInput.Controller.LTrackedRemote).z;
+            float controllerAngle = 0.0f;
+            if (_hand.myTouch == OVRInput.RawButton.LHandTrigger)
+                controllerAngle = OVRInput.GetLocalControllerRotation(OVRInput.Controller.LTrackedRemote).z;
+            else if(_hand.myTouch == OVRInput.RawButton.RHandTrigger)
+                controllerAngle = OVRInput.GetLocalControllerRotation(OVRInput.Controller.RTrackedRemote).z;
 
             if (WeaponUnfold == false) {
-                spawnObj = Instantiate(weaponList[0], spawnOriginObj_Display.transform);
-            }
-            else {
-                spawnObj.transform.position = spawnOriginObj_Display.transform.position;
+                spawnObj = Instantiate(weaponList[0], transform);
             }
 
             // コントローラーの角度を実際の角度に
@@ -217,7 +218,7 @@ namespace Nakajima.Weapon
                 Destroy(spawnObj);
                 createWeaponList.Remove(spawnObj);
 
-                spawnObj = Instantiate(weaponList[angleState], spawnOriginObj_Display.transform.position, Quaternion.identity);
+                spawnObj = Instantiate(weaponList[angleState], transform.position, Quaternion.identity);
                 createWeaponList.Add(spawnObj);
             }
             WeaponUnfold = true;
@@ -294,19 +295,31 @@ namespace Nakajima.Weapon
         /// </summary>
         public void DeleteWeapon()
         {
-            if (createWeaponList.Count < 1) return;
+            if (createWeaponList.Count < 1) {
+                Reset();
+                return;
+            }
 
             // ステージから削除
             foreach(GameObject obj in createWeaponList) {
                 Destroy(obj);
             }
 
-            WeaponUnfold = false;
-            CanCreate = true;
+            Reset();
 
             // 要素から削除
             createWeaponList.RemoveAll(s => s == null);
             createWeaponList.Clear();
+        }
+
+        /// <summary>
+        /// 状態のリセット
+        /// </summary>
+        public void Reset()
+        {
+            WeaponUnfold = false;
+            CanCreate = true;
+            ActiveHand = null;
         }
     }
 }

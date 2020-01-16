@@ -13,7 +13,7 @@ namespace Nakajima.Player
     public class HandMaster : MonoBehaviour
     {
         // WeaponCreateの参照
-        protected WeaponCreate weaponCreate;
+        public WeaponCreate weaponCreate;
         protected WeaponManager weaponMgr;
 
         // どっちの手か
@@ -113,9 +113,25 @@ namespace Nakajima.Player
         }
 
         /// <summary>
+        /// 武器生成(まだ所持ではない)
+        /// </summary>
+        public virtual void Create() { }
+
+        /// <summary>
         /// 所持中の武器を破棄する
         /// </summary>
-        public virtual bool DeleteWeapon() { return false; }
+        public virtual bool CheckDelete() { return false; }
+
+        /// <summary>
+        /// 武器の削除
+        /// </summary>
+        public virtual void DeleteWeapon(bool _flag) { }
+
+        /// <summary>
+        /// 武器の削除
+        /// </summary>
+        public virtual void DeleteWeapon() { }
+
     }
 }
 
