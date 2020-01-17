@@ -308,18 +308,6 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 202587213}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
---- !u!1 &288610075 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 6543043765629186917, guid: 00af76491d297ca4a9a83812bad496ae,
-    type: 3}
-  m_PrefabInstance: {fileID: 1987098945853353211}
-  m_PrefabAsset: {fileID: 0}
---- !u!1 &614584254 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 8983242151083728166, guid: 00af76491d297ca4a9a83812bad496ae,
-    type: 3}
-  m_PrefabInstance: {fileID: 1987098945853353211}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &705507993
 GameObject:
   m_ObjectHideFlags: 0
@@ -502,44 +490,6 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 765250717}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
---- !u!1 &823676751 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 3554920469812057782, guid: 00af76491d297ca4a9a83812bad496ae,
-    type: 3}
-  m_PrefabInstance: {fileID: 1987098945853353211}
-  m_PrefabAsset: {fileID: 0}
---- !u!1 &857278044 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 2530311423364744218, guid: 00af76491d297ca4a9a83812bad496ae,
-    type: 3}
-  m_PrefabInstance: {fileID: 1987098945853353211}
-  m_PrefabAsset: {fileID: 0}
---- !u!1 &1135416855 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 6193948618022199568, guid: 00af76491d297ca4a9a83812bad496ae,
-    type: 3}
-  m_PrefabInstance: {fileID: 1987098945853353211}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &1135416859
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1135416855}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 30793dc070f7da744b1ccafddab23cec, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _intensity: 0
-  shader: {fileID: 4800000, guid: 6acf6147411123540a6fbbd1ed26761b, type: 3}
---- !u!1 &1209517598 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 1464089858866244751, guid: 00af76491d297ca4a9a83812bad496ae,
-    type: 3}
-  m_PrefabInstance: {fileID: 1987098945853353211}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1234257587
 GameObject:
   m_ObjectHideFlags: 0
@@ -636,26 +586,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &1236522756 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 2973059261451610084, guid: 00af76491d297ca4a9a83812bad496ae,
-    type: 3}
-  m_PrefabInstance: {fileID: 1987098945853353211}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &1236522760
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1236522756}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 30793dc070f7da744b1ccafddab23cec, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _intensity: 0
-  shader: {fileID: 4800000, guid: 6acf6147411123540a6fbbd1ed26761b, type: 3}
 --- !u!1 &1303944857
 GameObject:
   m_ObjectHideFlags: 0
@@ -715,24 +645,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0c2431f1a01303441b0ea3c724ff0427, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!1 &1449050657 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 6118238484171172166, guid: 00af76491d297ca4a9a83812bad496ae,
-    type: 3}
-  m_PrefabInstance: {fileID: 1987098945853353211}
-  m_PrefabAsset: {fileID: 0}
---- !u!1 &1676530460 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 6796380497885633415, guid: 00af76491d297ca4a9a83812bad496ae,
-    type: 3}
-  m_PrefabInstance: {fileID: 1987098945853353211}
-  m_PrefabAsset: {fileID: 0}
---- !u!1 &1774098733 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 5011175847247448447, guid: 00af76491d297ca4a9a83812bad496ae,
-    type: 3}
-  m_PrefabInstance: {fileID: 1987098945853353211}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1866844617
 GameObject:
   m_ObjectHideFlags: 0
@@ -981,76 +893,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7292759956524927187, guid: 00af76491d297ca4a9a83812bad496ae,
-        type: 3}
-      propertyPath: m_IsActive
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 3554920469812057782, guid: 00af76491d297ca4a9a83812bad496ae,
-        type: 3}
-      propertyPath: m_IsActive
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 18999197384120772, guid: 00af76491d297ca4a9a83812bad496ae,
-        type: 3}
-      propertyPath: m_modelOculusTouchQuestAndRiftSLeftController
-      value: 
-      objectReference: {fileID: 1676530460}
-    - target: {fileID: 18999197384120772, guid: 00af76491d297ca4a9a83812bad496ae,
-        type: 3}
-      propertyPath: m_modelOculusTouchQuestAndRiftSRightController
-      value: 
-      objectReference: {fileID: 1774098733}
-    - target: {fileID: 18999197384120772, guid: 00af76491d297ca4a9a83812bad496ae,
-        type: 3}
-      propertyPath: m_modelOculusTouchRiftLeftController
-      value: 
-      objectReference: {fileID: 857278044}
-    - target: {fileID: 18999197384120772, guid: 00af76491d297ca4a9a83812bad496ae,
-        type: 3}
-      propertyPath: m_modelOculusTouchRiftRightController
-      value: 
-      objectReference: {fileID: 1449050657}
-    - target: {fileID: 8983242151083728166, guid: 00af76491d297ca4a9a83812bad496ae,
-        type: 3}
-      propertyPath: m_IsActive
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 5940452035171197491, guid: 00af76491d297ca4a9a83812bad496ae,
-        type: 3}
-      propertyPath: m_modelOculusTouchQuestAndRiftSLeftController
-      value: 
-      objectReference: {fileID: 614584254}
-    - target: {fileID: 5940452035171197491, guid: 00af76491d297ca4a9a83812bad496ae,
-        type: 3}
-      propertyPath: m_modelOculusTouchQuestAndRiftSRightController
-      value: 
-      objectReference: {fileID: 1209517598}
-    - target: {fileID: 5940452035171197491, guid: 00af76491d297ca4a9a83812bad496ae,
-        type: 3}
-      propertyPath: m_modelOculusTouchRiftLeftController
-      value: 
-      objectReference: {fileID: 823676751}
-    - target: {fileID: 5940452035171197491, guid: 00af76491d297ca4a9a83812bad496ae,
-        type: 3}
-      propertyPath: m_modelOculusTouchRiftRightController
-      value: 
-      objectReference: {fileID: 288610075}
-    - target: {fileID: 6543043765629186917, guid: 00af76491d297ca4a9a83812bad496ae,
-        type: 3}
-      propertyPath: m_IsActive
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 1464089858866244751, guid: 00af76491d297ca4a9a83812bad496ae,
-        type: 3}
-      propertyPath: m_IsActive
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 7783598882928509106, guid: 00af76491d297ca4a9a83812bad496ae,
-        type: 3}
-      propertyPath: m_IsActive
-      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 00af76491d297ca4a9a83812bad496ae, type: 3}
