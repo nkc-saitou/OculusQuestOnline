@@ -5,7 +5,7 @@ EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Scenes:
-  - enabled: 1
+  - enabled: 0
     path: Assets/Sanoki/Scenes/Title_test.unity
     guid: 0d4dba8ba88f16a42a809fa414c1f668
   - enabled: 1
