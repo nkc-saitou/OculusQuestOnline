@@ -19,9 +19,6 @@ namespace Nakajima.Player
         [SerializeField, Header("<自分の手(0 右手 1 左手)>")]
         protected PlayerHand[] myHand;
 
-        // 自身のMovement;
-        private MovementComponetBase myMovement;
-
         // オンライン用のプレイヤーの生成
         private TestPlayerCreate testPlayerCreate;
 
@@ -164,7 +161,13 @@ namespace Nakajima.Player
         /// <param name="col"></param>
         public void OnTriggerEnter(Collider col)
         {
+            var module = col.gameObject.GetComponent<ModuleObject>();
 
+            if (module == null) return;
+            
+            GetScore += module.GetPower();
+
+            Debug.Log("相手のスコア : " + GetScore);
         }
     }
 }

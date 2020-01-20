@@ -2,12 +2,16 @@
 using System.Collections.Generic;
 using UnityEngine;
 using Nakajima.Weapon;
+using Nakajima.Movement;
 using Matsumoto.Weapon;
 
 namespace Nakajima.Player
 {
     public class PlayerMaster : MonoBehaviour
     {
+        // 自身のMovement;
+        protected MovementComponetBase myMovement;
+
         // 武器生成
         protected WeaponCreate weaponCreate;
         protected WeaponManager weaponMgr;
@@ -15,6 +19,11 @@ namespace Nakajima.Player
         protected Rigidbody myRig;
         // 入力ベクター
         protected Vector3 inputVec;
+
+        // スコア
+        public int GetScore {
+            protected set; get;
+        }
         
         /// <summary>
         /// 初回処理
