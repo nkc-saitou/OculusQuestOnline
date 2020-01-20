@@ -110,9 +110,9 @@ namespace Nakajima.Player
         {
             // 逆の手の武器も削除する
             if (_hand.myTouch == OVRInput.RawButton.LHandTrigger)
-                myHand[0].CheckDelete();
+                myHand[0].DeleteWeapon();
             else if (_hand.myTouch == OVRInput.RawButton.RHandTrigger)
-                myHand[1].CheckDelete();
+                myHand[1].DeleteWeapon();
         }
     }
 }
