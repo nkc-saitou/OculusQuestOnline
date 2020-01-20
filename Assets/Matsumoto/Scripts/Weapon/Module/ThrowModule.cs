@@ -41,19 +41,13 @@ namespace Matsumoto.Weapon {
 		public override void ModuleInitialize(WeaponBase weapon) {
 			base.ModuleInitialize(weapon);
 
-            var transforms = weapon.transform.GetComponentsInChildren<Transform>();
-			foreach(Transform item in transforms) {
-				if(item.name == "[ShotAnchor]") {
-					_throwAnchor = item;
-					return;
-				}
-			}
-
             _prevPosition = transform.position;
-			_samples = new List<Vector3>();
+            _samples = new List<Vector3>();
 
             Owner.Subscribe(item =>
             {
+                Debug.Log("OwnerSet :" + item);
+
                 if (!item) return;
                 var playerID = item.myProvider.MyID;
                 manager = FindObjectOfType<NetworkEventManager>();
@@ -66,6 +60,14 @@ namespace Matsumoto.Weapon {
                     b.Modular.Speed = v.magnitude;
                 });
             });
+
+            var transforms = weapon.transform.GetComponentsInChildren<Transform>();
+			foreach(Transform item in transforms) {
+				if(item.name == "[ShotAnchor]") {
+					_throwAnchor = item;
+					return;
+				}
+			}
 
             Debug.LogWarning("not found child object. name : [ShotAnchor]");
 		}

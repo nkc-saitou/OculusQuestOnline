@@ -40,5 +40,7 @@ MonoBehaviour:
   - SetOpposite
   - SetDestroy
   - ExecSyncEvent
+  - OtherClientEntry
+  - SceneChange
   DisableAutoOpenWizard: 1
   ShowSettings: 1

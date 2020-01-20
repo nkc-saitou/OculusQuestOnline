@@ -28,8 +28,8 @@ namespace Matsumoto.Weapon {
 
 			Observable.Timer(TimeSpan.FromSeconds(LifeTime)).Subscribe(_ =>
 			{
-			if(_effect)
-					_effect.DestroyEffect();
+                if(_effect)
+				    _effect.DestroyEffect();
 				Destroy(gameObject);
 			}).AddTo(this);
 		}
@@ -40,8 +40,8 @@ namespace Matsumoto.Weapon {
 		}
 
 		private void OnCollisionEnter(Collision collision) {
-			if(_effect)
-				_effect.DestroyEffect();
+            if(_effect)
+			    _effect.DestroyEffect();
 			var e = Instantiate(_hitEffect, transform.position, transform.rotation);
 			e.Invoke(nameof(e.DestroyEffect), 3);
 
@@ -49,8 +49,8 @@ namespace Matsumoto.Weapon {
 		}
 
 		private void OnTriggerEnter(Collider other) {
-			if(_effect)
-				_effect.DestroyEffect();
+            if(_effect)
+			    _effect.DestroyEffect();
 			var e = Instantiate(_hitEffect, transform.position, transform.rotation);
 			e.Invoke(nameof(e.DestroyEffect), 3);
 			Destroy(gameObject);

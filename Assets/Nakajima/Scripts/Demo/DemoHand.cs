@@ -128,9 +128,15 @@ namespace Nakajima.Player
             return true;
         }
 
-        public override void DeleteWeapon(bool _flag)
+        public override void DeleteWeapon()
         {
+            // なにもないならリターン
+            if (HasWeapon == false) return;
 
+            // 削除
+            Destroy(hasObj);
+            HasWeapon = false;
+            weaponCreate.Reset();
         }
 
         /// <summary>
