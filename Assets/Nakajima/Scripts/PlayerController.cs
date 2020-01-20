@@ -45,8 +45,11 @@ namespace Nakajima.Player
                 myHand[0].deleteWeapon += CheckDelete;
                 myHand[1].oppositeWeapon += SetOpposite;
                 myHand[1].deleteWeapon += CheckDelete;
-
-                Debug.Log("aaaa");
+                
+                myHead = myHand[0].GetMyProvider.GetMyObj("Head");
+                myBody = myHand[0].GetMyProvider.GetMyObj("Body");
+                myBody.transform.parent = transform;
+                offset = Mathf.Abs(myBody.transform.position.y - myHead.transform.position.y);
             };
         }
 
@@ -65,6 +68,7 @@ namespace Nakajima.Player
         /// </summary>
         public override void Move()
         {
+
             // 移動方法ステートで処理わけ
             switch (myMovement.movementState)
             {
@@ -83,6 +87,20 @@ namespace Nakajima.Player
             myMovement.Move(inputVec);
             // 移動
             myRig.velocity = myMovement.Velocity;
+        }
+
+        /// <summary>
+        /// トラッキングするObjectの移動
+        /// </summary>
+        private void TrackingMove()
+        {
+            if (myBody == null) return;
+
+            // トラッキングした場合の座標
+            Vector3 trackingPos = UnityEngine.XR.InputTracking.GetLocalPosition(UnityEngine.XR.XRNode.CenterEye);
+            trackingPos = new Vector3(trackingPos.x, trackingPos.y - offset, trackingPos.z);
+
+            myBody.transform.localPosition += trackingPos;
         }
 
         /// <summary>

@@ -25,7 +25,7 @@ namespace Matsumoto.Weapon {
             Owner.Subscribe(item =>
             {
                 if (!item) return;
-                var playerID = item.myProvider.MyID;
+                var playerID = item.GetMyProvider.MyID;
                 manager = FindObjectOfType<NetworkEventManager>();
                 manager.AddSyncEvent(playerID, "ShotModule_Shot" + _myID, (data) => {
                     var p = (Vector3)(data[0]);

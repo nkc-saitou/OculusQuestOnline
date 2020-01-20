@@ -25,9 +25,6 @@ namespace Nakajima.Player
         // PhotonView
         private PhotonView photonView;
 
-        // 自身のProvider
-        public DisplayPlayerProvider myProvider;
-
         [SerializeField]
         private GameObject GunObj;
 
@@ -94,7 +91,7 @@ namespace Nakajima.Player
 
             // 同期したい
             Debug.Log("ID : " + TestOnlineData.PlayerID + " 通過");
-            syncWeapon?.Invoke(myProvider.MyID, handName, GetWeaponName(hasObj.name));
+            syncWeapon?.Invoke(GetMyProvider.MyID, handName, GetWeaponName(hasObj.name));
 
             if (weaponMgr.HasOtherWeapon(GetWeaponName(hasObj.name)))
             {
@@ -128,7 +125,7 @@ namespace Nakajima.Player
             if (weaponMgr.HasOtherWeapon(GetWeaponName(hasObj.name)))
             {
                 var obj = handList[1].GetBody();
-                setOppesite?.Invoke(myProvider.MyID, handName, obj, GetWeaponName(hasObj.name));
+                setOppesite?.Invoke(GetMyProvider.MyID, handName, obj, GetWeaponName(hasObj.name));
             }
         }
 
@@ -206,7 +203,7 @@ namespace Nakajima.Player
 
             // 削除
             Destroy(hasObj);
-            if(photonView.IsMine) netDeleteWeapon?.Invoke(myProvider.MyID, handName, _flag);
+            if(photonView.IsMine) netDeleteWeapon?.Invoke(GetMyProvider.MyID, handName, _flag);
             HasWeapon = false;
             isBoth = false;
             weaponCreate.Reset();

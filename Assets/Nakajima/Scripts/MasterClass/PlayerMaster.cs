@@ -11,6 +11,11 @@ namespace Nakajima.Player
     {
         // 自身のMovement;
         protected MovementComponetBase myMovement;
+        // 自身の体
+        protected GameObject myHead;
+        protected GameObject myBody;
+        // 頭と体の距離
+        protected float offset;
 
         // 武器生成
         protected WeaponCreate weaponCreate;

@@ -33,6 +33,13 @@ namespace Nakajima.Player
             set { hasWeapon = value; }
             get { return hasWeapon; }
         }
+
+        // 自身のProvider
+        protected DisplayPlayerProvider myProvider;
+        public DisplayPlayerProvider GetMyProvider {
+            set { myProvider = value; }
+            get{ return myProvider; }
+        }
         
         /// <summary>
         /// 初回処理
