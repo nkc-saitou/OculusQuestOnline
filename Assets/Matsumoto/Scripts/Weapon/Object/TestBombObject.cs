@@ -8,6 +8,7 @@ namespace Matsumoto.Weapon {
 	public class TestBombObject : ModuleObject {
 
 		public float LifeTime = 10;
+		public float ExplosionStart = 1.0f;
 
 		[SerializeField]
 		private Rigidbody _rigidbody;
@@ -51,6 +52,10 @@ namespace Matsumoto.Weapon {
 			_body.SetActive(false);
 			Destroy(gameObject, 0.2f);
 
+		}
+
+		private void OnCollisionEnter(Collision collision) {
+			if(_timer > ExplosionStart) Explosion();
 		}
 	}
 }
