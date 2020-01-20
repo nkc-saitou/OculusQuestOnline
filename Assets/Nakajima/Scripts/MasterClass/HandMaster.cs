@@ -23,6 +23,9 @@ namespace Nakajima.Player
         [HideInInspector]
         public GameObject hasObj;
 
+        // 両手武器かどうか
+        public bool isBoth;
+
         // 武器を所持しているか
         private bool hasWeapon;
         public bool HasWeapon
@@ -79,10 +82,10 @@ namespace Nakajima.Player
         /// <summary>
         /// 武器ごとのアクション実行
         /// </summary>
-        protected void WeaponAction()
+        public virtual void WeaponAction(bool _getButton, bool _UpOrDown)
         {
             // 武器がないならリターン
-            if (HasWeapon == false || hasObj == null) { Debug.Log("リターン"); return; }
+            if (HasWeapon == false || _getButton == false) { Debug.Log("リターン"); return; }
 
             var weapon = hasObj.GetComponent<IWeapon>();
 

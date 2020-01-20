@@ -28,14 +28,7 @@ namespace Nakajima.Player
         /// </summary>
         public override void Update()
         {
-            // 武器所持時のみ実行
-            if (HasWeapon) {
-                WeaponAction();
-                return;
-            }
 
-            // 武器を掴む
-            if (OVRInput.GetDown(myTouch) && HasWeapon == false) GrabWeapon();
         }
 
         /// <summary>
@@ -95,6 +88,23 @@ namespace Nakajima.Player
             hasObj.transform.localPosition = Vector3.zero;
             hasObj.transform.localRotation = Quaternion.identity;
             HasWeapon = true;
+            isBoth = true;
+        }
+
+        public override void WeaponAction(bool _getButton, bool _UpOrDown)
+        {
+
+            var weapon = hasObj.GetComponent<IWeapon>();
+
+            // 武器使用
+            if (_UpOrDown)
+            {
+                weapon.OnButtonUp(OVRInput.Button.One);
+            }
+            else
+            {
+                weapon.OnButtonDown(OVRInput.Button.One);
+            }
         }
 
         /// <summary>

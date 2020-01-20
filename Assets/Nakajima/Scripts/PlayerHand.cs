@@ -34,9 +34,6 @@ namespace Nakajima.Player
         // 右手か左手か
         private string handName;
 
-        // 両手武器かどうか
-        public bool isBoth;
-
         int temp = 0;
 
         /// <summary>
@@ -58,16 +55,7 @@ namespace Nakajima.Player
         /// </summary>
         public override void Update()
         {
-            // 武器所持時のみ実行
-            if (photonView.IsMine && HasWeapon) {
-                WeaponAction();
-                return;
-            }
 
-            // 武器を掴む
-            if (OVRInput.GetDown(myTouch) && HasWeapon == false) {
-                GrabWeapon();
-            }
         }
 
         /// <summary>
@@ -164,6 +152,21 @@ namespace Nakajima.Player
 
             temp++;
             Debug.Log("SetWeapon : " + HasWeapon + " : " + temp);
+        }
+
+        public override void WeaponAction(bool _getButton, bool _UpOrDown)
+        {
+            if (photonView.IsMine == false || _getButton == false) return;
+
+            var weapon = hasObj.GetComponent<IWeapon>();
+
+            // 武器使用
+            if (_UpOrDown) {
+                weapon.OnButtonUp(OVRInput.Button.One);
+            }
+            else {
+                weapon.OnButtonDown(OVRInput.Button.One);
+            }
         }
 
         /// <summary>

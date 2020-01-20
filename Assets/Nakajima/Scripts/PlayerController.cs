@@ -5,6 +5,7 @@ using UnityEngine.XR;
 using Nakajima.Movement;
 using Nakajima.Weapon;
 using Saitou.Network;
+using Matsumoto.Weapon;
 
 
 /// <summary>
@@ -98,11 +99,28 @@ namespace Nakajima.Player
             if (OVRInput.GetDown(OVRInput.RawButton.A) && myHand[0].HasWeapon == false)
                 myHand[0].Create();
 
+            // 中指トリガーで武器を掴む
+            if (OVRInput.GetDown(OVRInput.RawButton.LHandTrigger) && myHand[1].HasWeapon == false)
+                myHand[1].GrabWeapon();
+            if (OVRInput.GetDown(OVRInput.RawButton.RHandTrigger) && myHand[0].HasWeapon == false)
+                myHand[0].GrabWeapon();
+
+            // 人差し指トリガーで武器使用
+            if (OVRInput.GetDown(OVRInput.RawButton.LIndexTrigger) && myHand[1].HasWeapon)
+                myHand[1].WeaponAction(true, false);
+            else if (OVRInput.GetUp(OVRInput.RawButton.LIndexTrigger) && myHand[1].HasWeapon)
+                myHand[1].WeaponAction(true, true);
+            if (OVRInput.GetDown(OVRInput.RawButton.RIndexTrigger) && myHand[0].HasWeapon)
+                myHand[0].WeaponAction(true, false);
+            else if (OVRInput.GetUp(OVRInput.RawButton.RIndexTrigger) && myHand[0].HasWeapon)
+                myHand[0].WeaponAction(true, true);
+
             // Y/Bボタンで所持中の武器の削除
             if (OVRInput.GetDown(OVRInput.RawButton.Y) && myHand[1].isBoth == false)
                 myHand[1].DeleteWeapon(myHand[1].CheckDelete());
             if (OVRInput.GetDown(OVRInput.RawButton.B) && myHand[0].isBoth == false)
                 myHand[0].DeleteWeapon(myHand[0].CheckDelete());
+
             // X/Aボタンを離したら武器の削除
             if (OVRInput.GetUp(OVRInput.RawButton.X))
                 myHand[1].weaponCreate.DeleteWeapon();
@@ -138,6 +156,15 @@ namespace Nakajima.Player
                 myHand[0].DeleteWeapon(false);
             else if (_hand.myTouch == OVRInput.RawButton.RHandTrigger)
                 myHand[1].DeleteWeapon(false);
+        }
+
+        /// <summary>
+        /// 当たり判定
+        /// </summary>
+        /// <param name="col"></param>
+        public void OnTriggerEnter(Collider col)
+        {
+
         }
     }
 }
