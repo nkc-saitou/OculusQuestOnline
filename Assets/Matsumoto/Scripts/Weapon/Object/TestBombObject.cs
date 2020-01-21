@@ -52,6 +52,8 @@ namespace Matsumoto.Weapon {
 			_body.SetActive(false);
 			Destroy(gameObject, 0.2f);
 
+			Audio.AudioManager.PlaySE("bomb1", position: transform.position);
+			
 		}
 
 		private void OnCollisionEnter(Collision collision) {
