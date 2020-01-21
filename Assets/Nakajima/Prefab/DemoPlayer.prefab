@@ -1156,6 +1156,7 @@ MonoBehaviour:
   movementState: 0
   centerOrigin: {fileID: 1987098945855269850}
   moveDirObj: {fileID: 6207167597746725010}
+  camera: {fileID: 3380464892775249531}
   minSpeed: 2
   halfSpeed: 3
   maxSpeed: 6
@@ -2245,13 +2246,9 @@ MonoBehaviour:
   spawnOriginObj_Circle: {fileID: 0}
   spawnOriginObj_Display: {fileID: 0}
   weaponList:
-  - {fileID: 8890954303500915444, guid: 0ac331b5bb7e4724ab5ad2fb30e167ae, type: 3}
+  - {fileID: 1353050716332709435, guid: 87acb058fbc9a34449a5dd79d6186898, type: 3}
   - {fileID: 7736314363512946226, guid: e764e101858569c46ae3ccb193c0da19, type: 3}
-  - {fileID: 1353050716332709435, guid: 87acb058fbc9a34449a5dd79d6186898, type: 3}
   - {fileID: 1448808920471177366, guid: b353011f4b2272349a26fcdb6e73790a, type: 3}
-  - {fileID: 1353050716332709435, guid: 87acb058fbc9a34449a5dd79d6186898, type: 3}
-  - {fileID: 1448808920471177366, guid: b353011f4b2272349a26fcdb6e73790a, type: 3}
-  createWeaponList: []
   radius: 0.8
   rotateSpeed: 0.5
 --- !u!114 &3919709587313486844
@@ -2269,6 +2266,7 @@ MonoBehaviour:
   weaponCreate: {fileID: 0}
   myTouch: 134217728
   hasObj: {fileID: 0}
+  isBoth: 0
 --- !u!1 &3336288748256171084
 GameObject:
   m_ObjectHideFlags: 0
@@ -4017,13 +4015,9 @@ MonoBehaviour:
   spawnOriginObj_Circle: {fileID: 0}
   spawnOriginObj_Display: {fileID: 0}
   weaponList:
-  - {fileID: 8890954303500915444, guid: 0ac331b5bb7e4724ab5ad2fb30e167ae, type: 3}
+  - {fileID: 1353050716332709435, guid: 87acb058fbc9a34449a5dd79d6186898, type: 3}
   - {fileID: 7736314363512946226, guid: e764e101858569c46ae3ccb193c0da19, type: 3}
-  - {fileID: 1353050716332709435, guid: 87acb058fbc9a34449a5dd79d6186898, type: 3}
   - {fileID: 1448808920471177366, guid: b353011f4b2272349a26fcdb6e73790a, type: 3}
-  - {fileID: 1353050716332709435, guid: 87acb058fbc9a34449a5dd79d6186898, type: 3}
-  - {fileID: 1448808920471177366, guid: b353011f4b2272349a26fcdb6e73790a, type: 3}
-  createWeaponList: []
   radius: 0.8
   rotateSpeed: 0.5
 --- !u!114 &6339987105038589626
@@ -4041,6 +4035,7 @@ MonoBehaviour:
   weaponCreate: {fileID: 0}
   myTouch: 536870912
   hasObj: {fileID: 0}
+  isBoth: 0
 --- !u!1 &5532554914605770308
 GameObject:
   m_ObjectHideFlags: 0
@@ -4937,7 +4932,8 @@ Transform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
+  m_Children:
+  - {fileID: 6228667599041234653}
   m_Father: {fileID: 1143271435407554069}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -6296,7 +6292,6 @@ Transform:
   - {fileID: 611741421537509002}
   - {fileID: 4473699576258652867}
   - {fileID: 1026024063455108743}
-  - {fileID: 6228667599041234653}
   m_Father: {fileID: 2666105108104726730}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -7275,7 +7270,7 @@ PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
-    m_TransformParent: {fileID: 1143271435407554069}
+    m_TransformParent: {fileID: 732973805985262556}
     m_Modifications:
     - target: {fileID: -927199367670048503, guid: 64c0881a3d8217a49ad4dd470ac50593,
         type: 3}
@@ -7320,7 +7315,7 @@ PrefabInstance:
     - target: {fileID: -4216859302048453862, guid: 64c0881a3d8217a49ad4dd470ac50593,
         type: 3}
       propertyPath: m_RootOrder
-      value: 7
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: -4216859302048453862, guid: 64c0881a3d8217a49ad4dd470ac50593,
         type: 3}
@@ -7414,15 +7409,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 1374db2846b1c3f46940f5d84a58aaff, type: 3}
---- !u!4 &6679767936063037100 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: -4216859302048453862, guid: 1374db2846b1c3f46940f5d84a58aaff,
-    type: 3}
-  m_PrefabInstance: {fileID: 1858290385320506806}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &7703429517594995903 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: -927199367670048503, guid: 1374db2846b1c3f46940f5d84a58aaff,
+    type: 3}
+  m_PrefabInstance: {fileID: 1858290385320506806}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &6679767936063037100 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: -4216859302048453862, guid: 1374db2846b1c3f46940f5d84a58aaff,
     type: 3}
   m_PrefabInstance: {fileID: 1858290385320506806}
   m_PrefabAsset: {fileID: 0}

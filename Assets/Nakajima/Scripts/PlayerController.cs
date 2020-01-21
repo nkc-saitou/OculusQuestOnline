@@ -98,9 +98,9 @@ namespace Nakajima.Player
 
             // トラッキングした場合の座標
             Vector3 trackingPos = UnityEngine.XR.InputTracking.GetLocalPosition(UnityEngine.XR.XRNode.CenterEye);
-            trackingPos = new Vector3(trackingPos.x, trackingPos.y - offset, trackingPos.z);
-
-            myBody.transform.localPosition += trackingPos;
+            Vector3 trackingPos_B = new Vector3(trackingPos.x, trackingPos.y - offset, trackingPos.z);
+            
+            myBody.transform.localPosition += trackingPos_B;
         }
 
         /// <summary>

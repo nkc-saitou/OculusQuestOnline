@@ -14,9 +14,6 @@ namespace Nakajima.Player
         [SerializeField, Header("<自分の手(0 右手 1 左手)>")]
         protected DemoHand[] myHand;
 
-        // 自身のMovement;
-        private MovementComponetBase myMovement;
-
         public override void Start()
         {
             myRig = GetComponent<Rigidbody>();

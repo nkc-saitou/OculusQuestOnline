@@ -20,6 +20,8 @@ namespace Nakajima.Player
         private GameObject myHead;
         [SerializeField]
         private GameObject myBody;
+        [SerializeField]
+        private GameObject headAnchor;
 
         // 自身のHand
         [SerializeField]
@@ -41,6 +43,7 @@ namespace Nakajima.Player
             // Objectの登録
             objList.Add("Head", myHead);
             objList.Add("Body", myBody);
+            objList.Add("HeadAnchor", headAnchor);
             
             // 自身の手
             myHand_R.GetMyProvider = this;
@@ -82,7 +85,16 @@ namespace Nakajima.Player
         // Update is called once per frame
         void Update()
         {
+            HeadSetAnchor();
+        }
 
+        /// <summary>
+        /// 頭の調整
+        /// </summary>
+        void HeadSetAnchor()
+        {
+            myHead.transform.position = 
+                new Vector3(myHead.transform.localPosition.x, headAnchor.transform.localPosition.y, myHead.transform.localPosition.z);
         }
     }
 }
