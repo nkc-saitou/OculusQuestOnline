@@ -5,6 +5,7 @@ using UnityEngine.XR;
 using Nakajima.Movement;
 using Nakajima.Weapon;
 using Saitou.Network;
+using Matsumoto.Weapon;
 
 
 /// <summary>
@@ -17,9 +18,6 @@ namespace Nakajima.Player
         // 自身の手(0 右手、1 左手)
         [SerializeField, Header("<自分の手(0 右手 1 左手)>")]
         protected PlayerHand[] myHand;
-
-        // 自身のMovement;
-        private MovementComponetBase myMovement;
 
         // オンライン用のプレイヤーの生成
         private TestPlayerCreate testPlayerCreate;
@@ -47,8 +45,11 @@ namespace Nakajima.Player
                 myHand[0].deleteWeapon += CheckDelete;
                 myHand[1].oppositeWeapon += SetOpposite;
                 myHand[1].deleteWeapon += CheckDelete;
-
-                Debug.Log("aaaa");
+                
+                myHead = myHand[0].GetMyProvider.GetMyObj("Head");
+                myBody = myHand[0].GetMyProvider.GetMyObj("Body");
+                myBody.transform.parent = transform;
+                offset = Mathf.Abs(myBody.transform.position.y - myHead.transform.position.y);
             };
         }
 
@@ -67,6 +68,7 @@ namespace Nakajima.Player
         /// </summary>
         public override void Move()
         {
+
             // 移動方法ステートで処理わけ
             switch (myMovement.movementState)
             {
@@ -88,6 +90,20 @@ namespace Nakajima.Player
         }
 
         /// <summary>
+        /// トラッキングするObjectの移動
+        /// </summary>
+        private void TrackingMove()
+        {
+            if (myBody == null) return;
+
+            // トラッキングした場合の座標
+            Vector3 trackingPos = UnityEngine.XR.InputTracking.GetLocalPosition(UnityEngine.XR.XRNode.CenterEye);
+            trackingPos = new Vector3(trackingPos.x, trackingPos.y - offset, trackingPos.z);
+
+            myBody.transform.localPosition += trackingPos;
+        }
+
+        /// <summary>
         /// 武器アクション
         /// </summary>
         public override void Actoin()
@@ -98,11 +114,28 @@ namespace Nakajima.Player
             if (OVRInput.GetDown(OVRInput.RawButton.A) && myHand[0].HasWeapon == false)
                 myHand[0].Create();
 
+            // 中指トリガーで武器を掴む
+            if (OVRInput.GetDown(OVRInput.RawButton.LHandTrigger) && myHand[1].HasWeapon == false)
+                myHand[1].GrabWeapon();
+            if (OVRInput.GetDown(OVRInput.RawButton.RHandTrigger) && myHand[0].HasWeapon == false)
+                myHand[0].GrabWeapon();
+
+            // 人差し指トリガーで武器使用
+            if (OVRInput.GetDown(OVRInput.RawButton.LIndexTrigger) && myHand[1].HasWeapon)
+                myHand[1].WeaponAction(true, false);
+            else if (OVRInput.GetUp(OVRInput.RawButton.LIndexTrigger) && myHand[1].HasWeapon)
+                myHand[1].WeaponAction(true, true);
+            if (OVRInput.GetDown(OVRInput.RawButton.RIndexTrigger) && myHand[0].HasWeapon)
+                myHand[0].WeaponAction(true, false);
+            else if (OVRInput.GetUp(OVRInput.RawButton.RIndexTrigger) && myHand[0].HasWeapon)
+                myHand[0].WeaponAction(true, true);
+
             // Y/Bボタンで所持中の武器の削除
             if (OVRInput.GetDown(OVRInput.RawButton.Y) && myHand[1].isBoth == false)
                 myHand[1].DeleteWeapon(myHand[1].CheckDelete());
             if (OVRInput.GetDown(OVRInput.RawButton.B) && myHand[0].isBoth == false)
                 myHand[0].DeleteWeapon(myHand[0].CheckDelete());
+
             // X/Aボタンを離したら武器の削除
             if (OVRInput.GetUp(OVRInput.RawButton.X))
                 myHand[1].weaponCreate.DeleteWeapon();
@@ -138,6 +171,21 @@ namespace Nakajima.Player
                 myHand[0].DeleteWeapon(false);
             else if (_hand.myTouch == OVRInput.RawButton.RHandTrigger)
                 myHand[1].DeleteWeapon(false);
+        }
+
+        /// <summary>
+        /// 当たり判定
+        /// </summary>
+        /// <param name="col"></param>
+        public void OnTriggerEnter(Collider col)
+        {
+            var module = col.gameObject.GetComponent<ModuleObject>();
+
+            if (module == null) return;
+            
+            GetScore += module.GetPower();
+
+            Debug.Log("相手のスコア : " + GetScore);
         }
     }
 }

@@ -122,6 +122,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   myHead: {fileID: 5961182420320700503}
+  myBody: {fileID: 5758192671805207200}
   myHand_R: {fileID: 822861405}
   myHand_L: {fileID: 822861403}
 --- !u!1 &6693596930728794350
@@ -212,9 +213,8 @@ MonoBehaviour:
   weaponCreate: {fileID: 0}
   myTouch: 536870912
   hasObj: {fileID: 0}
-  myProvider: {fileID: 0}
-  GunObj: {fileID: 151061625077218210, guid: 5877dc5a617738a4996842db317be39c, type: 3}
   isBoth: 0
+  GunObj: {fileID: 151061625077218210, guid: 5877dc5a617738a4996842db317be39c, type: 3}
 --- !u!114 &6399080613318361179
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -341,9 +341,8 @@ MonoBehaviour:
   weaponCreate: {fileID: 0}
   myTouch: 134217728
   hasObj: {fileID: 0}
-  myProvider: {fileID: 0}
-  GunObj: {fileID: 151061625077218210, guid: 5877dc5a617738a4996842db317be39c, type: 3}
   isBoth: 0
+  GunObj: {fileID: 151061625077218210, guid: 5877dc5a617738a4996842db317be39c, type: 3}
 --- !u!114 &6544453511463257247
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -402,7 +401,7 @@ PrefabInstance:
     - target: {fileID: -4216859302048453862, guid: 64c0881a3d8217a49ad4dd470ac50593,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0
+      value: -0.5
       objectReference: {fileID: 0}
     - target: {fileID: -4216859302048453862, guid: 64c0881a3d8217a49ad4dd470ac50593,
         type: 3}
@@ -483,7 +482,7 @@ PrefabInstance:
     - target: {fileID: -4216859302048453862, guid: f48f102d17d9cb64d8d4904a279cdc43,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0
+      value: -0.5
       objectReference: {fileID: 0}
     - target: {fileID: -4216859302048453862, guid: f48f102d17d9cb64d8d4904a279cdc43,
         type: 3}

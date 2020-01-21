@@ -49,7 +49,7 @@ namespace Matsumoto.Weapon {
                 Debug.Log("OwnerSet :" + item);
 
                 if (!item) return;
-                var playerID = item.myProvider.MyID;
+                var playerID = item.GetMyProvider.MyID;
                 manager = FindObjectOfType<NetworkEventManager>();
                 manager.AddSyncEvent(playerID, "ThrowModule_Throw" + _myID, (data) => {
                     var p = (Vector3)(data[0]);
