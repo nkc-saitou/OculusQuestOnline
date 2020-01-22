@@ -2,85 +2,105 @@
 {
 	Properties
 	{
-		_MainTex("_MainTex", 2D) = "white" {}      // Note _MainTex is a special name: This can also be accessed from C# via mainTexture property.
-		Colorize("Colorize", Range(0.0, 1.0)) = 1
-		_GlitchTex("Glitch",    2D) = ""{}
-		_BufferTex("Buffer",    2D) = ""{}
-		_Intensity("Intensity", Float) = 1
+		[PerRendererData] _MainTex("Sprite Texture", 2D) = "white" {}
+		_Color("Tint", Color) = (1,1,1,1)
+		[MaterialToggle] PixelSnap("Pixel snap", Float) = 0
+		_Divide("Divide", Int) = 128
+		_RadiusOffset("RadiusOffset", Float) = 0
+		_GradationPower("GradationPower", Float) = 1
 	}
+
 		SubShader
 		{
-			Pass
-			{
-			Name "ColorizeSubshader"
-
-			// ---
-			// For Alpha transparency:   https://docs.unity3d.com/462/Documentation/Manual/SL-SubshaderTags.html
 			Tags
 			{
 				"Queue" = "Transparent"
+				"IgnoreProjector" = "True"
 				"RenderType" = "Transparent"
+				"PreviewType" = "Plane"
+				"CanUseSpriteAtlas" = "True"
 			}
-			Blend SrcAlpha OneMinusSrcAlpha
-			// ---
 
+			Cull Off
+			Lighting Off
+			ZWrite Off
+			Blend One OneMinusSrcAlpha
+
+			Pass {
 			CGPROGRAM
-			#pragma vertex   MyVertexShaderFunction
-			#pragma fragment  MyFragmentShaderFunction
-			#pragma fragmentoption ARB_precision_hint_fastest
-			#include "UnityCG.cginc"
+				#pragma vertex vert
+				#pragma fragment frag
+				#pragma target 2.0
+				#pragma multi_compile _ PIXELSNAP_ON
+				#pragma multi_compile _ ETC1_EXTERNAL_ALPHA
+				#include "UnityCG.cginc"
 
-			sampler2D _MainTex;
+				struct appdata_t {
+					float4 vertex   : POSITION;
+					float4 color    : COLOR;
+					float2 texcoord : TEXCOORD0;
+				};
 
-			float Colorize;
+				struct v2f {
+					float4 vertex   : SV_POSITION;
+					fixed4 color : COLOR;
+					float2 texcoord  : TEXCOORD0;
+				};
 
-			sampler2D _GlitchTex;
-			sampler2D _BufferTex;
-			float _Intensity;
-			//fixed4 _Color0;
+				fixed4 _Color;
 
-			// http://wiki.unity3d.com/index.php/Shader_Code :
-			// There are some pre-defined structs e.g.: v2f_img, appdata_base, appdata_tan, appdata_full, v2f_vertex_lit
-			//
-			// but if you want to create a custom struct, then the see Acceptable Field types and names at http://wiki.unity3d.com/index.php/Shader_Code
-			// my custom struct recieving data from unity
-			struct my_needed_data_from_unity {
-				float4 vertex   : POSITION;  // The vertex position in model space.          //  Name&type must be the same!
-				float4 texcoord : TEXCOORD0; // The first UV coordinate.                     //  Name&type must be the same!
-				float4 color    : COLOR;     //    The color value of this vertex specifically. //  Name&type must be the same!
-			};
+				v2f vert(appdata_t IN) {
+					v2f OUT;
+					OUT.vertex = UnityObjectToClipPos(IN.vertex);
+					OUT.texcoord = IN.texcoord;
+					OUT.color = IN.color * _Color;
+					#ifdef PIXELSNAP_ON
+					OUT.vertex = UnityPixelSnap(OUT.vertex);
+					#endif
 
-			// my custom Vertex to Fragment struct
-			struct my_v2f {
-				float4  pos : SV_POSITION;
-				float2  uv : TEXCOORD0;
-				float4  color : COLOR;
-			};
+					return OUT;
+				}
 
-			my_v2f  MyVertexShaderFunction(my_needed_data_from_unity  v) {
-				my_v2f  result;
-				result.pos = UnityObjectToClipPos(v.vertex);  // Upgrade NOTE: replaced 'mul(UNITY_MATRIX_MVP,*)' with 'UnityObjectToClipPos(*)'
-				result.uv = v.texcoord.xy;
-				result.color = v.color;
-				return result;
-			}
+				sampler2D _MainTex;
+				sampler2D _AlphaTex;
+				int _Divide;
+				float _RadiusOffset;
+				float _GradationPower;
 
-			float random(fixed2 p) {
-				return frac(sin(dot(p, fixed2(12.9898, 78.233))) * 43758.5453);
-			}
+				fixed4 SampleSpriteTexture(float2 uv) {
+					fixed4 color = tex2D(_MainTex, uv);
 
-			float4 MyFragmentShaderFunction(my_v2f  i) : COLOR
-			{
-				//float4 texcolor = tex2D(_MainTex, i.uv); // texture's pixel color
-				//float4 vertexcolor = i.color; // this is coming from UnityEngine.UI.Image.Color
-				//texcolor.rgb = texcolor.rgb * (1 - Colorize) + vertexcolor.rgb * Colorize;
+	#if ETC1_EXTERNAL_ALPHA
+					// get the color from an external texture (usecase: Alpha support for ETC1 on android)
+					color.a = tex2D(_AlphaTex, uv).r;
+	#endif ETC1_EXTERNAL_ALPHA
 
-				float c = random(i.uv);
-				return fixed4(c, c, c, c * i.color.a);
-			}
+					return color;
+				}
 
+				float random(fixed2 p) {
+					return frac(sin(dot(p + _Time.y, fixed2(12.9898, 78.233))) * 43758.5453);
+				}
+
+				float noise(fixed2 st) {
+					fixed2 p = floor(st);
+					return random(p);
+				}
+
+				fixed4 frag(v2f IN) : SV_Target {
+
+					fixed4 c = SampleSpriteTexture(IN.texcoord) * IN.color;
+					fixed2 texcoord = IN.texcoord;
+					c *= noise(IN.texcoord * _Divide);
+					fixed2 ld = (texcoord - 0.5) * (texcoord - 0.5);
+					c.a *= clamp(sqrt(ld.x + ld.y) * _GradationPower + _RadiusOffset, 0, 1);
+					
+					c.rgb = c.rgb + max(fixed3(0,0,0),IN.color.rgb - 0.5);
+					c.rgb *= c.a;
+					return c;
+
+				}
 			ENDCG
+			}
 		}
-		}
-			//Fallback "Diffuse"
 }
