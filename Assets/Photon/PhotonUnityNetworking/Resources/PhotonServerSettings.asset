@@ -34,5 +34,13 @@ MonoBehaviour:
   - DestroySpaceship
   - Fire
   - RespawnSpaceship
+  - GrabWeapon
+  - OutputLog
+  - PlayerGrab
+  - SetOpposite
+  - SetDestroy
+  - ExecSyncEvent
+  - OtherClientEntry
+  - SceneChange
   DisableAutoOpenWizard: 1
   ShowSettings: 1
