@@ -39,6 +39,8 @@ namespace Nakajima.Player
         /// </summary>
         public override void Move()
         {
+            TrackingMove();
+
             // 移動方法ステートで処理わけ
             switch (myMovement.movementState)
             {
@@ -57,6 +59,23 @@ namespace Nakajima.Player
             myMovement.Move(inputVec);
             // 移動
             myRig.velocity = myMovement.Velocity;
+        }
+
+        /// <summary>
+        /// トラッキングするObjectの移動
+        /// </summary>
+        private void TrackingMove()
+        {
+            if (myBody == null) return;
+
+            // トラッキングした場合の座標
+            Vector3 trackingPos = myHead.transform.position;
+
+            frequency = 1.0f / moveTime;
+            float sin = Mathf.Cos(2 * Mathf.PI * frequency * Time.time) * moveValue;
+            Vector3 trackingPos_B = new Vector3(trackingPos.x, myMovement.GetMyCamera.transform.localPosition.y + 0.3f + sin, trackingPos.z);
+
+            myBody.transform.position = trackingPos_B;
         }
 
         /// <summary>

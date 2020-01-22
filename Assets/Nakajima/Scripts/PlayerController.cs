@@ -48,7 +48,6 @@ namespace Nakajima.Player
                 
                 myHead = myHand[0].GetMyProvider.GetMyObj("Head");
                 myBody = myHand[0].GetMyProvider.GetMyObj("Body");
-                myBody.transform.parent = transform;
                 offset = Mathf.Abs(myBody.transform.position.y - myHead.transform.position.y);
             };
         }
@@ -68,6 +67,7 @@ namespace Nakajima.Player
         /// </summary>
         public override void Move()
         {
+            TrackingMove();
 
             // 移動方法ステートで処理わけ
             switch (myMovement.movementState)
@@ -97,10 +97,14 @@ namespace Nakajima.Player
             if (myBody == null) return;
 
             // トラッキングした場合の座標
-            Vector3 trackingPos = UnityEngine.XR.InputTracking.GetLocalPosition(UnityEngine.XR.XRNode.CenterEye);
-            Vector3 trackingPos_B = new Vector3(trackingPos.x, trackingPos.y - offset, trackingPos.z);
+            Vector3 trackingPos = myHead.transform.position;
             
-            myBody.transform.localPosition += trackingPos_B;
+            // 振動数を計算
+            frequency = 1.0f / moveTime;
+            float sin = Mathf.Cos(2 * Mathf.PI * frequency * Time.time) * moveValue;
+            Vector3 trackingPos_B = new Vector3(trackingPos.x, myMovement.GetMyCamera.transform.localPosition.y + 0.5f * sin, trackingPos.z);
+
+            myBody.transform.position = trackingPos_B;
         }
 
         /// <summary>
