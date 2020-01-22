@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Nakajima.Player;
 
 /// <summary>
 /// 武器の生成クラス
@@ -12,8 +13,10 @@ namespace Nakajima.Weapon
     /// </summary>
     public enum CreateState
     {
-        PLAYER_CIRCLE,      // プレイヤーの周囲に生成
-        HAND_DISPLAY,       // 手の角度から生成
+        PLAYER_CIRCLE,                  // プレイヤーの周囲に生成
+        HAND_DISPLAY,                   // 手の角度から生成
+        HAND_DISPLAY_COCK,        // 手の角度(コック式)
+        HAND_FORWARD,               // 手の向いてる方向(前方)から生成
     }
 
     public class WeaponCreate : MonoBehaviour
@@ -28,10 +31,9 @@ namespace Nakajima.Weapon
         /// </summary>
         void Update()
         {
-            // 武器を展開中でないならリターン
             if (WeaponUnfold == false) return;
 
-            UnfoldUpdate();
+            if(ActiveHand != null) UnfoldUpdate(ActiveHand);
         }
 
         // 現在のステート
@@ -59,6 +61,16 @@ namespace Nakajima.Weapon
         [SerializeField, Header("<武器の回転速度>")]
         private float rotateSpeed;
 
+        // 現在表示中の武器
+        int weaponState;
+
+        // アクティブな手(武器生成)
+        private HandMaster activeHand;
+        public HandMaster ActiveHand
+        {
+            set { activeHand = value; }
+            get { return activeHand; }
+        }
         // 武器を生成可能かどうか
         private bool canCreate = true;
         public bool CanCreate
@@ -86,6 +98,12 @@ namespace Nakajima.Weapon
                     currentState = CreateState.HAND_DISPLAY;
                     break;
                 case CreateState.HAND_DISPLAY:
+                    currentState = CreateState.HAND_DISPLAY_COCK;
+                    break;
+                case CreateState.HAND_DISPLAY_COCK:
+                    currentState = CreateState.HAND_FORWARD;
+                    break;
+                case CreateState.HAND_FORWARD:
                     currentState = CreateState.PLAYER_CIRCLE;
                     break;
             }
@@ -108,7 +126,15 @@ namespace Nakajima.Weapon
                     break;
                 // 手の角度から
                 case CreateState.HAND_DISPLAY:
-                    Create_Display();
+                    Create_Display(activeHand);
+                    break;
+                // 手の角度から
+                case CreateState.HAND_DISPLAY_COCK:
+                    Create_Display(activeHand);
+                    break;
+                // 手の方向から
+                case CreateState.HAND_FORWARD:
+                    Create_Forward(activeHand);
                     break;
             }
 
@@ -143,8 +169,11 @@ namespace Nakajima.Weapon
         /// <summary>
         /// 展開中の更新処理
         /// </summary>
-        private void UnfoldUpdate()
+        public void UnfoldUpdate(HandMaster _hand)
         {
+            // 武器を展開中でないならリターン
+            if (WeaponUnfold == false || ActiveHand == null) return;
+
             switch (currentState)
             {
                 // プレイヤーの周囲から
@@ -153,7 +182,11 @@ namespace Nakajima.Weapon
                     break;
                 // 手の角度から
                 case CreateState.HAND_DISPLAY:
-                    Create_Display();
+                    Create_Display(_hand);
+                    break;
+                // 手の方向から
+                case CreateState.HAND_FORWARD:
+                    Create_Forward(_hand);
                     break;
             }
         }
@@ -161,31 +194,99 @@ namespace Nakajima.Weapon
         /// <summary>
         /// 手の角度から武器を生成
         /// </summary>
-        private void Create_Display()
+        private void Create_Display(HandMaster _hand)
         {
             // 武器が対応されている角度検知
             float angleDiff = 360.0f / weaponList.Count;
             // 左コントローラーの角度検知
-            float controllerAngle = OVRInput.GetLocalControllerRotation(OVRInput.Controller.LTrackedRemote).z;
+            float controllerAngle = 0.0f;
+            if (_hand.myTouch == OVRInput.RawButton.LHandTrigger)
+                controllerAngle = OVRInput.GetLocalControllerRotation(OVRInput.Controller.LTrackedRemote).z;
+            else if(_hand.myTouch == OVRInput.RawButton.RHandTrigger)
+                controllerAngle = OVRInput.GetLocalControllerRotation(OVRInput.Controller.RTrackedRemote).z;
 
             if (WeaponUnfold == false) {
-                spawnObj = Instantiate(weaponList[0], spawnOriginObj_Display.transform);
-            }
-            else {
-                spawnObj.transform.position = spawnOriginObj_Display.transform.position;
+                spawnObj = Instantiate(weaponList[0], transform);
             }
 
             // コントローラーの角度を実際の角度に
             float angle = 180.0f * controllerAngle;
             int angleState = (int)angle / (int)angleDiff;
-            if(angleState <= weaponList.Count) {
+            if(angleState <= weaponList.Count && weaponState != angleState) {
                 if (angleState < 0) angleState = angleState + 6;
+                weaponState = angleState;
                 Destroy(spawnObj);
                 createWeaponList.Remove(spawnObj);
 
-                spawnObj = Instantiate(weaponList[angleState], spawnOriginObj_Display.transform.position, Quaternion.identity);
+                spawnObj = Instantiate(weaponList[angleState], transform.position, Quaternion.identity);
                 createWeaponList.Add(spawnObj);
             }
+            WeaponUnfold = true;
+        }
+
+        /// <summary>
+        /// 手の角度から生成
+        /// </summary>
+        private void Create_Cock(PlayerHand _hand)
+        {
+            // 上方向を支点とする
+            Vector3 originVec = Vector3.up;
+
+            
+        }
+
+        /// <summary>
+        /// 手の方向から生成
+        /// </summary>
+        private void Create_Forward(HandMaster _hand)
+        {
+            // コントローラーの方向を取得
+            Vector3 controllerDir = _hand.transform.forward;
+
+            // 初回生成
+            if (WeaponUnfold == false)
+            {
+                weaponState = -1;
+                spawnObj = Instantiate(weaponList[0], spawnOriginObj_Display.transform);
+            }
+            else
+                spawnObj.transform.position = spawnOriginObj_Display.transform.position;
+
+            int angleState = 0;
+
+            // 前方
+            if (controllerDir.z >= 0.5f) {
+                Debug.Log("前");
+                angleState = 0;
+            }
+            // 後方
+            else if(controllerDir.z <= -0.5f) {
+                Debug.Log("後ろ");
+                angleState = 1;
+            }
+            // 右方
+            if(controllerDir.x >= 0.5f) {
+                Debug.Log("右");
+                angleState = 2;
+            }
+            // 左方
+            else if(controllerDir.x <= -0.5f) {
+                Debug.Log("左");
+                angleState = 3;
+            }
+
+            if(angleState != weaponState)
+            {
+                weaponState = angleState;
+
+                Destroy(spawnObj);
+                createWeaponList.Remove(spawnObj);
+
+                spawnObj = Instantiate(weaponList[weaponState], spawnOriginObj_Display.transform.position, Quaternion.identity);
+                createWeaponList.Add(spawnObj);
+            }
+            
+
             WeaponUnfold = true;
         }
 
@@ -194,14 +295,31 @@ namespace Nakajima.Weapon
         /// </summary>
         public void DeleteWeapon()
         {
+            if (createWeaponList.Count < 1) {
+                Reset();
+                return;
+            }
+
             // ステージから削除
             foreach(GameObject obj in createWeaponList) {
                 Destroy(obj);
             }
 
+            Reset();
+
             // 要素から削除
             createWeaponList.RemoveAll(s => s == null);
             createWeaponList.Clear();
+        }
+
+        /// <summary>
+        /// 状態のリセット
+        /// </summary>
+        public void Reset()
+        {
+            WeaponUnfold = false;
+            CanCreate = true;
+            ActiveHand = null;
         }
     }
 }
