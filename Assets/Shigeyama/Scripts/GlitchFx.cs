@@ -100,7 +100,7 @@ public class GlitchFx : MonoBehaviour
 
     void Update()
     {
-        if (Random.value > 0.85f) UpdateNoise();
+        //if (Random.value > 0.85f) UpdateNoise();
     }
 
     void OnRenderImage(RenderTexture source, RenderTexture destination)
