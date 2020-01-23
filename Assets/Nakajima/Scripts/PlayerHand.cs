@@ -202,7 +202,10 @@ namespace Nakajima.Player
             if (_flag) deleteWeapon?.Invoke(this);
 
             // 削除
-            Destroy(hasObj);
+            var weapon = hasObj.GetComponent<IWeapon>();
+            if (weapon == null) return;
+
+            weapon.Destroy(0.5f);
             if(photonView.IsMine) netDeleteWeapon?.Invoke(GetMyProvider.MyID, handName, _flag);
             HasWeapon = false;
             isBoth = false;

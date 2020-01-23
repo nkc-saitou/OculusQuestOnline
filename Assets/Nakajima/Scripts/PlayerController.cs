@@ -45,10 +45,11 @@ namespace Nakajima.Player
                 myHand[0].deleteWeapon += CheckDelete;
                 myHand[1].oppositeWeapon += SetOpposite;
                 myHand[1].deleteWeapon += CheckDelete;
-                
-                myHead = myHand[0].GetMyProvider.GetMyObj("Head");
-                myBody = myHand[0].GetMyProvider.GetMyObj("Body");
-                offset = Mathf.Abs(myBody.transform.position.y - myHead.transform.position.y);
+
+                if (rootObj == null) return;
+
+                rootObj.transform.GetChild(0).transform.localPosition = new Vector3(0.0f, -1.7f, 0.0f);
+                rootObj.transform.GetChild(1).transform.localPosition = new Vector3(0.0f, 0.0f, 0.0f);
             };
         }
 
@@ -96,10 +97,13 @@ namespace Nakajima.Player
         {
             if (rootObj == null) return;
 
+            Vector3 trackingPos = InputTracking.GetLocalPosition(XRNode.CenterEye);
+
             // 移動方向
             Vector3 moveVec = _inputVec * 13.0f;
             // rootを傾ける
-            rootObj.transform.rotation = Quaternion.Euler(moveVec.z, 0.0f, -moveVec.x);
+            rootObj.transform.localPosition = trackingPos;
+            rootObj.transform.localRotation = Quaternion.Euler(moveVec.z, 0.0f, -moveVec.x);
         }
 
         /// <summary>

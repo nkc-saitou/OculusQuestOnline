@@ -2231,7 +2231,7 @@ MonoBehaviour:
   movementState: 0
   centerOrigin: {fileID: 4843531762562746774}
   moveDirObj: {fileID: 1044962125557809886}
-  myCamera: {fileID: 0}
+  myCamera: {fileID: 8524728499730273335}
   minSpeed: 2
   halfSpeed: 3
   maxSpeed: 6
@@ -3542,7 +3542,7 @@ GameObject:
   m_Layer: 0
   m_Name: Root
   m_TagString: Untagged
-  m_Icon: {fileID: 0}
+  m_Icon: {fileID: 7250588514170254948, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
@@ -3618,7 +3618,7 @@ Transform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
-  - {fileID: 4704719907194317424}
+  - {fileID: 5420894526615264029}
   m_Father: {fileID: 5825808658071346374}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -4095,7 +4095,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 4ad6df9900269944589130caa16ea7c0, type: 3}
---- !u!4 &4704719907194317424 stripped
+--- !u!4 &5420894526615264029 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 752214447527145812, guid: 4ad6df9900269944589130caa16ea7c0,
     type: 3}
