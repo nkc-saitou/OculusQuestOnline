@@ -21,8 +21,8 @@ public class NetworkEventManager : MonoBehaviourPunCallbacks
     // オンライン用のプレイヤーの生成
     private TestPlayerCreate testPlayerCreate;
 
-	private Dictionary<(int playerID, int eventID), System.Action<object>> _syncEventTable
-		= new Dictionary<(int playerID, int eventID), System.Action<object>>();
+	private Dictionary<(int playerID, string eventID), System.Action<object[]>> _syncEventTable
+		= new Dictionary<(int playerID, string eventID), System.Action<object[]>>();
 
     // Start is called before the first frame update
     void Start()
@@ -84,16 +84,16 @@ public class NetworkEventManager : MonoBehaviourPunCallbacks
 
         foreach(var hand in _hand)
         {
-            hand.syncWeapon += (ID, weaponName) => {
-                myPhotonView.RPC(nameof(PlayerGrab), RpcTarget.All, ID, weaponName);
+            hand.syncWeapon += (ID, Hand, weaponName) => {
+                myPhotonView.RPC(nameof(PlayerGrab), RpcTarget.All, ID, Hand, weaponName);
             };
 
-            hand.setOppesite += (ID, obj, weaponName) => {
-                SetOpposite(ID, obj, weaponName);
+            hand.setOppesite += (ID, Hand, obj, weaponName) => {
+                SetOpposite(ID, Hand, obj, weaponName);
             };
 
-            hand.deleteWeapon += (Hand, ID) => {
-                SetDestroy(Hand, ID);
+            hand.netDeleteWeapon += (ID, handName, Flag) => {
+                SetDestroy(ID, handName, Flag);
             };
         }
     }
@@ -104,12 +104,13 @@ public class NetworkEventManager : MonoBehaviourPunCallbacks
     /// <param name="_playerID"></param>
     /// <param name="_weaponName"></param>
     [PunRPC]
-    public void PlayerGrab(int _playerID, string _weaponName)
+    public void PlayerGrab(int _playerID, string _handName, string _weaponName)
     {
-        Debug.Log( "ID : " + _playerID);
+        weapon = null;
+
         // IDで処理分け
         var handHash = new ExitGames.Client.Photon.Hashtable();
-        handHash[_playerID + "_left"] = _weaponName;
+        handHash[_playerID + _handName] = _weaponName;
         PhotonNetwork.LocalPlayer.SetCustomProperties(handHash);
     }
 
@@ -119,13 +120,13 @@ public class NetworkEventManager : MonoBehaviourPunCallbacks
     /// <param name="_hand">利き手</param>
     /// <param name="_weapon">武器</param>
     [PunRPC]
-    private void SetOpposite(int _playerID, GameObject _weapon, string _weaponName)
+    private void SetOpposite(int _playerID, string _handName, GameObject _weapon, string _weaponName)
     {
-        Debug.Log("ID : " + _playerID);
         // IDで処理分け
         weapon = _weapon;
         var handHash = new ExitGames.Client.Photon.Hashtable();
-        handHash[_playerID + "_right"] = _weaponName;
+        if (_handName == "_right") handHash[_playerID + "_left"] = _weaponName;
+        else if (_handName == "_left") handHash[_playerID + "_right"] = _weaponName;
         PhotonNetwork.LocalPlayer.SetCustomProperties(handHash);
     }
 
@@ -135,11 +136,10 @@ public class NetworkEventManager : MonoBehaviourPunCallbacks
     /// <param name="_hand">武器を所持している手</param>
     /// <param name="_playerID">ID</param>
     [PunRPC]
-    private void SetDestroy(PlayerHand _hand, int _playerID)
+    private void SetDestroy(int _playerID, string _handName, bool _flag)
     {
         var handHash = new ExitGames.Client.Photon.Hashtable();
-        if(_hand.myTouch == OVRInput.RawButton.RHandTrigger) handHash[_playerID + "_right"] = "None";
-        else handHash[_playerID + "_left"] = "None";
+        handHash[_playerID + _handName] = "None";
         PhotonNetwork.LocalPlayer.SetCustomProperties(handHash);
     }
 
@@ -149,31 +149,36 @@ public class NetworkEventManager : MonoBehaviourPunCallbacks
 	/// <param name="playerID">呼び出されるときに判断するプレイヤーID</param>
 	/// <param name="eventID">呼び出すためのイベント番号(固有)</param>
 	/// <param name="action">実行されるイベント</param>
-	public void AddSyncEvent(int playerID, int eventID, System.Action<object> action) {
+	public void AddSyncEvent(int playerID, string eventID, System.Action<object[]> action) {
 		_syncEventTable.Add((playerID, eventID), action);
+        Debug.Log($"AddSyncEvent playerID:{playerID}, eventID:{eventID}");
 	}
 
 	/// <summary>
 	/// 全プレイヤーにイベントを実行させる
 	/// </summary>
 	/// <param name="eventID">呼び出すイベント番号(固有)</param>
-	public void CallSyncEvent(int eventID, object data) {
-		myPhotonView.RPC(nameof(ExecSyncEvent), RpcTarget.All, TestOnlineData.PlayerID, eventID, data);
-	}
+	public void CallSyncEvent(string eventID, object[] data) {
+		myPhotonView.RPC(nameof(ExecSyncEvent), RpcTarget.All, TestOnlineData.PlayerID, eventID, data as object);
+        Debug.Log($"CallSyncEvent eventID:{eventID}");
+    }
 
-	/// <summary>
-	/// 全プレイヤーにイベントを実行させる
-	/// </summary>
-	/// <param name="eventID">呼び出すイベント番号(固有)</param>
-	[PunRPC]
-	private void ExecSyncEvent(int playerID, int eventID, object data) {
+    /// <summary>
+    /// 全プレイヤーにイベントを実行させる
+    /// </summary>
+    /// <param name="eventID">呼び出すイベント番号(固有)</param>
+    [PunRPC]
+	private void ExecSyncEvent(int playerID, string eventID, object[] data) {
 
-		var eventPair = (playerID, eventID);
+        Debug.Log($"ExecSyncEvent playerID:{playerID}, eventID:{eventID}");
+
+        var eventPair = (playerID, eventID);
 		// eventPairで参照するイベントは必ず存在するはず
 		if(_syncEventTable.ContainsKey(eventPair)) {
 			_syncEventTable[eventPair]?.Invoke(data);
-		}
-	}
+             Debug.Log($"ExecSyncEvent success");
+        }
+    }
 
 	/// <summary>
 	/// カスタムPropertiesに変更があった際のCallback
@@ -198,11 +203,6 @@ public class NetworkEventManager : MonoBehaviourPunCallbacks
         // IDを抜き出す
         string[] hash = SplitID(_dic.Key.ToString());
 
-        var handL = PhotonNetwork.LocalPlayer.CustomProperties[hash[0] + "_left"];
-        Debug.Log(handL.ToString());
-        var handR = PhotonNetwork.LocalPlayer.CustomProperties[hash[0] + "_right"];
-        Debug.Log(_dic.Value.ToString());
-
         // 武器削除
         if (_dic.Value.ToString() == "None") {
             DeletePlayerWeapon(_dic);
@@ -216,14 +216,18 @@ public class NetworkEventManager : MonoBehaviourPunCallbacks
                 case "1":
                     if (HandList[1].HasWeapon == false)
                         HandList[0].GrabWeapon(_dic.Value.ToString());
-                    else
+                    else if(HandList[1].HasWeapon && weapon != null)
                         HandList[0].SetWeapon(weapon);
+                    else if(HandList[1].HasWeapon && weapon == null)
+                        HandList[0].GrabWeapon(_dic.Value.ToString());
                     break;
                 case "2":
                     if (HandList[3].HasWeapon == false)
                         HandList[2].GrabWeapon(_dic.Value.ToString());
-                    else
+                    else if (HandList[3].HasWeapon && weapon != null)
                         HandList[2].SetWeapon(weapon);
+                    else if (HandList[3].HasWeapon && weapon == null)
+                        HandList[2].GrabWeapon(_dic.Value.ToString());
                     break;
             }
         }
@@ -234,18 +238,21 @@ public class NetworkEventManager : MonoBehaviourPunCallbacks
                 case "1":
                     if (HandList[0].HasWeapon == false)
                         HandList[1].GrabWeapon(_dic.Value.ToString());
-                    else
+                    else if (HandList[0].HasWeapon && weapon != null)
                         HandList[1].SetWeapon(weapon);
+                    else if (HandList[0].HasWeapon && weapon == null)
+                        HandList[1].GrabWeapon(_dic.Value.ToString());
                     break;
                 case "2":
                     if (HandList[2].HasWeapon == false)
                         HandList[3].GrabWeapon(_dic.Value.ToString());
-                    else
+                    else if (HandList[2].HasWeapon && weapon != null)
                         HandList[3].SetWeapon(weapon);
+                    else if (HandList[2].HasWeapon && weapon == null)
+                        HandList[3].GrabWeapon(_dic.Value.ToString());
                     break;
             }
         }
-        
     }
 
     /// <summary>
@@ -256,9 +263,6 @@ public class NetworkEventManager : MonoBehaviourPunCallbacks
     {
         // IDを抜き出す
         string[] hash = SplitID(_dic.Key.ToString());
-
-        var handL = PhotonNetwork.LocalPlayer.CustomProperties[hash[0] + "_left"];
-        var handR = PhotonNetwork.LocalPlayer.CustomProperties[hash[0] + "_right"];
 
         // 右手の処理
         if (hash[1] == "right") {

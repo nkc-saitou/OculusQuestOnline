@@ -2,12 +2,14 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using Nakajima.Player;
+using UniRx;
 
 namespace Matsumoto.Weapon {
 
 	public class ThrowModule : WeaponModuleBase {
 
-		[SerializeField]
+        [SerializeField]
 		private ModuleObject _bomb;
 
 		[SerializeField]
@@ -16,11 +18,15 @@ namespace Matsumoto.Weapon {
 		[SerializeField]
 		private float _throwPower = 100;
 
-		private Transform _throwAnchor;
+        private static int _createCount = 0;
+        private int _myID = _createCount++;
+
+        private Transform _throwAnchor;
 		private Vector3 _prevPosition;
 		private List<Vector3> _samples = new List<Vector3>();
+        private NetworkEventManager manager;
 
-		private void Update() {
+        private void Update() {
 
 			// Sample Vec
 			_samples.Add((transform.position - _prevPosition));
@@ -35,7 +41,30 @@ namespace Matsumoto.Weapon {
 		public override void ModuleInitialize(WeaponBase weapon) {
 			base.ModuleInitialize(weapon);
 
-			var transforms = weapon.transform.GetComponentsInChildren<Transform>();
+            _prevPosition = transform.position;
+            _samples = new List<Vector3>();
+
+            Owner.Subscribe(item =>
+            {
+                Debug.Log("OwnerSet :" + item);
+
+                if (!item) return;
+                var playerID = item.GetMyProvider.MyID;
+                manager = FindObjectOfType<NetworkEventManager>();
+                manager.AddSyncEvent(playerID, "ThrowModule_Throw" + _myID, (data) => {
+                    var p = (Vector3)(data[0]);
+                    var r = (Quaternion)(data[1]);
+                    var v = (Vector3)(data[2]);
+                    var b = Instantiate(_bomb, p, r);
+                    b.ModuleData = _moduleData;
+                    b.Modular.Speed = v.magnitude;
+
+					Audio.AudioManager.PlaySE("whip-gesture1", position: p);
+
+				});
+            });
+
+            var transforms = weapon.transform.GetComponentsInChildren<Transform>();
 			foreach(Transform item in transforms) {
 				if(item.name == "[ShotAnchor]") {
 					_throwAnchor = item;
@@ -43,13 +72,10 @@ namespace Matsumoto.Weapon {
 				}
 			}
 
-			_prevPosition = transform.position;
-			_samples = new List<Vector3>();
-
-			Debug.LogWarning("not found child object. name : [ShotAnchor]");
+            Debug.LogWarning("not found child object. name : [ShotAnchor]");
 		}
 
-		public override void OnUseModule(WeaponBase weapon) {
+        public override void OnUseModule(WeaponBase weapon) {
 			base.OnUseModule(weapon);
 
 			if(!_throwAnchor) {
@@ -66,9 +92,8 @@ namespace Matsumoto.Weapon {
 			_throwAnchor.forward = throwVector;
 			Debug.DrawLine(_throwAnchor.position, _throwAnchor.position + throwVector, Color.red, 1);
 
-			var b = Instantiate(_bomb, _throwAnchor.position, _throwAnchor.rotation);
-			b.ModuleData = _moduleData;
-			b.Modular.Speed = throwVector.magnitude;
+            manager.CallSyncEvent("ThrowModule_Throw" + _myID, new object[] { _throwAnchor.position, _throwAnchor.rotation, throwVector });
+
 		}
 
 		private Vector3 CalcThrowVector() {

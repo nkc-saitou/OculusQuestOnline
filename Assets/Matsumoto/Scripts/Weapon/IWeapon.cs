@@ -16,6 +16,8 @@ namespace Matsumoto.Weapon {
 
 		Transform GetGrabAnchor();
 
+        void SetOwner(Nakajima.Player.PlayerHand owner);
+
 	}
 
 

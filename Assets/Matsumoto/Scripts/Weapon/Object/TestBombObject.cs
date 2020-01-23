@@ -8,32 +8,56 @@ namespace Matsumoto.Weapon {
 	public class TestBombObject : ModuleObject {
 
 		public float LifeTime = 10;
+		public float ExplosionStart = 1.0f;
 
 		[SerializeField]
 		private Rigidbody _rigidbody;
 
 		[SerializeField]
+		private Collider _explosiveCollision;
+
+		[SerializeField]
 		private ParticleSystem _explosionEffect;
+
+		[SerializeField]
+		private GameObject _body;
+
+		private float _timer = 0.0f;
 
 		public override WeaponModuleData ModuleData {
 			get; set;
 		}
 
 		private void Start() {
-
-			Destroy(gameObject, LifeTime);
+			_explosiveCollision.enabled = false;
 			_rigidbody.AddForce(transform.forward * ModuleData.Speed * Modular.Speed);
-
-		}
-
-		private void OnDestroy() {
-
-			var e = Instantiate(_explosionEffect, transform.position, Quaternion.identity);
-			Destroy(e.gameObject, 10);
 		}
 
 		private void Update() {
 			
+			if((_timer += Time.deltaTime) > LifeTime) {
+				Explosion();
+			}
+
+		}
+
+		private void Explosion() {
+
+			_explosiveCollision.enabled = true;
+
+			// effect
+			var e = Instantiate(_explosionEffect, transform.position, Quaternion.identity);
+			Destroy(e.gameObject, 10);
+
+			_body.SetActive(false);
+			Destroy(gameObject, 0.2f);
+
+			Audio.AudioManager.PlaySE("bomb1", position: transform.position);
+			
+		}
+
+		private void OnCollisionEnter(Collision collision) {
+			if(_timer > ExplosionStart) Explosion();
 		}
 	}
 }

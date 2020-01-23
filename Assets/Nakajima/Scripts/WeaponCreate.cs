@@ -50,8 +50,6 @@ namespace Nakajima.Weapon
         // 生成する武器のリスト
         [SerializeField]
         private List<GameObject> weaponList = new List<GameObject>();
-        // 生成中の武器リスト
-        public List<GameObject> createWeaponList = new List<GameObject>();
 
         // プレイヤー中心からの半径
         [Header("<中心からの半径>")]
@@ -65,8 +63,8 @@ namespace Nakajima.Weapon
         int weaponState;
 
         // アクティブな手(武器生成)
-        private PlayerHand activeHand;
-        public PlayerHand ActiveHand
+        private HandMaster activeHand;
+        public HandMaster ActiveHand
         {
             set { activeHand = value; }
             get { return activeHand; }
@@ -161,7 +159,6 @@ namespace Nakajima.Weapon
                 // 生成
                 GameObject weapon = Instantiate(weaponList[index], spawnPos, Quaternion.identity);
                 weapon.transform.parent = spawnOriginObj_Circle.transform;
-                createWeaponList.Add(weapon);
             }
             WeaponUnfold = true;
         }
@@ -169,10 +166,10 @@ namespace Nakajima.Weapon
         /// <summary>
         /// 展開中の更新処理
         /// </summary>
-        public void UnfoldUpdate(PlayerHand _hand)
+        public void UnfoldUpdate(HandMaster _hand)
         {
             // 武器を展開中でないならリターン
-            if (WeaponUnfold == false) return;
+            if (WeaponUnfold == false || ActiveHand == null) return;
 
             switch (currentState)
             {
@@ -194,31 +191,31 @@ namespace Nakajima.Weapon
         /// <summary>
         /// 手の角度から武器を生成
         /// </summary>
-        private void Create_Display(PlayerHand _hand)
+        private void Create_Display(HandMaster _hand)
         {
             // 武器が対応されている角度検知
-            float angleDiff = 360.0f / weaponList.Count;
+            float angleDiff = 180.0f / weaponList.Count;
             // 左コントローラーの角度検知
-            float controllerAngle = OVRInput.GetLocalControllerRotation(OVRInput.Controller.LTrackedRemote).z;
+            float controllerAngle = 0.0f;
+            if (_hand.myTouch == OVRInput.RawButton.LHandTrigger)
+                controllerAngle = OVRInput.GetLocalControllerRotation(OVRInput.Controller.LTrackedRemote).z;
+            else if(_hand.myTouch == OVRInput.RawButton.RHandTrigger)
+                controllerAngle = OVRInput.GetLocalControllerRotation(OVRInput.Controller.RTrackedRemote).z;
 
             if (WeaponUnfold == false) {
-                spawnObj = Instantiate(weaponList[0], spawnOriginObj_Display.transform);
-            }
-            else {
-                spawnObj.transform.position = spawnOriginObj_Display.transform.position;
+                spawnObj = Instantiate(weaponList[0], transform);
             }
 
             // コントローラーの角度を実際の角度に
             float angle = 180.0f * controllerAngle;
             int angleState = (int)angle / (int)angleDiff;
             if(angleState <= weaponList.Count && weaponState != angleState) {
-                if (angleState < 0) angleState = angleState + 6;
+                if (angleState < 0) angleState = weaponList.Count - 1;
+                else if (angleState > 1) angleState = weaponList.Count - 2;
                 weaponState = angleState;
                 Destroy(spawnObj);
-                createWeaponList.Remove(spawnObj);
 
-                spawnObj = Instantiate(weaponList[angleState], spawnOriginObj_Display.transform.position, Quaternion.identity);
-                createWeaponList.Add(spawnObj);
+                spawnObj = Instantiate(weaponList[angleState], transform.position, Quaternion.identity);
             }
             WeaponUnfold = true;
         }
@@ -237,7 +234,7 @@ namespace Nakajima.Weapon
         /// <summary>
         /// 手の方向から生成
         /// </summary>
-        private void Create_Forward(PlayerHand _hand)
+        private void Create_Forward(HandMaster _hand)
         {
             // コントローラーの方向を取得
             Vector3 controllerDir = _hand.transform.forward;
@@ -279,10 +276,8 @@ namespace Nakajima.Weapon
                 weaponState = angleState;
 
                 Destroy(spawnObj);
-                createWeaponList.Remove(spawnObj);
 
                 spawnObj = Instantiate(weaponList[weaponState], spawnOriginObj_Display.transform.position, Quaternion.identity);
-                createWeaponList.Add(spawnObj);
             }
             
 
@@ -294,19 +289,21 @@ namespace Nakajima.Weapon
         /// </summary>
         public void DeleteWeapon()
         {
-            if (createWeaponList.Count < 1) return;
+            if (spawnObj == null) return;
 
-            // ステージから削除
-            foreach(GameObject obj in createWeaponList) {
-                Destroy(obj);
-            }
+            Destroy(spawnObj);
 
+            Reset();
+        }
+
+        /// <summary>
+        /// 状態のリセット
+        /// </summary>
+        public void Reset()
+        {
             WeaponUnfold = false;
             CanCreate = true;
-
-            // 要素から削除
-            createWeaponList.RemoveAll(s => s == null);
-            createWeaponList.Clear();
+            ActiveHand = null;
         }
     }
 }
