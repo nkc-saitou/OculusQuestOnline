@@ -10,7 +10,7 @@ namespace Matsumoto.Weapon {
 	/// </summary>
 	public interface IWeapon : IOculusControllable {
 
-		UniTask Destroy();
+		UniTask Destroy(float fadeTime);
 
 		GameObject GetBody();
 
