@@ -24,9 +24,6 @@ namespace Saitou.Network
         Subject<Unit> onInRoomSub = new Subject<Unit>();
         public IObservable<Unit> OnInRoom { get { return onInRoomSub; } }
 
-        public Text text;
-        public Text playerText;
-
         string roomName = "myRoomName";
 
         void Start()
@@ -37,17 +34,16 @@ namespace Saitou.Network
 
             InitRoomSetting();
 
-            text.text = "未接続";
-
             // 入っているかどうかを確認したい
             IsInRoom.Subscribe(_ => Debug.Log("isOpen" + IsInRoom.Value));
 
+            // 現在の入室人数
             this.UpdateAsObservable()
                 .TakeUntilDestroy(this)
                 .Where(_ => IsInRoom.Value)
                 .Subscribe(_ => 
                 {
-                    playerText.text = PhotonNetwork.PlayerList.Length.ToString();
+                    TestOnlineData.PlayerCount.Value = PhotonNetwork.PlayerList.Length;
                 });
         }
 
@@ -98,8 +94,6 @@ namespace Saitou.Network
         public override void OnConnectedToMaster()
         {
             Debug.Log("OnConnectedToMaster");
-
-            text.text = "サーバー接続中";
             // ロビーに入る
             JoinLobby();
         }
@@ -110,7 +104,6 @@ namespace Saitou.Network
         public override void OnJoinedLobby()
         {
             Debug.Log("ロビーに入りました。");
-            text.text = "ロビー接続接続中";
             JoinOrCreateRoom().Forget();
         }
 
@@ -120,7 +113,6 @@ namespace Saitou.Network
 
             TestOnlineData.PlayerID = PhotonNetwork.PlayerList.Length;
 
-            text.text = "ルーム入室済";
             onInRoomSub.OnNext(Unit.Default);
         }
 
