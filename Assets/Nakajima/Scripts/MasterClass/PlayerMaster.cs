@@ -12,7 +12,9 @@ namespace Nakajima.Player
         // 自身のMovement;
         protected MovementComponetBase myMovement;
         // 自身の体
+        [SerializeField]
         protected GameObject myHead;
+        [SerializeField]
         protected GameObject myBody;
         // 頭と体の距離
         protected float offset;
@@ -24,6 +26,14 @@ namespace Nakajima.Player
         protected Rigidbody myRig;
         // 入力ベクター
         protected Vector3 inputVec;
+
+        // 往復時間
+        [SerializeField, Header("往復にかかる時間")]
+        protected float moveTime;
+        [SerializeField, Header("振幅(移動量)")]
+        protected float moveValue;
+        // 周波数(振動数)
+        protected float frequency;
 
         // スコア
         public int GetScore {
