@@ -36,14 +36,9 @@ namespace Sanoki.Online
 
         private void Update()
         {
-            if (Input.GetKeyDown(KeyCode.G)) Entry();
-            //if (Input.GetKeyDown(KeyCode.F))
-            //{
-            //    networkManager.JoinOrCreateRoom();
-            //}
-            flgText[0].text = "マスタークライアント：" + isStart[0].ToString();
-            flgText[1].text = "その他：" + isStart[1].ToString();
-            if (OVRInput.GetDown(OVRInput.RawButton.A)) Entry();
+            flgText[0].text = "1P：" + isStart[0].ToString();
+            flgText[1].text = "2P：" + isStart[1].ToString();
+            if (OVRInput.GetDown(OVRInput.RawButton.A)||Input.GetKeyDown(KeyCode.G)) Entry();
 
         }
         
