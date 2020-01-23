@@ -39,21 +39,24 @@ namespace Matsumoto.Weapon {
 			_rigidbody.MovePosition(pos);
 		}
 
-		private void OnCollisionEnter(Collision collision) {
-            if(_effect)
-			    _effect.DestroyEffect();
+		private void OnHit() {
+
+			if(_effect)
+				_effect.DestroyEffect();
 			var e = Instantiate(_hitEffect, transform.position, transform.rotation);
 			e.Invoke(nameof(e.DestroyEffect), 3);
-
 			Destroy(gameObject);
+
+			Audio.AudioManager.PlaySE("beamgun2", position: transform.position);
+
+		}
+
+		private void OnCollisionEnter(Collision collision) {
+			OnHit();
 		}
 
 		private void OnTriggerEnter(Collider other) {
-            if(_effect)
-			    _effect.DestroyEffect();
-			var e = Instantiate(_hitEffect, transform.position, transform.rotation);
-			e.Invoke(nameof(e.DestroyEffect), 3);
-			Destroy(gameObject);
+			OnHit();
 		}
 	}
 }

@@ -58,7 +58,10 @@ namespace Matsumoto.Weapon {
                     var b = Instantiate(_bomb, p, r);
                     b.ModuleData = _moduleData;
                     b.Modular.Speed = v.magnitude;
-                });
+
+					Audio.AudioManager.PlaySE("whip-gesture1", position: p);
+
+				});
             });
 
             var transforms = weapon.transform.GetComponentsInChildren<Transform>();

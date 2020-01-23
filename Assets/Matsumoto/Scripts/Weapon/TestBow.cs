@@ -26,7 +26,7 @@ namespace Matsumoto.Weapon {
 			//	OnButtonDown(OVRInput.Button.One);
 			//}
 
-			if(Input.GetKeyUp(KeyCode.E)) {
+			if(Input.GetKeyUp(KeyCode.E) && IsUsable) {
 				OnButtonUp(OVRInput.Button.One);
 			}
 
@@ -52,8 +52,8 @@ namespace Matsumoto.Weapon {
 			_arrow.localPosition = pos;
 		}
 
-		public override void Initialize() {
-			base.Initialize();
+		public override void Initialize(float fadeTime) {
+			base.Initialize(fadeTime);
 
 			var input = (WeaponOtherInput)_otherWeapon;
 
@@ -63,6 +63,7 @@ namespace Matsumoto.Weapon {
 				.Where(_ => _isStayArrowPosition)
 				.Subscribe(button => {
 					if(button != OVRInput.Button.One) return;
+					if(!IsUsable) return;
 
 					_isChargingArrow = true;
 				})
@@ -71,6 +72,7 @@ namespace Matsumoto.Weapon {
 			input.OnButtonUpRecieved
 				.Subscribe(button => {
 					if(button != OVRInput.Button.One) return;
+					if(!IsUsable) return;
 
 					_weaponModules[0].OnUseModule(this);
 					_isChargingArrow = false;
@@ -94,10 +96,12 @@ namespace Matsumoto.Weapon {
 		}
 
 		private void OnTriggerEnter(Collider other) {
+			if(!IsUsable) return;
 			_isStayArrowPosition = true;
 		}
 
 		private void OnTriggerExit(Collider other) {
+			if(!IsUsable) return;
 			_isStayArrowPosition = false;
 		}
 
