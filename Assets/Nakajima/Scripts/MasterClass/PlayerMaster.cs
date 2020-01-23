@@ -11,9 +11,13 @@ namespace Nakajima.Player
     {
         // 自身のMovement;
         protected MovementComponetBase myMovement;
-        // 自身の体
+        // ルートObj
+        [SerializeField]
+        protected GameObject rootObj;
+        // 自身の頭
         [SerializeField]
         protected GameObject myHead;
+        // 自身の体
         [SerializeField]
         protected GameObject myBody;
         // 頭と体の距離
@@ -35,8 +39,18 @@ namespace Nakajima.Player
         // 周波数(振動数)
         protected float frequency;
 
+        // 武器を使用できるかどうか
+        public bool CanUseWeapon {
+            protected set; get;
+        }
+
+        // 武器を生成できるかどうか
+        public bool CanCreateWeapon {
+            protected set; get;
+        }
+
         // スコア
-        public int GetScore {
+        public int Score {
             protected set; get;
         }
         
