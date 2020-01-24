@@ -51,7 +51,6 @@ namespace Matsumoto.Weapon {
 		public virtual UniTask Destroy(float fadeTime) {
 
 			StartCoroutine(DestroyAnim(fadeTime));
-			Destroy(gameObject);
 			return new UniTask();
 		}
 
@@ -120,7 +119,7 @@ namespace Matsumoto.Weapon {
 			var t = 1.0f;
 			IsUsable = false;
 
-			Debug.Log("fadeOut");
+			Debug.Log("fadeIn");
 
 			while(t > 0.0f) {
 
@@ -131,10 +130,13 @@ namespace Matsumoto.Weapon {
 					m.SetFloat("_Value", t);
 				}
 
+				Debug.Log("fadeIn:" + t);
+
 				yield return null;
 
 			}
 
+			Destroy(gameObject);
 
 		}
 	}
