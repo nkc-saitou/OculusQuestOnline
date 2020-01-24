@@ -28,6 +28,7 @@ namespace Matsumoto.Weapon {
 		}
 
 		private Renderer[] _rendererArray;
+		private int _valueProp;
 
 		public bool IsUsable {
 			get; protected set;
@@ -37,12 +38,13 @@ namespace Matsumoto.Weapon {
 		public virtual void Initialize(float fadeTime) {
 
 			_rendererArray = GetComponentsInChildren<Renderer>();
+			_valueProp = Shader.PropertyToID("_Value");
 
 			// 再生成
 			for(int i = 0;i < _rendererArray.Length;i++) {
 				var r = _rendererArray[i];
 				r.material = new Material(r.material);
-				r.material.SetFloat("_Value", 0.0f);
+				r.material.SetFloat(_valueProp, 0.0f);
 			}
 
 			StartCoroutine(SpawnAnim(fadeTime));
@@ -101,7 +103,7 @@ namespace Matsumoto.Weapon {
 
 				for(int i = 0;i < _rendererArray.Length;i++) {
 					var m = _rendererArray[i].material;
-					m.SetFloat("_Value", t);
+					m.SetFloat(_valueProp, t);
 				}
 				Debug.Log("fadeOut:" + t);
 
@@ -127,7 +129,7 @@ namespace Matsumoto.Weapon {
 
 				for(int i = 0;i < _rendererArray.Length;i++) {
 					var m = _rendererArray[i].material;
-					m.SetFloat("_Value", t);
+					m.SetFloat(_valueProp, t);
 				}
 
 				Debug.Log("fadeIn:" + t);
