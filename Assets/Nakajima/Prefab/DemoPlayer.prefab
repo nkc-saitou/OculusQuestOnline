@@ -1912,8 +1912,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8230257814677601962}
   - component: {fileID: 3639932573735010633}
-  - component: {fileID: 3661983210279422752}
-  - component: {fileID: 1236522760}
+  - component: {fileID: 274631663}
   m_Layer: 0
   m_Name: LeftEyeAnchor
   m_TagString: MainCamera
@@ -1978,7 +1977,7 @@ Camera:
   m_OcclusionCulling: 1
   m_StereoConvergence: 10
   m_StereoSeparation: 0.022
---- !u!114 &3661983210279422752
+--- !u!114 &274631663
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1987,29 +1986,14 @@ MonoBehaviour:
   m_GameObject: {fileID: 2973059261451610084}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e90b7bd6b19560544a6e86851574b098, type: 3}
+  m_Script: {fileID: 11500000, guid: 4cb4d9bd051a71f48a18edd27bce7c19, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _iteration: 9
-  _threshold: 100
-  _softThreshold: 1
-  _intensity: 1.83
-  _debug: 0
-  _material: {fileID: 2100000, guid: 68ac5bcde5622874b83f351045f4727b, type: 2}
---- !u!114 &1236522760
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2973059261451610084}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 30793dc070f7da744b1ccafddab23cec, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _intensity: 0
-  shader: {fileID: 4800000, guid: 6acf6147411123540a6fbbd1ed26761b, type: 3}
+  threshold: 1
+  intensity: 0.09
+  blurSize: 0.88
+  blurIterations: 4
+  fastBloomMaterial: {fileID: 2100000, guid: 221340b8b5ad10940ba1646f87e3770c, type: 2}
 --- !u!1 &3143171978600203708
 GameObject:
   m_ObjectHideFlags: 0
@@ -4842,8 +4826,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3792162353756730844}
   - component: {fileID: 3530188454226293381}
-  - component: {fileID: 5649418862103907820}
-  - component: {fileID: 1135416859}
+  - component: {fileID: 1418406723}
   m_Layer: 0
   m_Name: RightEyeAnchor
   m_TagString: Untagged
@@ -4908,7 +4891,7 @@ Camera:
   m_OcclusionCulling: 1
   m_StereoConvergence: 10
   m_StereoSeparation: 0.022
---- !u!114 &5649418862103907820
+--- !u!114 &1418406723
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -4917,29 +4900,14 @@ MonoBehaviour:
   m_GameObject: {fileID: 6193948618022199568}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e90b7bd6b19560544a6e86851574b098, type: 3}
+  m_Script: {fileID: 11500000, guid: 4cb4d9bd051a71f48a18edd27bce7c19, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _iteration: 9
-  _threshold: 100
-  _softThreshold: 1
-  _intensity: 1.83
-  _debug: 0
-  _material: {fileID: 2100000, guid: 68ac5bcde5622874b83f351045f4727b, type: 2}
---- !u!114 &1135416859
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6193948618022199568}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 30793dc070f7da744b1ccafddab23cec, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _intensity: 0
-  shader: {fileID: 4800000, guid: 6acf6147411123540a6fbbd1ed26761b, type: 3}
+  threshold: 1
+  intensity: 0.09
+  blurSize: 0.88
+  blurIterations: 4
+  fastBloomMaterial: {fileID: 2100000, guid: 221340b8b5ad10940ba1646f87e3770c, type: 2}
 --- !u!1 &6207167597746725010
 GameObject:
   m_ObjectHideFlags: 0

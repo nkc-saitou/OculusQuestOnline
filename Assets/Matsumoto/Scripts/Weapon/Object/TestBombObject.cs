@@ -17,7 +17,7 @@ namespace Matsumoto.Weapon {
 		private Collider _explosiveCollision;
 
 		[SerializeField]
-		private ParticleSystem _explosionEffect;
+		private GameObject _explosionEffect;
 
 		[SerializeField]
 		private GameObject _body;

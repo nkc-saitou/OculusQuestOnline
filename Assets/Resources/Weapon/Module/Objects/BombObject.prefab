@@ -235,9 +235,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   LifeTime: 10
+  ExplosionStart: 1
   _rigidbody: {fileID: 7317063493098124288}
   _explosiveCollision: {fileID: 4363684575671902610}
-  _explosionEffect: {fileID: 19821056, guid: 079954accd64b32419ec069129c81273, type: 3}
+  _explosionEffect: {fileID: 8793150089216181864, guid: 32098d440f1fe89438da9e8429355276,
+    type: 3}
   _body: {fileID: 1048880052829928156}
 --- !u!54 &7317063493098124288
 Rigidbody:
