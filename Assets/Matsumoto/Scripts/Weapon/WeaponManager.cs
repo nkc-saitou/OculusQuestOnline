@@ -78,6 +78,7 @@ namespace Matsumoto.Weapon {
 			var weaponArray = new List<WeaponBase>();
 
 			var weapon = CreateWeapon(_weaponBaseDictionary[name]);
+			weapon.Initialize(1.0f);
 			weaponArray.Add(weapon);
 
 			if(!weapon.OtherWeapon) {
@@ -86,12 +87,9 @@ namespace Matsumoto.Weapon {
 
 			// 両手武器用
 			var otherWeapon = CreateWeapon(weapon.OtherWeapon);
+			otherWeapon.Initialize(1.0f);
 			weapon.OtherWeapon = otherWeapon;
 			weaponArray.Add(otherWeapon);
-
-			foreach(var item in weaponArray) {
-				item.Initialize();
-			}
 
 			return weaponArray.ToArray();
 		}

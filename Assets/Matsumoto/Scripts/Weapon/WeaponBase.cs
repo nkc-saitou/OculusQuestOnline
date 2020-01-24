@@ -1,6 +1,8 @@
 ﻿using UnityEngine;
 using System.Collections;
 using UniRx.Async;
+using UniRx;
+using UniRx.Triggers;
 
 namespace Matsumoto.Weapon {
 
@@ -25,11 +27,67 @@ namespace Matsumoto.Weapon {
 			set { _otherWeapon = value; }
 		}
 
-		public virtual void Initialize() { }
+		private Renderer[] _rendererArray;
+		private float _fadeValue = 0.0f;
 
-		public virtual UniTask Destroy() {
+		public bool IsUsable {
+			get; protected set;
+		} = false;
+
+
+		public virtual void Initialize(float fadeTime) {
+
+			_rendererArray = GetComponentsInChildren<Renderer>();
+
+			// 再生成
+			for(int i = 0;i < _rendererArray.Length;i++) {
+				var r = _rendererArray[i];
+				r.material = new Material(r.material);
+				r.material.SetFloat("_Value", 0.0f);
+			}
+
+			var rn = 1 / fadeTime;
+
+			var disposable = new SingleAssignmentDisposable();
+			disposable.Disposable = this.UpdateAsObservable()
+				.Subscribe(_ => {
+
+					_fadeValue = Mathf.Min(1.0f, _fadeValue + rn * Time.deltaTime);
+
+					for(int i = 0;i < _rendererArray.Length;i++) {
+						var m = _rendererArray[i].material;
+						m.SetFloat("_Value", _fadeValue);
+					}
+
+					if(_fadeValue >= 1.0f) {
+						IsUsable = true;
+						disposable.Dispose();
+					}
+
+				})
+				.AddTo(this);
+		}
+
+		public virtual async UniTask Destroy(float fadeTime) {
+
+			var rn = 1 / fadeTime;
+
+			IsUsable = false;
+			while(_fadeValue > 0.0f) {
+
+				_fadeValue = Mathf.Max(0.0f, _fadeValue - rn * Time.deltaTime);
+
+				for(int i = 0;i < _rendererArray.Length;i++) {
+					var m = _rendererArray[i].material;
+					m.SetFloat("_Value", _fadeValue);
+				}
+
+				await UniTask.DelayFrame(0);
+
+			}
+
 			Destroy(gameObject);
-			return new UniTask();
+			return;
 		}
 
 		public virtual GameObject GetBody() {

@@ -45,10 +45,11 @@ namespace Nakajima.Player
                 myHand[0].deleteWeapon += CheckDelete;
                 myHand[1].oppositeWeapon += SetOpposite;
                 myHand[1].deleteWeapon += CheckDelete;
-                
-                myHead = myHand[0].GetMyProvider.GetMyObj("Head");
-                myBody = myHand[0].GetMyProvider.GetMyObj("Body");
-                offset = Mathf.Abs(myBody.transform.position.y - myHead.transform.position.y);
+
+                if (rootObj == null) return;
+
+                rootObj.transform.GetChild(0).transform.localPosition = new Vector3(0.0f, -1.7f, 0.0f);
+                rootObj.transform.GetChild(1).transform.localPosition = new Vector3(0.0f, 0.0f, 0.0f);
             };
         }
 
@@ -67,7 +68,6 @@ namespace Nakajima.Player
         /// </summary>
         public override void Move()
         {
-            TrackingMove();
 
             // 移動方法ステートで処理わけ
             switch (myMovement.movementState)
@@ -83,6 +83,7 @@ namespace Nakajima.Player
                     break;
             }
 
+            TrackingMove(inputVec);
             // 移動力の計算
             myMovement.Move(inputVec);
             // 移動
@@ -92,19 +93,17 @@ namespace Nakajima.Player
         /// <summary>
         /// トラッキングするObjectの移動
         /// </summary>
-        private void TrackingMove()
+        private void TrackingMove(Vector3 _inputVec)
         {
-            if (myBody == null) return;
+            if (rootObj == null) return;
 
-            // トラッキングした場合の座標
-            Vector3 trackingPos = myHead.transform.position;
-            
-            // 振動数を計算
-            frequency = 1.0f / moveTime;
-            float sin = Mathf.Cos(2 * Mathf.PI * frequency * Time.time) * moveValue;
-            Vector3 trackingPos_B = new Vector3(trackingPos.x, myMovement.GetMyCamera.transform.localPosition.y + 0.5f * sin, trackingPos.z);
+            Vector3 trackingPos = InputTracking.GetLocalPosition(XRNode.CenterEye);
 
-            myBody.transform.position = trackingPos_B;
+            // 移動方向
+            Vector3 moveVec = _inputVec * 13.0f;
+            // rootを傾ける
+            rootObj.transform.localPosition = trackingPos;
+            rootObj.transform.localRotation = Quaternion.Euler(moveVec.z, 0.0f, -moveVec.x);
         }
 
         /// <summary>
@@ -187,9 +186,9 @@ namespace Nakajima.Player
 
             if (module == null) return;
             
-            GetScore += module.GetPower();
+            Score += module.GetPower();
 
-            Debug.Log("相手のスコア : " + GetScore);
+            Debug.Log("相手のスコア : " + Score);
         }
     }
 }
