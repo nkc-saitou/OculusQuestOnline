@@ -28,7 +28,7 @@ namespace Matsumoto.Weapon {
 		}
 
 		private Renderer[] _rendererArray;
-		private float _fadeValue = 0.0f;
+		private int _valueProp;
 
 		public bool IsUsable {
 			get; protected set;
@@ -38,56 +38,22 @@ namespace Matsumoto.Weapon {
 		public virtual void Initialize(float fadeTime) {
 
 			_rendererArray = GetComponentsInChildren<Renderer>();
+			_valueProp = Shader.PropertyToID("_Value");
 
 			// 再生成
 			for(int i = 0;i < _rendererArray.Length;i++) {
 				var r = _rendererArray[i];
 				r.material = new Material(r.material);
-				r.material.SetFloat("_Value", 0.0f);
+				r.material.SetFloat(_valueProp, 0.0f);
 			}
 
-			var rn = 1 / fadeTime;
-
-			var disposable = new SingleAssignmentDisposable();
-			disposable.Disposable = this.UpdateAsObservable()
-				.Subscribe(_ => {
-
-					_fadeValue = Mathf.Min(1.0f, _fadeValue + rn * Time.deltaTime);
-
-					for(int i = 0;i < _rendererArray.Length;i++) {
-						var m = _rendererArray[i].material;
-						m.SetFloat("_Value", _fadeValue);
-					}
-
-					if(_fadeValue >= 1.0f) {
-						IsUsable = true;
-						disposable.Dispose();
-					}
-
-				})
-				.AddTo(this);
+			StartCoroutine(SpawnAnim(fadeTime));
 		}
 
-		public virtual async UniTask Destroy(float fadeTime) {
+		public virtual UniTask Destroy(float fadeTime) {
 
-			var rn = 1 / fadeTime;
-
-			IsUsable = false;
-			while(_fadeValue > 0.0f) {
-
-				_fadeValue = Mathf.Max(0.0f, _fadeValue - rn * Time.deltaTime);
-
-				for(int i = 0;i < _rendererArray.Length;i++) {
-					var m = _rendererArray[i].material;
-					m.SetFloat("_Value", _fadeValue);
-				}
-
-				await UniTask.DelayFrame(0);
-
-			}
-
-			Destroy(gameObject);
-			return;
+			StartCoroutine(DestroyAnim(fadeTime));
+			return new UniTask();
 		}
 
 		public virtual GameObject GetBody() {
@@ -124,7 +90,58 @@ namespace Matsumoto.Weapon {
 
 		public virtual void OnTriggerAnalogValue(OVRInput.Axis1D type, float axis) {}
 
-    }
+		private IEnumerator SpawnAnim(float fadeTime) {
+
+			var rn = 1 / fadeTime;
+			var t = 0.0f;
+
+			Debug.Log("fadeOut");
+
+			while(t < 1.0f) {
+
+				t = Mathf.Min(1.0f, t + rn * Time.deltaTime);
+
+				for(int i = 0;i < _rendererArray.Length;i++) {
+					var m = _rendererArray[i].material;
+					m.SetFloat(_valueProp, t);
+				}
+				Debug.Log("fadeOut:" + t);
+
+				yield return null;
+
+			}
+
+			IsUsable = true;
+
+		}
+
+		private IEnumerator DestroyAnim(float fadeTime) {
+
+			var rn = 1 / fadeTime;
+			var t = 1.0f;
+			IsUsable = false;
+
+			Debug.Log("fadeIn");
+
+			while(t > 0.0f) {
+
+				t = Mathf.Max(0.0f, t - rn * Time.deltaTime);
+
+				for(int i = 0;i < _rendererArray.Length;i++) {
+					var m = _rendererArray[i].material;
+					m.SetFloat(_valueProp, t);
+				}
+
+				Debug.Log("fadeIn:" + t);
+
+				yield return null;
+
+			}
+
+			Destroy(gameObject);
+
+		}
+	}
 }
 
 
