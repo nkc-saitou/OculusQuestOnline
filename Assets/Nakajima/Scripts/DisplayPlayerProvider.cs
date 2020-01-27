@@ -85,16 +85,7 @@ namespace Nakajima.Player
         // Update is called once per frame
         void Update()
         {
-            HeadSetAnchor();
-        }
 
-        /// <summary>
-        /// 頭の調整
-        /// </summary>
-        void HeadSetAnchor()
-        {
-            myHead.transform.position = 
-                new Vector3(myHead.transform.localPosition.x, headAnchor.transform.localPosition.y, myHead.transform.localPosition.z);
         }
     }
 }
