@@ -29,6 +29,7 @@ namespace Nakajima.Player
         {
             myRig = GetComponent<Rigidbody>();
             myMovement = GetComponent<MovementComponetBase>();
+            myDamageEffect = FindObjectOfType<DamageEffect>();
             weaponCreate = GetComponent<WeaponCreate>();
             testPlayerCreate = FindObjectOfType<TestPlayerCreate>();
 
@@ -187,6 +188,8 @@ namespace Nakajima.Player
             if (module == null) return;
             
             Score += module.GetPower();
+
+            myDamageEffect.OnDamage();
 
             Debug.Log("相手のスコア : " + Score);
         }

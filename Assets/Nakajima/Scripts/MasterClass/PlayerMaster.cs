@@ -11,6 +11,8 @@ namespace Nakajima.Player
     {
         // 自身のMovement;
         protected MovementComponetBase myMovement;
+        // 自身のダメージ表示用クラス
+        protected DamageEffect myDamageEffect;
         // ルートObj
         [SerializeField]
         protected GameObject rootObj;

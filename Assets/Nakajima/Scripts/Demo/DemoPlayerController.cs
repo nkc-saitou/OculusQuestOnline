@@ -18,6 +18,7 @@ namespace Nakajima.Player
         {
             myRig = GetComponent<Rigidbody>();
             myMovement = GetComponent<MovementComponetBase>();
+            myDamageEffect = FindObjectOfType<DamageEffect>();
             weaponMgr = FindObjectOfType<WeaponManager>();
 
             // イベントをバインド
