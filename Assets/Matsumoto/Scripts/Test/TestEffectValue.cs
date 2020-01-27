@@ -27,10 +27,10 @@ public class TestEffectValue : MonoBehaviour
 	// Update is called once per frame
 	void Update()
     {
-		if(OVRInput.GetDown(OVRInput.RawButton.X)) {
+		if(OVRInput.GetDown(OVRInput.RawButton.X) || Input.GetKeyDown(KeyCode.D)) {
 			_value += .1f;
 		}
-		if(OVRInput.GetDown(OVRInput.RawButton.Y)) {
+		if(OVRInput.GetDown(OVRInput.RawButton.Y) || Input.GetKeyDown(KeyCode.A)) {
 			_value -= .1f;
 		}
 
