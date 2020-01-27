@@ -79,7 +79,7 @@
 	#if ETC1_EXTERNAL_ALPHA
 					// get the color from an external texture (usecase: Alpha support for ETC1 on android)
 					color.a = tex2D(_AlphaTex, uv).r;
-	#endif ETC1_EXTERNAL_ALPHA
+	#endif //ETC1_EXTERNAL_ALPHA
 
 					return color;
 				}
