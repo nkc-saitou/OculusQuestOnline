@@ -56,6 +56,7 @@ namespace Matsumoto.Weapon {
                     var r = (Quaternion)(data[1]);
                     var v = (Vector3)(data[2]);
                     var b = Instantiate(_bomb, p, r);
+					b.Owner = Owner.Value;
                     b.ModuleData = _moduleData;
                     b.Modular.Speed = v.magnitude;
 
