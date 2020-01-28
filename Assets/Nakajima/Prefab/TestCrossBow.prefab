@@ -162,7 +162,6 @@ GameObject:
   m_Component:
   - component: {fileID: 6039881241058073254}
   - component: {fileID: 2753638391311573093}
-  - component: {fileID: 6597697507378364124}
   - component: {fileID: 4529251308191701419}
   m_Layer: 0
   m_Name: TestCrossBow
@@ -198,30 +197,7 @@ BoxCollider:
   m_Enabled: 1
   serializedVersion: 2
   m_Size: {x: 0.25, y: 0.5, z: 1}
-  m_Center: {x: 0, y: 0, z: 0.5}
---- !u!114 &6597697507378364124
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8890954303500915444}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e7da6a390ea53f0489b8de62166dc90b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _weaponData: {fileID: 0}
-  _weaponModules:
-  - {fileID: 4427101607777204413, guid: 28aaeaae80c4e30469de7c05478147a7, type: 3}
-  _otherWeapon: {fileID: 2063658209161802891, guid: c15bb3e6d112d5042b95bff34b23dd47,
-    type: 3}
-  _bowBody: {fileID: 0}
-  _arrow: {fileID: 4336498896152116198}
-  _arrowBody: {fileID: 6740315682579315694}
-  _arrowCollider: {fileID: 8372705271305214701}
-  _gripCollider: {fileID: 0}
-  _maxLength: 0.3
+  m_Center: {x: 0, y: 0, z: 0.3}
 --- !u!114 &4529251308191701419
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System;
 using UnityEngine;
+using UniRx.Async;
 using Photon.Pun;
 using Nakajima.Weapon;
 using Matsumoto.Weapon;
@@ -70,7 +71,7 @@ namespace Nakajima.Player
         public override void GrabWeapon()
         {
             // 何も触れていないならリターン
-            if (hasObj == null) return;
+            if (HasWeapon) return;
 
             // 生成中の武器だったら装備する
             // 掴んだなら他の武器は削除
@@ -78,7 +79,7 @@ namespace Nakajima.Player
 
             // 武器のデータを持ってくる
             weaponMgr.LoadWeapon();
-            var handList = weaponMgr.CreateWeapon(GetWeaponName(hasObj.name));
+            var handList = weaponMgr.CreateWeapon(GetWeaponName(hasObj.name), 0.5f);
             hasObj = handList[0].GetBody();
             hasObj.transform.parent = transform;
             hasObj.transform.localPosition = Vector3.zero;
@@ -109,8 +110,10 @@ namespace Nakajima.Player
             // 武器を持っているならリターン
             if (HasWeapon || photonView.IsMine) return;
 
+            HasWeapon = true;
+
             weaponMgr.LoadWeapon();
-            var handList = weaponMgr.CreateWeapon(_weaponName);
+            var handList = weaponMgr.CreateWeapon(_weaponName, 0.5f);
             hasObj = handList[0].GetBody();
             hasObj.transform.parent = transform;
             hasObj.transform.localPosition = Vector3.zero;
@@ -118,7 +121,6 @@ namespace Nakajima.Player
 
             handList[0].SetOwner(this);
 
-            HasWeapon = true;
             if (photonView.IsMine) weaponCreate.CanCreate = false;
 
             // 反対の手にも装備
@@ -146,9 +148,6 @@ namespace Nakajima.Player
             isBoth = true;
 
             _weapon.GetComponent<IWeapon>().SetOwner(this);
-
-            temp++;
-            Debug.Log("SetWeapon : " + HasWeapon + " : " + temp);
         }
 
         public override void WeaponAction(bool _getButton, bool _UpOrDown)
@@ -169,12 +168,15 @@ namespace Nakajima.Player
         /// <summary>
         /// 武器生成(まだ所持ではない)
         /// </summary>
-        public override void Create()
+        public async override void Create()
         {
-            // 武器所持中なら武器を削除する
             if (isBoth) return;
 
-            DeleteWeapon(CheckDelete());
+            // 武器所持中なら武器を削除する
+            // 削除するまで待機
+            if (HasWeapon) DeleteWeapon(CheckDelete());
+            
+            await UniTask.WaitUntil(() => hasObj == null);
 
             weaponCreate.ActiveHand = this;
             weaponCreate.Create();
@@ -209,7 +211,6 @@ namespace Nakajima.Player
             // 削除
             var weapon = hasObj.GetComponent<IWeapon>();
             if (weapon == null) return;
-            hasObj = null;
 
             weapon.Destroy(0.5f);
             if(photonView.IsMine) netDeleteWeapon?.Invoke(GetMyProvider.MyID, handName, _flag);
@@ -229,7 +230,6 @@ namespace Nakajima.Player
             // 削除
             var weapon = hasObj.GetComponent<IWeapon>();
             if (weapon == null) return;
-            hasObj = null;
 
             weapon.Destroy(0.5f);
             HasWeapon = false;
@@ -241,7 +241,7 @@ namespace Nakajima.Player
         /// 触れている状態
         /// </summary>
         /// <param name="_col">コリジョン</param>
-        void OnTriggerStay(Collider _col)
+        private void OnTriggerStay(Collider _col)
         {
             // 武器を持っているならリターン
             if (HasWeapon) return;
@@ -249,19 +249,6 @@ namespace Nakajima.Player
             var obj = _col.gameObject.GetComponent<ProvisionalWeapon>();
             if (obj == null) return;
             hasObj = _col.gameObject;
-        }
-
-        /// <summary>
-        /// 離れた瞬間
-        /// </summary>
-        /// <param name="_col">コリジョン</param>
-        void OnTriggerExit(Collider _col)
-        {
-            // 武器を持っているならリターン
-            if (HasWeapon) return;
-
-            var obj = _col.gameObject.GetComponent<ProvisionalWeapon>();
-            if (obj == null) return;
         }
     }
 }

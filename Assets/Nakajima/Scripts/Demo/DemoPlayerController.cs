@@ -80,9 +80,9 @@ namespace Nakajima.Player
         public override void Actoin()
         {
             // X/Aボタンで武器生成
-            if (OVRInput.GetDown(OVRInput.RawButton.X))
+            if (OVRInput.Get(OVRInput.RawButton.X))
                 myHand[1].Create();
-            if (OVRInput.GetDown(OVRInput.RawButton.A))
+            if (OVRInput.Get(OVRInput.RawButton.A))
                 myHand[0].Create();
 
             // 中指トリガーで武器を掴む

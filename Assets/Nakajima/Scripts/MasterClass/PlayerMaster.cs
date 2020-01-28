@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Nakajima.Main;
 using Nakajima.Weapon;
 using Nakajima.Movement;
 using Matsumoto.Weapon;
@@ -9,6 +10,8 @@ namespace Nakajima.Player
 {
     public class PlayerMaster : MonoBehaviour
     {
+        // MainManager
+        protected MainManager mainMgr;
         // 自身のMovement;
         protected MovementComponetBase myMovement;
         // 自身のダメージ表示用クラス

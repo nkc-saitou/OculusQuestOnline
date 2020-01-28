@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System;
 using UnityEngine;
+using UniRx.Async;
 using Nakajima.Weapon;
 using Matsumoto.Weapon;
 
@@ -20,7 +21,6 @@ namespace Nakajima.Player
         public OVRInput.RawButton myTouch;
 
         // 触れたオブジェクト
-        [HideInInspector]
         public GameObject hasObj;
 
         // 両手武器かどうか
@@ -125,7 +125,7 @@ namespace Nakajima.Player
         /// <summary>
         /// 武器生成(まだ所持ではない)
         /// </summary>
-        public virtual void Create() { }
+        public async virtual void Create() { }
 
         /// <summary>
         /// 所持中の武器を破棄する
