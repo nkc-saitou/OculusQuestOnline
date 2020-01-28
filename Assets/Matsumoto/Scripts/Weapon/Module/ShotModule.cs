@@ -31,7 +31,8 @@ namespace Matsumoto.Weapon {
                     var p = (Vector3)(data[0]);
                     var r = (Quaternion)(data[1]);
                     var b = Instantiate(_bullet, p, r);
-                    b.ModuleData = _moduleData;
+					b.Owner = Owner.Value;
+					b.ModuleData = _moduleData;
 
 					var e = Instantiate(_muzzle, p, r);
 					e.transform.localPosition = new Vector3();
