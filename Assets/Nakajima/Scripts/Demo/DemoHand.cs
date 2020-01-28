@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System;
 using UnityEngine;
+using UniRx.Async;
 using Photon.Pun;
 using Nakajima.Weapon;
 using Matsumoto.Weapon;
@@ -112,6 +113,11 @@ namespace Nakajima.Player
         /// </summary>
         public override void Create()
         {
+            // 武器所持中なら武器を削除する
+            if (isBoth) return;
+
+            DeleteWeapon(CheckDelete());
+
             weaponCreate.ActiveHand = this;
             weaponCreate.Create();
         }
@@ -124,28 +130,47 @@ namespace Nakajima.Player
         public override bool CheckDelete()
         {
             // 武器を所持していないならfalse
-            if (HasWeapon == false) return false;
+            if (HasWeapon == false || hasObj == null) return false;
 
             // 両手武器の場合逆の手も削除する
-            if(weaponMgr.HasOtherWeapon(GetWeaponName(hasObj.name))) {
-                deleteWeapon?.Invoke(this);
-            }
+            if (weaponMgr.HasOtherWeapon(GetWeaponName(hasObj.name))) return true;
+
+            return false;
+        }
+
+        /// <summary>
+        /// 武器の削除
+        /// </summary>
+        /// <param name="_flag">両手武器かどうか</param>
+        public override void DeleteWeapon(bool _flag)
+        {
+            // なにもないならリターン
+            if (HasWeapon == false) return;
+
+            // 両手武器の場合
+            if (_flag) deleteWeapon?.Invoke(this);
 
             // 削除
-            Destroy(hasObj);
+            var weapon = hasObj.GetComponent<IWeapon>();
+            if (weapon == null) return;
+            hasObj = null;
+
+            weapon.Destroy(0.5f);
             HasWeapon = false;
+            isBoth = false;
             weaponCreate.Reset();
-            return true;
         }
 
         public override void DeleteWeapon()
         {
             // なにもないならリターン
             if (HasWeapon == false) return;
+            hasObj = null;
 
             // 削除
             Destroy(hasObj);
             HasWeapon = false;
+            isBoth = false;
             weaponCreate.Reset();
         }
 

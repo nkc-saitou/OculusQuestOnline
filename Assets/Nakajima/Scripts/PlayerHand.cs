@@ -171,6 +171,11 @@ namespace Nakajima.Player
         /// </summary>
         public override void Create()
         {
+            // 武器所持中なら武器を削除する
+            if (isBoth) return;
+
+            DeleteWeapon(CheckDelete());
+
             weaponCreate.ActiveHand = this;
             weaponCreate.Create();
         }
@@ -204,6 +209,7 @@ namespace Nakajima.Player
             // 削除
             var weapon = hasObj.GetComponent<IWeapon>();
             if (weapon == null) return;
+            hasObj = null;
 
             weapon.Destroy(0.5f);
             if(photonView.IsMine) netDeleteWeapon?.Invoke(GetMyProvider.MyID, handName, _flag);
@@ -223,6 +229,7 @@ namespace Nakajima.Player
             // 削除
             var weapon = hasObj.GetComponent<IWeapon>();
             if (weapon == null) return;
+            hasObj = null;
 
             weapon.Destroy(0.5f);
             HasWeapon = false;

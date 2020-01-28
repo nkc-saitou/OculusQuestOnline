@@ -78,20 +78,22 @@ namespace Matsumoto.Weapon {
 			var weaponArray = new List<WeaponBase>();
 
 			var weapon = CreateWeapon(_weaponBaseDictionary[name]);
-			weapon.Initialize(1.0f);
 			weaponArray.Add(weapon);
 
 			if(!weapon.OtherWeapon) {
+			    weapon.Initialize(1.0f);
 				return weaponArray.ToArray();
 			}
 
 			// 両手武器用
 			var otherWeapon = CreateWeapon(weapon.OtherWeapon);
-			otherWeapon.Initialize(1.0f);
 			weapon.OtherWeapon = otherWeapon;
 			weaponArray.Add(otherWeapon);
 
-			return weaponArray.ToArray();
+            weapon.Initialize(1.0f);
+            otherWeapon.Initialize(1.0f);
+
+            return weaponArray.ToArray();
 		}
 
 		[ContextMenu("OverrideData")]
