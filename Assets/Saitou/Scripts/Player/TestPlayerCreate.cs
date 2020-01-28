@@ -17,7 +17,7 @@ namespace Saitou.Network
 
         public GameObject playerPrefab;
 
-        public Action<PlayerHand[]> OnPlayerCreate;
+        public  Action<PlayerHand[]> OnPlayerCreate;
 
         void Start()
         {
