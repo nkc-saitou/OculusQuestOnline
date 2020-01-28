@@ -15,8 +15,6 @@ namespace Sanoki.Online
         PhotonView photonView;
         NetworkManager networkManager;
         bool[] isStart = new bool[2];
-
-        public Text[] flgText = new Text[2];
         
         private void Start()
         {
@@ -36,9 +34,7 @@ namespace Sanoki.Online
 
         private void Update()
         {
-            flgText[0].text = "1P：" + isStart[0].ToString();
-            flgText[1].text = "2P：" + isStart[1].ToString();
-            if (OVRInput.GetDown(OVRInput.RawButton.A)||Input.GetKeyDown(KeyCode.G)) Entry();
+            
 
         }
         
@@ -84,5 +80,16 @@ namespace Sanoki.Online
             }
             return true;
         }
+
+        private void OnTriggerEnter(Collider other)
+        {
+            Matsumoto.Weapon.ModuleObject obj;
+            obj = other.GetComponent<Matsumoto.Weapon.ModuleObject>();
+            if (TestOnlineData.PlayerID == obj.Owner.GetMyProvider.MyID)
+            {
+                Entry();
+            }
+        }
     }
+    
 }
