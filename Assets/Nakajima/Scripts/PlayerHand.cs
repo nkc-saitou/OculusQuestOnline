@@ -221,7 +221,10 @@ namespace Nakajima.Player
             if (HasWeapon == false || photonView.IsMine) return;
 
             // 削除
-            Destroy(hasObj);
+            var weapon = hasObj.GetComponent<IWeapon>();
+            if (weapon == null) return;
+
+            weapon.Destroy(0.5f);
             HasWeapon = false;
             isBoth = false;
             weaponCreate.Reset();
