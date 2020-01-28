@@ -25,14 +25,25 @@ namespace Matsumoto.Weapon {
             Owner.Subscribe(item =>
             {
                 if (!item) return;
-                var playerID = item.myProvider.MyID;
+                var playerID = item.GetMyProvider.MyID;
                 manager = FindObjectOfType<NetworkEventManager>();
                 manager.AddSyncEvent(playerID, "ShotModule_Shot" + _myID, (data) => {
                     var p = (Vector3)(data[0]);
                     var r = (Quaternion)(data[1]);
                     var b = Instantiate(_bullet, p, r);
                     b.ModuleData = _moduleData;
-                });
+
+					var e = Instantiate(_muzzle, p, r);
+					e.transform.localPosition = new Vector3();
+					e.PlayEffect();
+
+					Observable.Timer(System.TimeSpan.FromSeconds(1)).Subscribe(_ => {
+						e.DestroyEffect();
+					}).AddTo(this);
+
+					Audio.AudioManager.PlaySE("beamgun1", position: p);
+
+				});
             });
 
 			var transforms = weapon.transform.GetComponentsInChildren<Transform>();
@@ -62,13 +73,6 @@ namespace Matsumoto.Weapon {
 			//b.ModuleData = _moduleData;
 			manager.CallSyncEvent("ShotModule_Shot" + _myID, new object[] { _shotAnchor.position, _shotAnchor.rotation });
 
-			var e = Instantiate(_muzzle, _shotAnchor);
-			e.transform.localPosition = new Vector3();
-			e.PlayEffect();
-
-			Observable.Timer(System.TimeSpan.FromSeconds(1)).Subscribe(_ => {
-				e.DestroyEffect();
-			}).AddTo(this);
 		}
 	}
 }

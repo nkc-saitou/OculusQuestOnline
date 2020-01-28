@@ -13,6 +13,14 @@ namespace Matsumoto.Weapon {
 			get;
 		} = new ModuleDataModular();
 
+		/// <summary>
+		/// 最終攻撃力を取得します
+		/// </summary>
+		/// <returns>オブジェクトの攻撃力</returns>
+		public virtual int GetPower() {
+			return ModuleData.Power * Modular.Power;
+		}
+
 	}
 
 }

@@ -13,8 +13,6 @@ namespace Saitou.Network
 {
     public class TestPlayerCreate : MonoBehaviourPunCallbacks
     {
-
-        NetworkTest _network;
         public Transform[] CreatePos;
 
         public GameObject playerPrefab;
@@ -23,14 +21,6 @@ namespace Saitou.Network
 
         void Start()
         {
-            _network = FindObjectOfType<NetworkTest>();
-
-            _network.OnInRoom
-                .Subscribe(_ =>
-                {
-
-                });
-
 
             this.UpdateAsObservable()
                 .TakeUntilDestroy(this)

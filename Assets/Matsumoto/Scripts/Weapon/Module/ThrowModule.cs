@@ -49,7 +49,7 @@ namespace Matsumoto.Weapon {
                 Debug.Log("OwnerSet :" + item);
 
                 if (!item) return;
-                var playerID = item.myProvider.MyID;
+                var playerID = item.GetMyProvider.MyID;
                 manager = FindObjectOfType<NetworkEventManager>();
                 manager.AddSyncEvent(playerID, "ThrowModule_Throw" + _myID, (data) => {
                     var p = (Vector3)(data[0]);
@@ -58,7 +58,10 @@ namespace Matsumoto.Weapon {
                     var b = Instantiate(_bomb, p, r);
                     b.ModuleData = _moduleData;
                     b.Modular.Speed = v.magnitude;
-                });
+
+					Audio.AudioManager.PlaySE("whip-gesture1", position: p);
+
+				});
             });
 
             var transforms = weapon.transform.GetComponentsInChildren<Transform>();

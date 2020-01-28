@@ -707,9 +707,8 @@ MonoBehaviour:
   weaponCreate: {fileID: 0}
   myTouch: 536870912
   hasObj: {fileID: 0}
-  myProvider: {fileID: 0}
-  GunObj: {fileID: 151061625077218210, guid: 5877dc5a617738a4996842db317be39c, type: 3}
   isBoth: 0
+  GunObj: {fileID: 151061625077218210, guid: 5877dc5a617738a4996842db317be39c, type: 3}
 --- !u!1 &2059121844363263960
 GameObject:
   m_ObjectHideFlags: 0
@@ -1160,6 +1159,7 @@ Transform:
   - {fileID: 899773162214859890}
   - {fileID: 5825808658071346374}
   - {fileID: 7399976590620756111}
+  - {fileID: 3735181445998857517}
   m_Father: {fileID: 8960986742822906502}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -2159,6 +2159,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2973586410962714445}
+  - component: {fileID: 6104284863063307209}
   - component: {fileID: 2390776983563907542}
   - component: {fileID: 5286007771052204209}
   - component: {fileID: 1032476366971235930}
@@ -2185,6 +2186,20 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!136 &6104284863063307209
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4843531762562746774}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  m_Radius: 0.5
+  m_Height: 2
+  m_Direction: 1
+  m_Center: {x: 0, y: 0.5, z: 0}
 --- !u!54 &2390776983563907542
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -2216,6 +2231,7 @@ MonoBehaviour:
   movementState: 0
   centerOrigin: {fileID: 4843531762562746774}
   moveDirObj: {fileID: 1044962125557809886}
+  myCamera: {fileID: 8524728499730273335}
   minSpeed: 2
   halfSpeed: 3
   maxSpeed: 6
@@ -2232,6 +2248,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8e84d4cc5ab159c4cbba53108a5899ed, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  rootObj: {fileID: 7857216514023794145}
+  myHead: {fileID: 0}
+  myBody: {fileID: 0}
+  moveTime: 0
+  moveValue: 0
   myHand: []
 --- !u!114 &8533763573901080786
 MonoBehaviour:
@@ -2246,9 +2267,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Display:
-  - {fileID: 1044962125557809886}
+  - {fileID: 7857216514023794145}
   - {fileID: 7865800702243325335}
   - {fileID: 8079552240929052129}
+  - {fileID: 7857216514023794145}
 --- !u!1 &5026655561434578831
 GameObject:
   m_ObjectHideFlags: 0
@@ -3508,6 +3530,36 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
+--- !u!1 &7857216514023794145
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 3735181445998857517}
+  m_Layer: 0
+  m_Name: Root
+  m_TagString: Untagged
+  m_Icon: {fileID: 7250588514170254948, guid: 0000000000000000d000000000000000, type: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &3735181445998857517
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7857216514023794145}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 6303226243685749849}
+  m_RootOrder: 6
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &7865800702243325335
 GameObject:
   m_ObjectHideFlags: 0
@@ -3799,9 +3851,8 @@ MonoBehaviour:
   weaponCreate: {fileID: 0}
   myTouch: 134217728
   hasObj: {fileID: 0}
-  myProvider: {fileID: 0}
-  GunObj: {fileID: 151061625077218210, guid: 5877dc5a617738a4996842db317be39c, type: 3}
   isBoth: 0
+  GunObj: {fileID: 151061625077218210, guid: 5877dc5a617738a4996842db317be39c, type: 3}
 --- !u!1 &8652115289237101919
 GameObject:
   m_ObjectHideFlags: 0

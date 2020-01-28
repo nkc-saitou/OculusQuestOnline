@@ -29,7 +29,7 @@ Transform:
   m_LocalPosition: {x: 0.004000008, y: 0.11299997, z: -0.003999945}
   m_LocalScale: {x: 0.049999997, y: 0.049999997, z: 0.049999997}
   m_Children: []
-  m_Father: {fileID: 2072200975535949349}
+  m_Father: {fileID: 6755632882381448639}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!33 &4268512140668843789
@@ -77,6 +77,39 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+--- !u!1 &1048880052829928156
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 6755632882381448639}
+  m_Layer: 0
+  m_Name: Body
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &6755632882381448639
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1048880052829928156}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children:
+  - {fileID: 6789876518174693875}
+  - {fileID: 2421168265679619176}
+  - {fileID: 2941909385445071608}
+  m_Father: {fileID: 2072200975535949349}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &4605488384127967818
 GameObject:
   m_ObjectHideFlags: 0
@@ -106,7 +139,7 @@ Transform:
   m_LocalPosition: {x: 0.004, y: 0.075, z: -0.004}
   m_LocalScale: {x: 0.099999994, y: 0.049999997, z: 0.099999994}
   m_Children: []
-  m_Father: {fileID: 2072200975535949349}
+  m_Father: {fileID: 6755632882381448639}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!33 &4687080295348764715
@@ -165,6 +198,8 @@ GameObject:
   - component: {fileID: 2072200975535949349}
   - component: {fileID: 3240199284442222847}
   - component: {fileID: 7317063493098124288}
+  - component: {fileID: -3545304303560203481}
+  - component: {fileID: 4363684575671902610}
   m_Layer: 0
   m_Name: BombObject
   m_TagString: Untagged
@@ -183,9 +218,7 @@ Transform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
-  - {fileID: 6789876518174693875}
-  - {fileID: 2421168265679619176}
-  - {fileID: 2941909385445071608}
+  - {fileID: 6755632882381448639}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -203,7 +236,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   LifeTime: 10
   _rigidbody: {fileID: 7317063493098124288}
+  _explosiveCollision: {fileID: 4363684575671902610}
   _explosionEffect: {fileID: 19821056, guid: 079954accd64b32419ec069129c81273, type: 3}
+  _body: {fileID: 1048880052829928156}
 --- !u!54 &7317063493098124288
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -220,6 +255,32 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
+--- !u!135 &-3545304303560203481
+SphereCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4747070067394678570}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 0.13
+  m_Center: {x: 0, y: 0, z: 0}
+--- !u!135 &4363684575671902610
+SphereCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4747070067394678570}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 0
+  serializedVersion: 2
+  m_Radius: 1
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &5397550817040907654
 GameObject:
   m_ObjectHideFlags: 0
@@ -249,7 +310,7 @@ Transform:
   m_LocalPosition: {x: 0.004000008, y: -0.0030000284, z: -0.003999945}
   m_LocalScale: {x: 0.25, y: 0.25, z: 0.25}
   m_Children: []
-  m_Father: {fileID: 2072200975535949349}
+  m_Father: {fileID: 6755632882381448639}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!33 &8907525210588666756

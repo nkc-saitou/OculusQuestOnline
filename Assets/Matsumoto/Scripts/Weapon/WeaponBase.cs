@@ -1,6 +1,8 @@
 ﻿using UnityEngine;
 using System.Collections;
 using UniRx.Async;
+using UniRx;
+using UniRx.Triggers;
 
 namespace Matsumoto.Weapon {
 
@@ -25,10 +27,32 @@ namespace Matsumoto.Weapon {
 			set { _otherWeapon = value; }
 		}
 
-		public virtual void Initialize() { }
+		private Renderer[] _rendererArray;
+		private int _valueProp;
 
-		public virtual UniTask Destroy() {
-			Destroy(gameObject);
+		public bool IsUsable {
+			get; protected set;
+		} = false;
+
+
+		public virtual void Initialize(float fadeTime) {
+
+			_rendererArray = GetComponentsInChildren<Renderer>();
+			_valueProp = Shader.PropertyToID("_Value");
+
+			// 再生成
+			for(int i = 0;i < _rendererArray.Length;i++) {
+				var r = _rendererArray[i];
+				r.material = new Material(r.material);
+				r.material.SetFloat(_valueProp, 0.0f);
+			}
+
+			StartCoroutine(SpawnAnim(fadeTime));
+		}
+
+		public virtual UniTask Destroy(float fadeTime) {
+
+			StartCoroutine(DestroyAnim(fadeTime));
 			return new UniTask();
 		}
 
@@ -66,7 +90,58 @@ namespace Matsumoto.Weapon {
 
 		public virtual void OnTriggerAnalogValue(OVRInput.Axis1D type, float axis) {}
 
-    }
+		private IEnumerator SpawnAnim(float fadeTime) {
+
+			var rn = 1 / fadeTime;
+			var t = 0.0f;
+
+			Debug.Log("fadeOut");
+
+			while(t < 1.0f) {
+
+				t = Mathf.Min(1.0f, t + rn * Time.deltaTime);
+
+				for(int i = 0;i < _rendererArray.Length;i++) {
+					var m = _rendererArray[i].material;
+					m.SetFloat(_valueProp, t);
+				}
+				Debug.Log("fadeOut:" + t);
+
+				yield return null;
+
+			}
+
+			IsUsable = true;
+
+		}
+
+		private IEnumerator DestroyAnim(float fadeTime) {
+
+			var rn = 1 / fadeTime;
+			var t = 1.0f;
+			IsUsable = false;
+
+			Debug.Log("fadeIn");
+
+			while(t > 0.0f) {
+
+				t = Mathf.Max(0.0f, t - rn * Time.deltaTime);
+
+				for(int i = 0;i < _rendererArray.Length;i++) {
+					var m = _rendererArray[i].material;
+					m.SetFloat(_valueProp, t);
+				}
+
+				Debug.Log("fadeIn:" + t);
+
+				yield return null;
+
+			}
+
+			Destroy(gameObject);
+
+		}
+	}
 }
 
 

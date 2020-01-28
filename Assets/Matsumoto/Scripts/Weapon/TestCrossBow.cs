@@ -81,8 +81,8 @@ namespace Matsumoto.Weapon {
 			_arrow.localPosition = pos;
 		}
 
-		public override void Initialize() {
-			base.Initialize();
+		public override void Initialize(float fadeTime) {
+			base.Initialize(fadeTime);
 
 			var input = (WeaponOtherInput)_otherWeapon;
 
@@ -91,6 +91,7 @@ namespace Matsumoto.Weapon {
 			input.OnButtonDownRecieved
 				.Subscribe(button => {
 					if(button != OVRInput.Button.One) return;
+					if(!IsUsable) return;
 
 					if(_isStayGripPosition) {
 						//_handGripOffset = OtherWeapon.transform.position - _gripCollider.transform.position;
@@ -108,6 +109,7 @@ namespace Matsumoto.Weapon {
 			input.OnButtonUpRecieved
 				.Subscribe(button => {
 					if(button != OVRInput.Button.One) return;
+					if(!IsUsable) return;
 
 					if(_hasGrip) {
 						_hasGrip = false;
@@ -133,6 +135,7 @@ namespace Matsumoto.Weapon {
 
 		public override void OnButtonDown(OVRInput.Button button) {
 			base.OnButtonDown(button);
+			if(!IsUsable) return;
 
 			if(!_isSettedArrow) {
 				return;
@@ -152,6 +155,7 @@ namespace Matsumoto.Weapon {
 		}
 
 		private void OnTriggerEnter(Collider other) {
+			if(!IsUsable) return;
 
 			if(other == _arrowCollider) {
 				_isStayArrowPosition = true;
@@ -164,6 +168,7 @@ namespace Matsumoto.Weapon {
 		}
 
 		private void OnTriggerExit(Collider other) {
+			if(!IsUsable) return;
 
 			if(other == _arrowCollider) {
 				_isStayArrowPosition = false;

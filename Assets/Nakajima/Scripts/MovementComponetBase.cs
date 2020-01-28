@@ -42,6 +42,13 @@ namespace Nakajima.Movement
             return moveDirObj.transform.right;
         }
 
+        // 基準とするカメラ
+        [SerializeField]
+        private Camera myCamera;
+        public Camera GetMyCamera {
+            get { return myCamera; }
+        }
+
         // 移動する力
         private Vector3 velocity;
         public Vector3 Velocity {
@@ -89,10 +96,10 @@ namespace Nakajima.Movement
             else if (_vec.z < 0.0f || Mathf.Abs(_vec.x) > 0.2f) currentSpeed = halfSpeed;
             
             // カメラの方向から、x-z平面の単位ベクトルを取得
-            Vector3 cameraForward = Vector3.Scale(transform.forward, new Vector3(1, 0, 1)).normalized;
+            Vector3 cameraForward = Vector3.Scale(myCamera.transform.forward, new Vector3(1, 0, 1)).normalized;
 
             // 方向キーの入力値とカメラの向きから、移動方向の決定
-            Vector3 moveVec = cameraForward * _vec.z + transform.right * _vec.x;
+            Vector3 moveVec = cameraForward * _vec.z + myCamera.transform.right * _vec.x;
 
             // 移動方向にスピードを掛ける。ジャンプや落下がある場合は、別途Y軸方向の速度ベクトルを足す。
             velocity = moveVec * currentSpeed;

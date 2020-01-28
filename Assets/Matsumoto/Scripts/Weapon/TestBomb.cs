@@ -10,7 +10,7 @@ namespace Matsumoto.Weapon {
 		void Update() {
 
 			// テストでキーでも動く
-			if(Input.GetKeyUp(KeyCode.E)) {
+			if(Input.GetKeyUp(KeyCode.E) && IsUsable) {
 				OnButtonUp(OVRInput.Button.One);
 			}
 
@@ -18,6 +18,8 @@ namespace Matsumoto.Weapon {
 
 		public override void OnButtonUp(OVRInput.Button button) {
 			base.OnButtonUp(button);
+
+			if(!IsUsable) return;
 
 			// 0番目のモジュールを使用
 			if(button == OVRInput.Button.One) {

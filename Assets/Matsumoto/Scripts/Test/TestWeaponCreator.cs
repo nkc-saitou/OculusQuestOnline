@@ -6,9 +6,18 @@ namespace Matsumoto.Weapon.Test {
 		public WeaponManager Manager;
 		public string CreateWeaponName;
 
+		public IWeapon[] CreatedWeapon;
+
 		[ContextMenu("CreateWeapon")]
 		public void Create() {
-			Manager.CreateWeapon(CreateWeaponName);
+			CreatedWeapon = Manager.CreateWeapon(CreateWeaponName);
+		}
+
+		[ContextMenu("DeleteWeapon")]
+		public void Delete() {
+			for(int i = 0;i < CreatedWeapon.Length;i++) {
+				CreatedWeapon[i].Destroy(1.0f);
+			}
 		}
 
 	}

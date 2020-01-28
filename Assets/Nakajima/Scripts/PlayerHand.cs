@@ -25,17 +25,11 @@ namespace Nakajima.Player
         // PhotonView
         private PhotonView photonView;
 
-        // 自身のProvider
-        public DisplayPlayerProvider myProvider;
-
         [SerializeField]
         private GameObject GunObj;
 
         // 右手か左手か
         private string handName;
-
-        // 両手武器かどうか
-        public bool isBoth;
 
         int temp = 0;
 
@@ -58,16 +52,7 @@ namespace Nakajima.Player
         /// </summary>
         public override void Update()
         {
-            // 武器所持時のみ実行
-            if (photonView.IsMine && HasWeapon) {
-                WeaponAction();
-                return;
-            }
 
-            // 武器を掴む
-            if (OVRInput.GetDown(myTouch) && HasWeapon == false) {
-                GrabWeapon();
-            }
         }
 
         /// <summary>
@@ -106,7 +91,7 @@ namespace Nakajima.Player
 
             // 同期したい
             Debug.Log("ID : " + TestOnlineData.PlayerID + " 通過");
-            syncWeapon?.Invoke(myProvider.MyID, handName, GetWeaponName(hasObj.name));
+            syncWeapon?.Invoke(GetMyProvider.MyID, handName, GetWeaponName(hasObj.name));
 
             if (weaponMgr.HasOtherWeapon(GetWeaponName(hasObj.name)))
             {
@@ -140,7 +125,7 @@ namespace Nakajima.Player
             if (weaponMgr.HasOtherWeapon(GetWeaponName(hasObj.name)))
             {
                 var obj = handList[1].GetBody();
-                setOppesite?.Invoke(myProvider.MyID, handName, obj, GetWeaponName(hasObj.name));
+                setOppesite?.Invoke(GetMyProvider.MyID, handName, obj, GetWeaponName(hasObj.name));
             }
         }
 
@@ -164,6 +149,21 @@ namespace Nakajima.Player
 
             temp++;
             Debug.Log("SetWeapon : " + HasWeapon + " : " + temp);
+        }
+
+        public override void WeaponAction(bool _getButton, bool _UpOrDown)
+        {
+            if (photonView.IsMine == false || _getButton == false) return;
+
+            var weapon = hasObj.GetComponent<IWeapon>();
+
+            // 武器使用
+            if (_UpOrDown) {
+                weapon.OnButtonUp(OVRInput.Button.One);
+            }
+            else {
+                weapon.OnButtonDown(OVRInput.Button.One);
+            }
         }
 
         /// <summary>
@@ -202,8 +202,11 @@ namespace Nakajima.Player
             if (_flag) deleteWeapon?.Invoke(this);
 
             // 削除
-            Destroy(hasObj);
-            if(photonView.IsMine) netDeleteWeapon?.Invoke(myProvider.MyID, handName, _flag);
+            var weapon = hasObj.GetComponent<IWeapon>();
+            if (weapon == null) return;
+
+            weapon.Destroy(0.5f);
+            if(photonView.IsMine) netDeleteWeapon?.Invoke(GetMyProvider.MyID, handName, _flag);
             HasWeapon = false;
             isBoth = false;
             weaponCreate.Reset();
