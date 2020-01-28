@@ -52,9 +52,16 @@ namespace Nakajima.Movement
         // 移動する力
         private Vector3 velocity;
         public Vector3 Velocity {
+            set { velocity = value; }
             get { return velocity; }
         }
-                     
+
+        private Vector3 moveVec;
+        public Vector3 MoveVec
+        {
+            get { return moveVec; }
+        }
+
         // 移動速度(最小、最大)
         [Header("＜最低スピード＞")]
         public float minSpeed = 10.0f;
@@ -99,7 +106,7 @@ namespace Nakajima.Movement
             Vector3 cameraForward = Vector3.Scale(myCamera.transform.forward, new Vector3(1, 0, 1)).normalized;
 
             // 方向キーの入力値とカメラの向きから、移動方向の決定
-            Vector3 moveVec = cameraForward * _vec.z + myCamera.transform.right * _vec.x;
+            moveVec = cameraForward * _vec.z + myCamera.transform.right * _vec.x;
 
             // 移動方向にスピードを掛ける。ジャンプや落下がある場合は、別途Y軸方向の速度ベクトルを足す。
             velocity = moveVec * currentSpeed;

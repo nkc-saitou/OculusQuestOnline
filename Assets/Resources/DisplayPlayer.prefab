@@ -262,12 +262,9 @@ MonoBehaviour:
   spawnOriginObj_Circle: {fileID: 0}
   spawnOriginObj_Display: {fileID: 0}
   weaponList:
-  - {fileID: 7736314363512946226, guid: e764e101858569c46ae3ccb193c0da19, type: 3}
-  - {fileID: 7736314363512946226, guid: e764e101858569c46ae3ccb193c0da19, type: 3}
-  - {fileID: 7736314363512946226, guid: e764e101858569c46ae3ccb193c0da19, type: 3}
-  - {fileID: 7736314363512946226, guid: e764e101858569c46ae3ccb193c0da19, type: 3}
   - {fileID: 1353050716332709435, guid: 87acb058fbc9a34449a5dd79d6186898, type: 3}
-  - {fileID: 1448808920471177366, guid: b353011f4b2272349a26fcdb6e73790a, type: 3}
+  - {fileID: 7736314363512946226, guid: e764e101858569c46ae3ccb193c0da19, type: 3}
+  - {fileID: 8890954303500915444, guid: 0ac331b5bb7e4724ab5ad2fb30e167ae, type: 3}
   radius: 0.8
   rotateSpeed: 0.5
 --- !u!135 &822861402
@@ -389,12 +386,9 @@ MonoBehaviour:
   spawnOriginObj_Circle: {fileID: 0}
   spawnOriginObj_Display: {fileID: 0}
   weaponList:
-  - {fileID: 7736314363512946226, guid: e764e101858569c46ae3ccb193c0da19, type: 3}
-  - {fileID: 7736314363512946226, guid: e764e101858569c46ae3ccb193c0da19, type: 3}
-  - {fileID: 7736314363512946226, guid: e764e101858569c46ae3ccb193c0da19, type: 3}
-  - {fileID: 7736314363512946226, guid: e764e101858569c46ae3ccb193c0da19, type: 3}
   - {fileID: 1353050716332709435, guid: 87acb058fbc9a34449a5dd79d6186898, type: 3}
-  - {fileID: 1448808920471177366, guid: b353011f4b2272349a26fcdb6e73790a, type: 3}
+  - {fileID: 7736314363512946226, guid: e764e101858569c46ae3ccb193c0da19, type: 3}
+  - {fileID: 8890954303500915444, guid: 0ac331b5bb7e4724ab5ad2fb30e167ae, type: 3}
   radius: 0.8
   rotateSpeed: 0.5
 --- !u!135 &822861404

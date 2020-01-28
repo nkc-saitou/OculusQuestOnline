@@ -82,7 +82,7 @@ Material:
     - _GlossMapScale: 1
     - _Glossiness: 0.5
     - _GlossyReflections: 1
-    - _GradationPower: 1
+    - _GradationPower: 0
     - _IgnoreRadius: 3.73
     - _Intensity: 0.89
     - _Metallic: 0
