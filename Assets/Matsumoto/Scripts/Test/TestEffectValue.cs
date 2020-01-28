@@ -16,12 +16,15 @@ public class TestEffectValue : MonoBehaviour
 	private float _value;
 
 	[SerializeField]
+	private string _propName;
+
+	[SerializeField]
 	private int _paramValue;
 
     // Start is called before the first frame update
     void Start()
     {
-		_paramValue = Shader.PropertyToID("_Value");
+		_paramValue = Shader.PropertyToID(_propName);
 	}
 
 	// Update is called once per frame
