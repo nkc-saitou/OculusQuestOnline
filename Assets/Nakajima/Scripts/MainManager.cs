@@ -1,17 +1,30 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System;
+using UniRx;
+using UniRx.Async;
 
 namespace Nakajima.Main
 {
     public class MainManager : MonoBehaviour
     {
+        public event Action<float> battleStart;
+
+        // バトル開始したかどうか
+        private bool battle;
+        public bool Battle
+        {
+            get { return battle; }
+        }
+
         // プレイヤーの得点
         [HideInInspector]
         public int[] playerScore;
         // 残り時間
-        private float gameTime;
-        public float GameTime {
+        private float gameTime = 60.0f;
+        public float GameTime
+        {
             set { gameTime = value; }
             get { return gameTime; }
         }
@@ -21,12 +34,46 @@ namespace Nakajima.Main
 
         void Start()
         {
-
+            // イベントにバインド
+            battleStart += BattleStart;
         }
         
         void Update()
         {
+            if (battle) CountDown();
+        }
 
+        // デバッグ用
+        [ContextMenu("start")]
+        private void GameStart()
+        {
+            battleStart?.Invoke(10.0f);
+        }
+
+        /// <summary>
+        /// バトル開始イベント
+        /// </summary>
+        /// <param name="_time"></param>
+        private async void BattleStart(float _time)
+        {
+            battle = true;
+            GameTime = _time;
+
+            // 時間終了まで待機
+            await UniTask.WaitUntil(() => GameTime <= 0.0f);
+
+            // 終了したあとの処理
+            battle = false;
+        }
+
+        /// <summary>
+        /// カウントダウン(時間計測)
+        /// </summary>
+        private void CountDown()
+        {
+            if (gameTime <= 0.0f) return;
+
+            gameTime -= Time.deltaTime;
         }
 
         /// <summary>
@@ -40,9 +87,8 @@ namespace Nakajima.Main
             // ステージからの距離
             var myCenter = new Vector3(transform.position.x, 0.0f, transform.position.z);
             var playerCenter = new Vector3(_playerPos.x, 0.0f, _playerPos.z) + _moveVec;
-
             float distance = Vector3.Distance(myCenter, playerCenter);
-            Debug.Log("ステージ中央からの距離 : " + distance);
+
             // ステージギリギリだったらtrue
             if (distance > stageSize) return true;
 
