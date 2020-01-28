@@ -3,6 +3,7 @@
 	Properties
 	{
 		_MainTex("Texture", 2D) = "white" {}
+		_NormalTex("Normal", 2D) = "bump" {}
 		_Value("Value", Range(0, 1)) = 0.0
 		_ColorInside("Color inside", Color) = (1, 1, 1, 1)
 		[HDR]_EmissionColorInside("Color Emission inside", Color) = (0, 0, 0, 1)
@@ -22,6 +23,7 @@
 		uniform	half4 _EmissionColorOutSide;
 		uniform	half4 _EmissionColorInside;
 		uniform sampler2D _MainTex;
+		uniform sampler2D _NormalTex;
 		uniform int _DivideX;
 		uniform int _DivideY;
 		uniform half _UpdatePer;
@@ -29,6 +31,29 @@
 		uniform half _Metallic;
 
 		#pragma target 3.0
+
+		float random(fixed2 p) {
+
+			fixed t = 0;
+			if (_UpdatePer <= 0) {
+				t = _Time.y;
+			}
+			else {
+				t = floor(_Time.y / _UpdatePer) * _UpdatePer;
+			}
+
+			return frac(sin(dot(p, float2(12.9898, 78.233)) + t) * float(43758.5453));
+		}
+
+		float noise(fixed2 st) {
+			fixed2 p = floor(st);
+			return random(p);
+		}
+
+		struct Input {
+			float2 uv_MainTex;
+			float2 uv_NormalMap;
+		};
 
 		ENDCG
 
@@ -39,30 +64,6 @@
 				CGPROGRAM
 				#pragma surface surf Standard fullforwardshadows
 
-				struct Input {
-					float2 uv_MainTex;
-				};
-
-
-
-				float random(fixed2 p) {
-
-					fixed t = 0;
-					if (_UpdatePer <= 0) {
-						t = _Time.y;
-					}
-					else {
-						t = floor(_Time.y / _UpdatePer) * _UpdatePer;
-					}
-
-					return frac(sin(dot(p + t, fixed2(12.9898, 78.233))) * 43758.5453);
-				}
-
-				float noise(fixed2 st) {
-					fixed2 p = floor(st);
-					return random(p);
-				}
-
 				void surf(Input IN, inout SurfaceOutputStandard o) {
 					fixed4 c = tex2D(_MainTex, IN.uv_MainTex);
 
@@ -71,6 +72,7 @@
 					}
 
 					o.Albedo = c * _ColorOutside;
+					o.Normal = UnpackNormal(tex2D(_NormalTex, IN.uv_NormalMap));
 					o.Emission = _EmissionColorOutSide;
 					o.Metallic = _Metallic;
 					o.Smoothness = _Glossiness;
@@ -83,28 +85,6 @@
 
 				CGPROGRAM
 				#pragma surface surf Standard fullforwardshadows
-
-				struct Input {
-					float2 uv_MainTex;
-				};
-
-				float random(fixed2 p) {
-
-					fixed t = 0;
-					if (_UpdatePer <= 0) {
-						t = _Time.y;
-					}
-					else {
-						t = floor(_Time.y / _UpdatePer) * _UpdatePer;
-					}
-
-					return frac(sin(dot(p + t, fixed2(12.9898, 78.233))) * 43758.5453);
-				}
-
-				float noise(fixed2 st) {
-					fixed2 p = floor(st);
-					return random(p);
-				}
 
 				void surf(Input IN, inout SurfaceOutputStandard o) {
 					fixed4 c = tex2D(_MainTex, IN.uv_MainTex);
