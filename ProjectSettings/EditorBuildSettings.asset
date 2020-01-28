@@ -5,7 +5,7 @@ EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Scenes:
-  - enabled: 0
+  - enabled: 1
     path: Assets/Shigeyama/Scenes/TestFX.unity
     guid: f71539e241c3b384193657437c251088
   - enabled: 1
