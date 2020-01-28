@@ -52,14 +52,13 @@
 
 		struct Input {
 			float2 uv_MainTex;
-			float2 uv_NormalMap;
 		};
 
 		ENDCG
 
 		SubShader
 		{
-				Tags { "RenderType" = "Transparent" "Queue" = "Transparent"}
+				Tags { "RenderType" = "Opaque" }
 
 				CGPROGRAM
 				#pragma surface surf Standard fullforwardshadows
@@ -72,7 +71,7 @@
 					}
 
 					o.Albedo = c * _ColorOutside;
-					o.Normal = UnpackNormal(tex2D(_NormalTex, IN.uv_NormalMap));
+					o.Normal = UnpackNormal(tex2D(_NormalTex, IN.uv_MainTex));
 					o.Emission = _EmissionColorOutside;
 					o.Metallic = _Metallic;
 					o.Smoothness = _Glossiness;
@@ -102,4 +101,5 @@
 
 				ENDCG
 		}
+			Fallback "Diffuse"
 }
