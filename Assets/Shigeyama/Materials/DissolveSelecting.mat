@@ -7,7 +7,7 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Dissolve
+  m_Name: DissolveSelecting
   m_Shader: {fileID: 4800000, guid: 0007bd0fffaa22a4ca00a60b66cc6a63, type: 3}
   m_ShaderKeywords: 
   m_LightmapFlags: 4
@@ -66,13 +66,13 @@ Material:
     - _BumpScale: 1
     - _Cutoff: 0.5
     - _DetailNormalMapScale: 1
-    - _DivideX: 32
-    - _DivideY: 32
+    - _DivideX: 48
+    - _DivideY: 48
     - _DstBlend: 0
     - _GlossMapScale: 1
-    - _Glossiness: 0.7
+    - _Glossiness: 1
     - _GlossyReflections: 1
-    - _Metallic: 0.5
+    - _Metallic: 1
     - _Mode: 0
     - _OcclusionStrength: 1
     - _Parallax: 0.02
@@ -81,14 +81,14 @@ Material:
     - _SrcBlend: 1
     - _TimeScale: 1
     - _UVSec: 0
-    - _UpdatePer: 0.06
-    - _Value: 1
+    - _UpdatePer: 0.05
+    - _Value: 0.55
     - _ZWrite: 1
     m_Colors:
     - _Color: {r: 1, g: 1, b: 1, a: 1}
     - _ColorInside: {r: 0, g: 0, b: 0, a: 1}
     - _ColorOutside: {r: 1, g: 1, b: 1, a: 1}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
-    - _EmissionColorInside: {r: 23.968628, g: 4.7686276, b: 0, a: 1}
+    - _EmissionColorInside: {r: 0, g: 0.66192394, b: 5.992157, a: 1}
     - _EmissionColorOutSide: {r: 0, g: 0, b: 0, a: 1}
-    - _EmissionColorOutside: {r: 0, g: 0, b: 0, a: 1}
+    - _EmissionColorOutside: {r: 0, g: 1.0980393, b: 2.9960785, a: 1}

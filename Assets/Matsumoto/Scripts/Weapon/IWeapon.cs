@@ -18,6 +18,10 @@ namespace Matsumoto.Weapon {
 
         void SetOwner(Nakajima.Player.PlayerHand owner);
 
+		bool IsUsable {
+			get;
+		}
+
 	}
 
 
