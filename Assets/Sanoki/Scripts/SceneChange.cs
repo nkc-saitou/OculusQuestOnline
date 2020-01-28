@@ -4,9 +4,9 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 public class SceneChange : MonoBehaviour
 {
-    
-    public void NextScene(string sceneName)
+
+    void SceneFade()
     {
-        SceneManager.LoadScene(sceneName);
+        SceneChanger.Instance.MoveScene("", 1.0f, 1.0f, SceneChangeType.BlackFade, false);
     }
 }
