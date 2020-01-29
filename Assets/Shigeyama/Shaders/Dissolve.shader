@@ -3,6 +3,7 @@
 	Properties
 	{
 		_MainTex("Texture", 2D) = "white" {}
+		_NoiseMap("Noise", 2D) = "white" {}
 		[Normal]_NormalTex("Normal", 2D) = "bump" {}
 		_Value("Value", Range(0, 1)) = 0.0
 		_ColorInside("Color inside", Color) = (1, 1, 1, 1)
@@ -23,6 +24,7 @@
 		uniform	half4 _EmissionColorOutside;
 		uniform	half4 _EmissionColorInside;
 		uniform sampler2D _MainTex;
+		uniform sampler2D _NoiseMap;
 		uniform sampler2D _NormalTex;
 		uniform int _DivideX;
 		uniform int _DivideY;
@@ -41,8 +43,10 @@
 			else {
 				t = floor(_Time.y / _UpdatePer) * _UpdatePer;
 			}
+			
+			//return frac(sin(dot(p, float2(12.9898, 78.233)) + t) * float(43758.5453));
 
-			return frac(sin(dot(p, float2(12.9898, 78.233)) + t) * float(43758.5453));
+			return tex2D(_NoiseMap, frac((p / 256) + t)).r;
 		}
 
 		float noise(fixed2 st) {
