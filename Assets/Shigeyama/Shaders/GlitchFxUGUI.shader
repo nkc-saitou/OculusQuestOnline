@@ -94,7 +94,7 @@
 						t = floor(_Time.y / _UpdatePer) * _UpdatePer;
 					}
 
-					return frac(sin(dot(p + t, fixed2(12.9898, 78.233))) * 43758.5453);
+					return frac(sin(dot(p + t, float2(12.9898, 78.233))) * float(43758.5453));
 				}
 
 				float noise(fixed2 st) {
