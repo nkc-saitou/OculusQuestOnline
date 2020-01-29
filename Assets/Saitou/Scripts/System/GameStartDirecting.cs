@@ -14,8 +14,9 @@ namespace Saitou.GameScene
         [SerializeField]TestPlayerCreate _playerCreate;
 
         [SerializeField] Animator[] _startUI;
+        [SerializeField] CountUI _countUI;
 
-        void Start()
+        async void Start()
         {
             _playerCreate.OnPlayerCreate = (tmp) => 
             {
@@ -23,8 +24,10 @@ namespace Saitou.GameScene
                 {
                     anim.SetTrigger("IsStart");
                 }
-
             };
+
+
+            await _countUI.CountStart();
 
         }
     }

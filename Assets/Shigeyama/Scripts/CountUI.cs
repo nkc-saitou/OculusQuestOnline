@@ -63,5 +63,6 @@ public class CountUI : MonoBehaviour
         await UniTask.Delay(1000);
 
         AudioManager.PlayBGM("GameScene_BGM");
+
     }
 }
