@@ -26,7 +26,7 @@ namespace Nakajima.Main
 
         // プレイヤーの得点
         [HideInInspector]
-        public int[] playerScore;
+        public int[] playerScore = new int[2];
         // 残り時間
         private float gameTime = 60.0f;
         public float GameTime
@@ -100,7 +100,7 @@ namespace Nakajima.Main
             // 相手プレイヤースコアのインデックスに変更
             int index = _ID + 1 * (_ID - 1) * -2;
 
-            playerScore[_ID - 1] = _score;
+            playerScore[index] = _score;
         }
 
         /// <summary>
