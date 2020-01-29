@@ -215,7 +215,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8482632767578359994}
-  m_LocalRotation: {x: -0, y: -1, z: -0, w: 0}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0.068, z: 0.4141}
   m_LocalScale: {x: 0.4, y: 0.4, z: 0.4}
   m_Children: []
@@ -380,22 +380,17 @@ PrefabInstance:
       propertyPath: m_Materials.Array.data[0]
       value: 
       objectReference: {fileID: 2100000, guid: 38e798da9f438f845991d3ca0bf2e867, type: 2}
-    - target: {fileID: -4656654828312911742, guid: 1e27351da74b5f547a0248861f16b594,
-        type: 3}
-      propertyPath: m_Materials.Array.data[0]
-      value: 
-      objectReference: {fileID: 2100000, guid: 38e798da9f438f845991d3ca0bf2e867, type: 2}
     - target: {fileID: 4034634481368043211, guid: 1e27351da74b5f547a0248861f16b594,
         type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 
       objectReference: {fileID: 2100000, guid: 38e798da9f438f845991d3ca0bf2e867, type: 2}
-    - target: {fileID: 7845563978400047333, guid: 1e27351da74b5f547a0248861f16b594,
+    - target: {fileID: -4656654828312911742, guid: 1e27351da74b5f547a0248861f16b594,
         type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 
       objectReference: {fileID: 2100000, guid: 38e798da9f438f845991d3ca0bf2e867, type: 2}
-    - target: {fileID: 7148613762030148312, guid: 1e27351da74b5f547a0248861f16b594,
+    - target: {fileID: -1032522383928767967, guid: 1e27351da74b5f547a0248861f16b594,
         type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 
@@ -405,7 +400,12 @@ PrefabInstance:
       propertyPath: m_Materials.Array.data[0]
       value: 
       objectReference: {fileID: 2100000, guid: 38e798da9f438f845991d3ca0bf2e867, type: 2}
-    - target: {fileID: -1032522383928767967, guid: 1e27351da74b5f547a0248861f16b594,
+    - target: {fileID: 7148613762030148312, guid: 1e27351da74b5f547a0248861f16b594,
+        type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 38e798da9f438f845991d3ca0bf2e867, type: 2}
+    - target: {fileID: 7845563978400047333, guid: 1e27351da74b5f547a0248861f16b594,
         type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 
