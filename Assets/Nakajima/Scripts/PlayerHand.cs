@@ -241,14 +241,14 @@ namespace Nakajima.Player
         /// 触れている状態
         /// </summary>
         /// <param name="_col">コリジョン</param>
-        private void OnTriggerStay(Collider _col)
-        {
-            // 武器を持っているならリターン
-            if (HasWeapon) return;
+        //private void OnTriggerStay(Collider _col)
+        //{
+        //    // 武器を持っているならリターン
+        //    if (HasWeapon) return;
 
-            var obj = _col.gameObject.GetComponent<ProvisionalWeapon>();
-            if (obj == null) return;
-            hasObj = _col.gameObject;
-        }
+        //    var obj = _col.gameObject.GetComponent<ProvisionalWeapon>();
+        //    if (obj == null) return;
+        //    hasObj = _col.gameObject;
+        //}
     }
 }
