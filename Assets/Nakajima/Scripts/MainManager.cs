@@ -46,6 +46,7 @@ namespace Nakajima.Main
             // イベントにバインド
             battleStart += BattleStart;
             battleEnd += BattleEnd;
+            updateScore += UpdateScore;
         }
         
         /// <summary>
