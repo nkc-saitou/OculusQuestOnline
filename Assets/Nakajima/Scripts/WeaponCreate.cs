@@ -215,7 +215,7 @@ namespace Nakajima.Weapon
                 weaponState = angleState;
                 Destroy(spawnObj);
 
-                spawnObj = Instantiate(weaponList[angleState], transform.position, Quaternion.identity);
+                spawnObj = Instantiate(weaponList[angleState], transform);
             }
             WeaponUnfold = true;
         }

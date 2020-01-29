@@ -14,6 +14,9 @@ namespace Nakajima.Main
         // バトル終了イベント
         public Action<bool> battleEnd;
 
+        // スコアの更新イベント
+        public Action<int, int> updateScore;
+
         // バトル開始したかどうか
         private bool battle;
         public bool Battle
@@ -84,6 +87,19 @@ namespace Nakajima.Main
         private void BattleEnd(bool _battle)
         {
             battle = false;
+        }
+
+        /// <summary>
+        /// スコアの更新イベント
+        /// </summary>
+        /// <param name="_ID">プレイヤーID</param>
+        /// <param name="_score">更新スコア</param>
+        private void UpdateScore(int _ID, int _score)
+        {
+            // 相手プレイヤースコアのインデックスに変更
+            int index = _ID + 1 * (_ID - 1) * -2;
+
+            playerScore[_ID - 1] = _score;
         }
 
         /// <summary>
