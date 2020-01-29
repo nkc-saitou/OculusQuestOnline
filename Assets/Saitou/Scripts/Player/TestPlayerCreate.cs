@@ -24,7 +24,7 @@ namespace Saitou.Network
 
             this.UpdateAsObservable()
                 .TakeUntilDestroy(this)
-                .Where(_ => PhotonNetwork.PlayerList.Length >= 1)
+                .Where(_ => PhotonNetwork.PlayerList.Length >= 2)
                 .Take(1)
                 .Subscribe(async _ =>
                 {
