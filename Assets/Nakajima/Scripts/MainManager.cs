@@ -9,7 +9,10 @@ namespace Nakajima.Main
 {
     public class MainManager : MonoBehaviour
     {
+        // バトル開始イベント
         public event Action<float> battleStart;
+        // バトル終了イベント
+        public event Action<bool> battleEnd;
 
         // バトル開始したかどうか
         private bool battle;
@@ -32,12 +35,19 @@ namespace Nakajima.Main
         // ステージサイズ
         private const int stageSize = 24;
 
+        /// <summary>
+        /// 初回処理
+        /// </summary>
         void Start()
         {
             // イベントにバインド
             battleStart += BattleStart;
+            battleEnd += BattleEnd;
         }
         
+        /// <summary>
+        /// 更新処理
+        /// </summary>
         void Update()
         {
             if (battle) CountDown();
@@ -56,6 +66,7 @@ namespace Nakajima.Main
         /// <param name="_time"></param>
         private async void BattleStart(float _time)
         {
+            // フラグを立てる
             battle = true;
             GameTime = _time;
 
@@ -63,6 +74,15 @@ namespace Nakajima.Main
             await UniTask.WaitUntil(() => GameTime <= 0.0f);
 
             // 終了したあとの処理
+            battleEnd?.Invoke(Battle);
+        }
+
+        /// <summary>
+        /// バトル終了イベント
+        /// </summary>
+        /// <param name="_battle"></param>
+        private void BattleEnd(bool _battle)
+        {
             battle = false;
         }
 
@@ -71,7 +91,11 @@ namespace Nakajima.Main
         /// </summary>
         private void CountDown()
         {
-            if (gameTime <= 0.0f) return;
+            // マイナス制限
+            if (gameTime <= 0.0f) {
+                gameTime = 0.0f;
+                return;
+            }
 
             gameTime -= Time.deltaTime;
         }
