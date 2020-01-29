@@ -73,10 +73,6 @@ namespace Nakajima.Player
             // 何も触れていないならリターン
             if (HasWeapon) return;
 
-            // 生成中の武器だったら装備する
-            // 掴んだなら他の武器は削除
-            weaponCreate.DeleteWeapon();
-
             // 武器のデータを持ってくる
             weaponMgr.LoadWeapon();
             var handList = weaponMgr.CreateWeapon(GetWeaponName(hasObj.name), 0.5f);
@@ -84,6 +80,10 @@ namespace Nakajima.Player
             hasObj.transform.parent = transform;
             hasObj.transform.localPosition = Vector3.zero;
             hasObj.transform.localRotation = Quaternion.identity;
+
+            // 生成中の武器だったら装備する
+            // 掴んだなら他の武器は削除
+            weaponCreate.DeleteWeapon();
 
             handList[0].SetOwner(this);
 
