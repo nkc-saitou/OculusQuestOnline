@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using Matsumoto.Audio;
 using UniRx.Async;
+using System;
 
 public class CountUI : MonoBehaviour
 {
@@ -20,6 +21,9 @@ public class CountUI : MonoBehaviour
     Sprite startImage;
 
     Sprite[] countImages = new Sprite[4];
+
+
+    public event Action CountEnd;
 
     int count = 0;
 
@@ -63,6 +67,8 @@ public class CountUI : MonoBehaviour
         await UniTask.Delay(1000);
 
         AudioManager.PlayBGM("GameScene_BGM");
+
+        CountEnd();
 
     }
 }
