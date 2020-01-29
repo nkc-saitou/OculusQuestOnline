@@ -6,6 +6,9 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
+    path: Assets/Sanoki/Scenes/Entry.unity
+    guid: ba4b9bcbd5aff44a8bed08ba70f05310
+  - enabled: 1
     path: Assets/Saitou/Scene/TestSaitou.unity
     guid: 71e81f43ffba1413f869e3e1dd11e429
   - enabled: 0
@@ -14,9 +17,6 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Sanoki/Scenes/Title_test.unity
     guid: 0d4dba8ba88f16a42a809fa414c1f668
-  - enabled: 1
-    path: Assets/Sanoki/Scenes/Entry.unity
-    guid: ba4b9bcbd5aff44a8bed08ba70f05310
   - enabled: 1
     path: Assets/Sanoki/Scenes/LobyTest.unity
     guid: 95a7fcb01a9fa914a8e68468238425be
