@@ -206,7 +206,7 @@ namespace Nakajima.Player
 
             myDamageEffect.OnDamage();
 
-            Debug.Log("相手のスコア : " + Score);
+            mainMgr.updateScore(myHand[0].GetMyProvider.MyID, Score);
         }
     }
 }
