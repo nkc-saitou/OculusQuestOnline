@@ -42,7 +42,8 @@ namespace Saitou.Network
 
                         await UniTask.Delay(1000);
 
-                        SceneChanger.Instance.MoveScene("LobyTest", 1.0f, 1.0f, SceneChangeType.WhiteFade, true);
+                        //SceneChanger.Instance.MoveScene("LobyTest", 1.0f, 1.0f, SceneChangeType.WhiteFade, true);
+                        SceneChanger.Instance.MoveScene("TestSaitou", 1.0f, 1.0f, SceneChangeType.WhiteFade, true);
                     }
                 });
 
