@@ -10,9 +10,9 @@ namespace Nakajima.Main
     public class MainManager : MonoBehaviour
     {
         // バトル開始イベント
-        public event Action<float> battleStart;
+        public Action<float> battleStart;
         // バトル終了イベント
-        public event Action<bool> battleEnd;
+        public Action<bool> battleEnd;
 
         // バトル開始したかどうか
         private bool battle;
