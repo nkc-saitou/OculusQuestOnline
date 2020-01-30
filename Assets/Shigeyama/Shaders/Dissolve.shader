@@ -36,7 +36,7 @@
 
 		float random(fixed2 p) {
 
-			fixed t = 0;
+			float t = 0;
 			if (_UpdatePer <= 0) {
 				t = _Time.y;
 			}
