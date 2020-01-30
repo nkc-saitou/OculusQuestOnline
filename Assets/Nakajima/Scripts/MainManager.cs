@@ -4,6 +4,7 @@ using UnityEngine;
 using System;
 using UniRx;
 using UniRx.Async;
+using Photon.Pun;
 
 namespace Nakajima.Main
 {
@@ -13,6 +14,11 @@ namespace Nakajima.Main
         public Action<float> battleStart;
         // バトル終了イベント
         public Action<bool> battleEnd;
+        // エントリーイベント
+        public Action playerEntry;
+
+        // photonView
+        private PhotonView myPhotonView;
 
         // スコアの更新イベント
         public Action<int, int> updateScore;
@@ -46,6 +52,11 @@ namespace Nakajima.Main
         // ステージサイズ
         private const int stageSize = 24;
 
+        void Awake()
+        {
+            myPhotonView = GetComponent<PhotonView>();
+        }
+
         /// <summary>
         /// 初回処理
         /// </summary>
@@ -55,6 +66,9 @@ namespace Nakajima.Main
             battleStart += BattleStart;
             battleEnd += BattleEnd;
             updateScore += UpdateScore;
+            playerEntry += () => {
+                myPhotonView.RPC(nameof(PlayerEntry), RpcTarget.All);
+            };
         }
         
         /// <summary>
@@ -96,6 +110,15 @@ namespace Nakajima.Main
         private void BattleEnd(bool _battle)
         {
             battle = false;
+        }
+
+        /// <summary>
+        /// プレイヤーエントリーイベント
+        /// </summary>
+        [PunRPC]
+        private void PlayerEntry()
+        {
+            Entry = true;
         }
 
         /// <summary>
