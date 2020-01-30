@@ -14,6 +14,8 @@ public class NetworkEventManager : MonoBehaviourPunCallbacks
     // 手の情報
     ExitGames.Client.Photon.Hashtable hand;
 
+    int playerCount = 0;
+
     // Hand
     PlayerHand[] HandList = new PlayerHand[4];
     private GameObject weapon;
@@ -32,8 +34,6 @@ public class NetworkEventManager : MonoBehaviourPunCallbacks
         myPhotonView = GetComponent<PhotonView>();
         testPlayerCreate = FindObjectOfType<TestPlayerCreate>();
 
-        int playerCount = 0;
-
         hand = new ExitGames.Client.Photon.Hashtable();
         hand["1_right"] = "";
         hand["1_left"] = "";
@@ -42,7 +42,7 @@ public class NetworkEventManager : MonoBehaviourPunCallbacks
 
         testPlayerCreate.OnPlayerCreate += (myHandArray) =>
         {
-            playerCount++;
+            myPhotonView.RPC(nameof(PlayerCount), RpcTarget.All);
         };
 
         await UniTask.WaitUntil(() => playerCount > 1);
@@ -108,6 +108,12 @@ public class NetworkEventManager : MonoBehaviourPunCallbacks
                 SetDestroy(ID, handName, Flag);
             };
         }
+    }
+
+    [PunRPC]
+    private void PlayerCount()
+    {
+        playerCount++;
     }
 
     /// <summary>

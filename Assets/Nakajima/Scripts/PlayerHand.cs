@@ -225,7 +225,7 @@ namespace Nakajima.Player
         public override void DeleteWeapon()
         {
             // なにもないならリターン
-            if (HasWeapon == false || photonView.IsMine) return;
+            if (HasWeapon == false || photonView.IsMine || hasObj == null) return;
 
             // 削除
             var weapon = hasObj.GetComponent<IWeapon>();

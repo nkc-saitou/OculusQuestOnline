@@ -5,6 +5,7 @@ using System;
 using UniRx;
 using UniRx.Async;
 using Photon.Pun;
+using UnityEngine.SceneManagement;
 
 namespace Nakajima.Main
 {
@@ -54,7 +55,6 @@ namespace Nakajima.Main
 
         void Awake()
         {
-            myPhotonView = GetComponent<PhotonView>();
         }
 
         /// <summary>
@@ -62,6 +62,7 @@ namespace Nakajima.Main
         /// </summary>
         void Start()
         {
+            myPhotonView = GetComponent<PhotonView>();
             // イベントにバインド
             battleStart += BattleStart;
             battleEnd += BattleEnd;
@@ -69,6 +70,10 @@ namespace Nakajima.Main
             playerEntry += () => {
                 myPhotonView.RPC(nameof(PlayerEntry), RpcTarget.All);
             };
+
+            playerScore = new int[2];
+
+            if (SceneManager.GetActiveScene().name == "LobbyTest") playerEntry();
         }
         
         /// <summary>
@@ -129,9 +134,8 @@ namespace Nakajima.Main
         private void UpdateScore(int _ID, int _score)
         {
             // 相手プレイヤースコアのインデックスに変更
-            int index = _ID + 1 * (_ID - 1) * -2;
-
-            playerScore[index] = _score;
+            if(_ID == 1) playerScore[1] = _score;
+            else if(_ID == 2) playerScore[0] = _score;
         }
 
         /// <summary>
