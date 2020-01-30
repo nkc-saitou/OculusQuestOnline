@@ -17,6 +17,9 @@ namespace Nakajima.Main
         // エントリーイベント
         public Action playerEntry;
 
+        // photonView
+        private PhotonView myPhotonView;
+
         // スコアの更新イベント
         public Action<int, int> updateScore;
 
@@ -49,6 +52,11 @@ namespace Nakajima.Main
         // ステージサイズ
         private const int stageSize = 24;
 
+        void Awake()
+        {
+            myPhotonView = GetComponent<PhotonView>();
+        }
+
         /// <summary>
         /// 初回処理
         /// </summary>
@@ -58,7 +66,9 @@ namespace Nakajima.Main
             battleStart += BattleStart;
             battleEnd += BattleEnd;
             updateScore += UpdateScore;
-            playerEntry += PlayerEntry;
+            playerEntry += () => {
+                myPhotonView.RPC(nameof(PlayerEntry), RpcTarget.All);
+            };
         }
         
         /// <summary>
