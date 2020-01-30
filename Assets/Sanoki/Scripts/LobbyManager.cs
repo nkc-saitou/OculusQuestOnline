@@ -9,5 +9,6 @@ public class LobbyManager : MonoBehaviour
     void Start()
     {
         mainManager = FindObjectOfType<MainManager>();
+        mainManager.Entry = true;
     }
 }
