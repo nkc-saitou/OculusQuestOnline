@@ -18,10 +18,18 @@ namespace Nakajima.Main
         public Action<int, int> updateScore;
 
         // バトル開始したかどうか
-        private bool battle;
+        private bool battle = false;
         public bool Battle
         {
             get { return battle; }
+        }
+
+        // エントリー状態かどうか
+        private bool entry = false;
+        public bool Entry
+        {
+            set { entry = value; }
+            get { return entry; }
         }
 
         // プレイヤーの得点
