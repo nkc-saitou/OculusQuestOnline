@@ -70,7 +70,7 @@ namespace Sanoki.Online
         [PunRPC]
         void SceneChange()
         {
-            SceneChanger.Instance.MoveScene("TestSaito", 1.0f, 1.0f, SceneChangeType.BlackFade, true);
+            SceneChanger.Instance.MoveScene("TestSaitou", 1.0f, 1.0f, SceneChangeType.BlackFade, true);
         }
 
         /// <summary>
