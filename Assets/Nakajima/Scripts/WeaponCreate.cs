@@ -45,7 +45,8 @@ namespace Nakajima.Weapon
         [Header("<武器生成の基準オブジェクト(コントローラーの角度から生成)>")]
         public GameObject spawnOriginObj_Display;
         // 生成中のオブジェクト
-        private GameObject spawnObj;
+        [HideInInspector]
+        public GameObject spawnObj;
 
         // 生成する武器のリスト
         [SerializeField]
@@ -204,6 +205,7 @@ namespace Nakajima.Weapon
 
             if (WeaponUnfold == false) {
                 spawnObj = Instantiate(weaponList[0], transform);
+                activeHand.hasObj = spawnObj;
             }
 
             // コントローラーの角度を実際の角度に
@@ -215,7 +217,8 @@ namespace Nakajima.Weapon
                 weaponState = angleState;
                 Destroy(spawnObj);
 
-                spawnObj = Instantiate(weaponList[angleState], transform.position, Quaternion.identity);
+                spawnObj = Instantiate(weaponList[angleState], transform);
+                activeHand.hasObj = spawnObj;
             }
             WeaponUnfold = true;
         }

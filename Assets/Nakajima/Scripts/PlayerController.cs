@@ -71,7 +71,6 @@ namespace Nakajima.Player
         /// </summary>
         public override void Move()
         {
-
             // 移動方法ステートで処理わけ
             switch (myMovement.movementState)
             {
@@ -90,8 +89,9 @@ namespace Nakajima.Player
             // 移動力の計算
             myMovement.Move(inputVec);
             // ステージ内でないなら移動不可
-            if (mainMgr.GetStageEdge(transform.position, myMovement.MoveVec)) {
-                myRig.velocity = Vector3.zero;
+            // バトル外は移動不可
+            if (mainMgr.GetStageEdge(transform.position, myMovement.MoveVec) || mainMgr.Battle == false) {
+                if (myRig.velocity != Vector3.zero) myRig.velocity = Vector3.zero;
                 return;
             }
             // 移動
@@ -126,20 +126,24 @@ namespace Nakajima.Player
                 myHand[0].Create();
 
             // 中指トリガーで武器を掴む
-            if (OVRInput.GetDown(OVRInput.RawButton.LHandTrigger) && myHand[1].HasWeapon == false)
-                myHand[1].GrabWeapon();
-            if (OVRInput.GetDown(OVRInput.RawButton.RHandTrigger) && myHand[0].HasWeapon == false)
-                myHand[0].GrabWeapon();
+            //if (OVRInput.GetDown(OVRInput.RawButton.LHandTrigger) && myHand[1].HasWeapon == false)
+            //    myHand[1].GrabWeapon();
+            //if (OVRInput.GetDown(OVRInput.RawButton.RHandTrigger) && myHand[0].HasWeapon == false)
+            //    myHand[0].GrabWeapon();
 
-            // 人差し指トリガーで武器使用
-            if (OVRInput.GetDown(OVRInput.RawButton.LIndexTrigger) && myHand[1].HasWeapon)
-                myHand[1].WeaponAction(true, false);
-            else if (OVRInput.GetUp(OVRInput.RawButton.LIndexTrigger) && myHand[1].HasWeapon)
-                myHand[1].WeaponAction(true, true);
-            if (OVRInput.GetDown(OVRInput.RawButton.RIndexTrigger) && myHand[0].HasWeapon)
-                myHand[0].WeaponAction(true, false);
-            else if (OVRInput.GetUp(OVRInput.RawButton.RIndexTrigger) && myHand[0].HasWeapon)
-                myHand[0].WeaponAction(true, true);
+            // バトル中のみ武器は使用できる
+            if (mainMgr.Battle || mainMgr.Entry)
+            {
+                // 人差し指トリガーで武器使用
+                if (OVRInput.GetDown(OVRInput.RawButton.LIndexTrigger) && myHand[1].HasWeapon)
+                    myHand[1].WeaponAction(true, false);
+                else if (OVRInput.GetUp(OVRInput.RawButton.LIndexTrigger) && myHand[1].HasWeapon)
+                    myHand[1].WeaponAction(true, true);
+                if (OVRInput.GetDown(OVRInput.RawButton.RIndexTrigger) && myHand[0].HasWeapon)
+                    myHand[0].WeaponAction(true, false);
+                else if (OVRInput.GetUp(OVRInput.RawButton.RIndexTrigger) && myHand[0].HasWeapon)
+                    myHand[0].WeaponAction(true, true);
+            }
 
             // Y/Bボタンで所持中の武器の削除
             //if (OVRInput.GetDown(OVRInput.RawButton.Y) && myHand[1].isBoth == false)
@@ -202,7 +206,7 @@ namespace Nakajima.Player
 
             myDamageEffect.OnDamage();
 
-            Debug.Log("相手のスコア : " + Score);
+            mainMgr.updateScore(myHand[0].GetMyProvider.MyID, Score);
         }
     }
 }

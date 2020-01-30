@@ -5,6 +5,7 @@ using Saitou.Network;
 using UniRx;
 using UniRx.Triggers;
 using UniRx.Async;
+using Nakajima.Main;
 
 namespace Saitou.GameScene
 {
@@ -14,6 +15,10 @@ namespace Saitou.GameScene
         [SerializeField]TestPlayerCreate _playerCreate;
 
         [SerializeField] Animator[] _startUI;
+        [SerializeField] CountUI _countUI;
+
+
+        [SerializeField] MainManager _mainManager;
 
         void Start()
         {
@@ -23,7 +28,12 @@ namespace Saitou.GameScene
                 {
                     anim.SetTrigger("IsStart");
                 }
+            };
 
+
+            _countUI.CountEnd += () =>
+            {
+                _mainManager.battleStart(60.0f);
             };
 
         }
