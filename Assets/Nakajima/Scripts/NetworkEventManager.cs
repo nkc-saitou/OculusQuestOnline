@@ -6,11 +6,15 @@ using ExitGames.Client.Photon;
 using Photon.Realtime;
 using Nakajima.Player;
 using Saitou.Network;
+using UniRx.Async;
+using System.Linq;
 
 public class NetworkEventManager : MonoBehaviourPunCallbacks
 {
     // 手の情報
     ExitGames.Client.Photon.Hashtable hand;
+
+    int playerCount = 0;
 
     // Hand
     PlayerHand[] HandList = new PlayerHand[4];
@@ -25,7 +29,7 @@ public class NetworkEventManager : MonoBehaviourPunCallbacks
 		= new Dictionary<(int playerID, string eventID), System.Action<object[]>>();
 
     // Start is called before the first frame update
-    void Start()
+    async void Start()
     {
         myPhotonView = GetComponent<PhotonView>();
         testPlayerCreate = FindObjectOfType<TestPlayerCreate>();
@@ -38,35 +42,43 @@ public class NetworkEventManager : MonoBehaviourPunCallbacks
 
         testPlayerCreate.OnPlayerCreate += (myHandArray) =>
         {
-            DisplayPlayerProvider[] playerList = FindObjectsOfType<DisplayPlayerProvider>();
-            Debug.Log("プレイヤー  " + playerList.Length);
-            foreach(var player in playerList) {
-                switch (player.MyID)
-                {
-                    case 0:
-                        if(TestOnlineData.PlayerID == 1) {
-                            player.MyID = 2;
-                            HandList[2] = player.GetMyHand("Hand_R");
-                            HandList[3] = player.GetMyHand("Hand_L");
-                        }
-                        else {
-                            player.MyID = 1;
-                            HandList[0] = player.GetMyHand("Hand_R");
-                            HandList[1] = player.GetMyHand("Hand_L");
-                        }
-                        break;
-                    case 1:
-                        HandList[0] = player.GetMyHand("Hand_R");
-                        HandList[1] = player.GetMyHand("Hand_L");
-                        break;
-                    case 2:
+            myPhotonView.RPC(nameof(PlayerCount), RpcTarget.All);
+        };
+
+        await UniTask.WaitUntil(() => playerCount > 1);
+
+        DisplayPlayerProvider[] playerList = FindObjectsOfType<DisplayPlayerProvider>();
+        Debug.Log("プレイヤー  " + playerList.Length);
+        foreach (var player in playerList)
+        {
+            switch (player.MyID)
+            {
+                case 0:
+                    if (TestOnlineData.PlayerID == 1)
+                    {
+                        player.MyID = 2;
                         HandList[2] = player.GetMyHand("Hand_R");
                         HandList[3] = player.GetMyHand("Hand_L");
-                        break;
-                }
+                    }
+                    else
+                    {
+                        player.MyID = 1;
+                        HandList[0] = player.GetMyHand("Hand_R");
+                        HandList[1] = player.GetMyHand("Hand_L");
+                    }
+                    break;
+                case 1:
+                    HandList[0] = player.GetMyHand("Hand_R");
+                    HandList[1] = player.GetMyHand("Hand_L");
+                    break;
+                case 2:
+                    HandList[2] = player.GetMyHand("Hand_R");
+                    HandList[3] = player.GetMyHand("Hand_L");
+                    break;
             }
-            EventBind(HandList);
-        };
+        }
+
+        EventBind(HandList);
     }
 
     // Update is called once per frame
@@ -96,6 +108,12 @@ public class NetworkEventManager : MonoBehaviourPunCallbacks
                 SetDestroy(ID, handName, Flag);
             };
         }
+    }
+
+    [PunRPC]
+    private void PlayerCount()
+    {
+        playerCount++;
     }
 
     /// <summary>

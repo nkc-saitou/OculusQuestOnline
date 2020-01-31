@@ -28,11 +28,11 @@ public class SceneChanger : SingletonMonoBehaviour<SceneChanger>
         _fadeType = materials[(int)type];
         if (isPhoton)
         {
-            StartCoroutine(MoveSceneAnim(sceneName, fadeInTime, fadeOutTime));
+            StartCoroutine(MoveScenePhotonAnim(sceneName, fadeInTime, fadeOutTime));
         }
         else
         {
-            StartCoroutine(MoveScenePhotonAnim(sceneName, fadeInTime, fadeOutTime));
+            StartCoroutine(MoveSceneAnim(sceneName, fadeInTime, fadeOutTime));
         }
         return true;
     }
