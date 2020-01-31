@@ -2,10 +2,16 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using Matsumoto.Audio;
+
 public class SceneChange : MonoBehaviour
 {
 
-    private void Update()
+	private void Start() {
+		AudioManager.FadeIn(1, "GameScene_BGM2");
+	}
+
+	private void Update()
     {
         if (OVRInput.GetDown(OVRInput.RawButton.Any)||Input.GetKeyDown(KeyCode.Z)) SceneFade();//questのボタンかZキーが入力されたら
     }
