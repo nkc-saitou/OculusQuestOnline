@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using System;
+using Nakajima.Player;
 using UniRx;
 using UniRx.Async;
 using Photon.Pun;
@@ -23,6 +24,9 @@ namespace Nakajima.Main
         // photonView
         private PhotonView myPhotonView;
 
+        // ローカルプレイヤー
+        private PlayerMaster playerController;
+
         // ResultCanvasの設定
         [SerializeField]
         private GameObject resultCanvas;
@@ -30,7 +34,9 @@ namespace Nakajima.Main
             get { return resultCanvas; }
         }
 
-
+        [SerializeField]
+        private GameObject[] rootPos;
+        
         // スコアの更新イベント
         public Action<int, int> updateScore;
 
@@ -73,6 +79,7 @@ namespace Nakajima.Main
         void Start()
         {
             myPhotonView = GetComponent<PhotonView>();
+
             // イベントにバインド
             battleStart += BattleStart;
             battleEnd += BattleEnd;
@@ -91,6 +98,8 @@ namespace Nakajima.Main
         /// </summary>
         void Update()
         {
+            // CanvasTracking();
+
             if (battle) CountDown();
         }
 
@@ -111,6 +120,8 @@ namespace Nakajima.Main
             battle = true;
             GameTime = _time;
 
+            playerController = FindObjectOfType<PlayerMaster>();
+
             // 時間終了まで待機
             await UniTask.WaitUntil(() => GameTime <= 0.0f);
 
@@ -125,10 +136,6 @@ namespace Nakajima.Main
         private void BattleEnd(bool _battle)
         {
             battle = false;
-
-            resultCanvas.SetActive(true);
-
-            resultCanvas.GetComponent<ResultUI>().SetScoreText(playerScore[0], playerScore[1]);
 
             // イベント実行
             resultEvent?.Invoke();
@@ -174,11 +181,34 @@ namespace Nakajima.Main
         }
 
         /// <summary>
+        /// キャンバスの位置を調整する
+        /// </summary>
+        private void CanvasTracking()
+        {
+            if (playerController == null) return;
+
+            // プレイヤーとのベクトルを取得
+            //Vector3 playerVec = (transform.position - playerController.transform.position).normalized;
+            for(int i = 0;i < rootPos.Length; i++)
+            {
+                Vector3 playerVec = playerController.myMovement.GetMyCamera.transform.forward * 30;
+                playerVec = new Vector3(playerVec.x, rootPos[i].transform.position.y, playerVec.z);
+                // プレイヤーとの反対のベクトル
+                Vector3 reverseVec = playerVec * -1;
+
+                // トラッキングした位置
+                Vector3 trackingPos = reverseVec * (stageSize + 10);
+                rootPos[i].transform.position = Vector3.Lerp(rootPos[i].transform.position, Vector3.zero + playerVec, 10.0f);
+                rootPos[i].transform.rotation = Quaternion.Euler(0.0f, playerController.myMovement.GetMyCamera.transform.eulerAngles.y, 0.0f);
+            }
+        }
+
+        /// <summary>
         /// 勝敗判定
         /// </summary>
         /// <param name="_ID"></param>
         /// <returns>1 勝ち 2 負け 0 引き分け</returns>
-        public int WinOrLose(int _ID)
+        public void WinOrLose(int _ID, ResultUI _resultObj)
         {
             // デフォルトは引き分け
             var result = 0;
@@ -207,8 +237,10 @@ namespace Nakajima.Main
                 }
             }
 
-            resultCanvas.GetComponent<ResultUI>().ResultDisplay(result);
-            return result;
+            // ResultCanvasの処理
+            var canvas = _resultObj.GetComponent<ResultUI>();
+            canvas.SetScoreText(playerScore[0], playerScore[1]);
+            canvas.ResultDisplay(result);
         }
 
         /// <summary>
