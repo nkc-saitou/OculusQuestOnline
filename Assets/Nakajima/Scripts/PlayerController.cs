@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.XR;
+using Nakajima.Main;
 using Nakajima.Movement;
 using Nakajima.Weapon;
 using Saitou.Network;
@@ -27,8 +28,10 @@ namespace Nakajima.Player
         /// </summary>
         public override void Start()
         {
+            mainMgr = FindObjectOfType<MainManager>();
             myRig = GetComponent<Rigidbody>();
             myMovement = GetComponent<MovementComponetBase>();
+            myDamageEffect = FindObjectOfType<DamageEffect>();
             weaponCreate = GetComponent<WeaponCreate>();
             testPlayerCreate = FindObjectOfType<TestPlayerCreate>();
 
@@ -45,11 +48,14 @@ namespace Nakajima.Player
                 myHand[0].deleteWeapon += CheckDelete;
                 myHand[1].oppositeWeapon += SetOpposite;
                 myHand[1].deleteWeapon += CheckDelete;
-                
-                myHead = myHand[0].GetMyProvider.GetMyObj("Head");
-                myBody = myHand[0].GetMyProvider.GetMyObj("Body");
-                offset = Mathf.Abs(myBody.transform.position.y - myHead.transform.position.y);
+
+                if (rootObj == null) return;
+
+                rootObj.transform.GetChild(0).transform.localPosition = new Vector3(0.0f, -1.7f, 0.0f);
+                rootObj.transform.GetChild(1).transform.localPosition = new Vector3(0.0f, 0.0f, 0.0f);
             };
+
+            mainMgr.resultEvent += GetWinOrLose;
         }
 
         /// <summary>
@@ -67,8 +73,6 @@ namespace Nakajima.Player
         /// </summary>
         public override void Move()
         {
-            TrackingMove();
-
             // 移動方法ステートで処理わけ
             switch (myMovement.movementState)
             {
@@ -83,8 +87,15 @@ namespace Nakajima.Player
                     break;
             }
 
+            TrackingMove(inputVec);
             // 移動力の計算
             myMovement.Move(inputVec);
+            // ステージ内でないなら移動不可
+            // バトル外は移動不可
+            if (mainMgr.GetStageEdge(transform.position, myMovement.MoveVec) || mainMgr.Battle == false) {
+                if (myRig.velocity != Vector3.zero) myRig.velocity = Vector3.zero;
+                return;
+            }
             // 移動
             myRig.velocity = myMovement.Velocity;
         }
@@ -92,19 +103,19 @@ namespace Nakajima.Player
         /// <summary>
         /// トラッキングするObjectの移動
         /// </summary>
-        private void TrackingMove()
+        private void TrackingMove(Vector3 _inputVec)
         {
-            if (myBody == null) return;
+            // ルートがないならリターン
+            if (rootObj == null) return;
 
-            // トラッキングした場合の座標
-            Vector3 trackingPos = myHead.transform.position;
-            
-            // 振動数を計算
-            frequency = 1.0f / moveTime;
-            float sin = Mathf.Cos(2 * Mathf.PI * frequency * Time.time) * moveValue;
-            Vector3 trackingPos_B = new Vector3(trackingPos.x, myMovement.GetMyCamera.transform.localPosition.y + 0.5f * sin, trackingPos.z);
+            // HMDのローカル位置を取得
+            Vector3 trackingPos = InputTracking.GetLocalPosition(XRNode.CenterEye);
 
-            myBody.transform.position = trackingPos_B;
+            // 移動方向
+            Vector3 moveVec = _inputVec * 13.0f;
+            // rootを傾ける
+            rootObj.transform.localPosition = trackingPos;
+            rootObj.transform.rotation = Quaternion.Euler(moveVec.z, myMovement.GetMyCamera.transform.localEulerAngles.y, -moveVec.x);
         }
 
         /// <summary>
@@ -113,38 +124,46 @@ namespace Nakajima.Player
         public override void Actoin()
         {
             // X/Aボタンで武器生成
-            if (OVRInput.GetDown(OVRInput.RawButton.X) && myHand[1].HasWeapon == false)
+            if (OVRInput.Get(OVRInput.RawButton.X))
                 myHand[1].Create();
-            if (OVRInput.GetDown(OVRInput.RawButton.A) && myHand[0].HasWeapon == false)
+            if (OVRInput.Get(OVRInput.RawButton.A))
                 myHand[0].Create();
 
             // 中指トリガーで武器を掴む
-            if (OVRInput.GetDown(OVRInput.RawButton.LHandTrigger) && myHand[1].HasWeapon == false)
-                myHand[1].GrabWeapon();
-            if (OVRInput.GetDown(OVRInput.RawButton.RHandTrigger) && myHand[0].HasWeapon == false)
-                myHand[0].GrabWeapon();
+            //if (OVRInput.GetDown(OVRInput.RawButton.LHandTrigger) && myHand[1].HasWeapon == false)
+            //    myHand[1].GrabWeapon();
+            //if (OVRInput.GetDown(OVRInput.RawButton.RHandTrigger) && myHand[0].HasWeapon == false)
+            //    myHand[0].GrabWeapon();
 
-            // 人差し指トリガーで武器使用
-            if (OVRInput.GetDown(OVRInput.RawButton.LIndexTrigger) && myHand[1].HasWeapon)
-                myHand[1].WeaponAction(true, false);
-            else if (OVRInput.GetUp(OVRInput.RawButton.LIndexTrigger) && myHand[1].HasWeapon)
-                myHand[1].WeaponAction(true, true);
-            if (OVRInput.GetDown(OVRInput.RawButton.RIndexTrigger) && myHand[0].HasWeapon)
-                myHand[0].WeaponAction(true, false);
-            else if (OVRInput.GetUp(OVRInput.RawButton.RIndexTrigger) && myHand[0].HasWeapon)
-                myHand[0].WeaponAction(true, true);
+            // バトル中のみ武器は使用できる
+            if (mainMgr.Battle || mainMgr.Entry)
+            {
+                // 人差し指トリガーで武器使用
+                if (OVRInput.GetDown(OVRInput.RawButton.LIndexTrigger) && myHand[1].HasWeapon)
+                    myHand[1].WeaponAction(true, false);
+                else if (OVRInput.GetUp(OVRInput.RawButton.LIndexTrigger) && myHand[1].HasWeapon)
+                    myHand[1].WeaponAction(true, true);
+                if (OVRInput.GetDown(OVRInput.RawButton.RIndexTrigger) && myHand[0].HasWeapon)
+                    myHand[0].WeaponAction(true, false);
+                else if (OVRInput.GetUp(OVRInput.RawButton.RIndexTrigger) && myHand[0].HasWeapon)
+                    myHand[0].WeaponAction(true, true);
+            }
 
             // Y/Bボタンで所持中の武器の削除
-            if (OVRInput.GetDown(OVRInput.RawButton.Y) && myHand[1].isBoth == false)
-                myHand[1].DeleteWeapon(myHand[1].CheckDelete());
-            if (OVRInput.GetDown(OVRInput.RawButton.B) && myHand[0].isBoth == false)
-                myHand[0].DeleteWeapon(myHand[0].CheckDelete());
+            //if (OVRInput.GetDown(OVRInput.RawButton.Y) && myHand[1].isBoth == false)
+            //    myHand[1].DeleteWeapon(myHand[1].CheckDelete());
+            //if (OVRInput.GetDown(OVRInput.RawButton.B) && myHand[0].isBoth == false)
+            //    myHand[0].DeleteWeapon(myHand[0].CheckDelete());
 
             // X/Aボタンを離したら武器の削除
+            //if (OVRInput.GetUp(OVRInput.RawButton.X))
+            //    myHand[1].weaponCreate.DeleteWeapon();
+            //if (OVRInput.GetUp(OVRInput.RawButton.A))
+            //    myHand[0].weaponCreate.DeleteWeapon();
             if (OVRInput.GetUp(OVRInput.RawButton.X))
-                myHand[1].weaponCreate.DeleteWeapon();
+                myHand[1].GrabWeapon();
             if (OVRInput.GetUp(OVRInput.RawButton.A))
-                myHand[0].weaponCreate.DeleteWeapon();
+                myHand[0].GrabWeapon();
         }
 
         /// <summary>
@@ -178,6 +197,15 @@ namespace Nakajima.Player
         }
 
         /// <summary>
+        /// 勝敗判定
+        /// </summary>
+        public override void GetWinOrLose()
+        {
+            // 勝敗の結果
+            int result = mainMgr.WinOrLose(1);
+        }
+
+        /// <summary>
         /// 当たり判定
         /// </summary>
         /// <param name="col"></param>
@@ -187,9 +215,11 @@ namespace Nakajima.Player
 
             if (module == null) return;
             
-            GetScore += module.GetPower();
+            Score += module.GetPower();
 
-            Debug.Log("相手のスコア : " + GetScore);
+            myDamageEffect.OnDamage();
+
+            mainMgr.updateScore(myHand[0].GetMyProvider.MyID, Score);
         }
     }
 }

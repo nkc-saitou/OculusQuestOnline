@@ -64,12 +64,13 @@ namespace Matsumoto.Weapon {
 			return weapon.OtherWeapon;
 		}
 
-		/// <summary>
-		/// 武器を生成する
-		/// </summary>
-		/// <param name="name">武器の名前</param>
-		/// <returns>武器のインターフェース1~2個(利き手用、その他(あれば、なければ入らない))</returns>
-		public IWeapon[] CreateWeapon(string name) {
+        /// <summary>
+        /// 武器を生成する
+        /// </summary>
+        /// <param name="name">武器の名前</param>
+        /// <param name="fadeTime">出現までの時間</param>
+        /// <returns>武器のインターフェース1~2個(利き手用、その他(あれば、なければ入らない))</returns>
+        public IWeapon[] CreateWeapon(string name, float fadeTime) {
 
 			if(!_weaponBaseDictionary.ContainsKey(name)) {
 				return null;
@@ -78,20 +79,22 @@ namespace Matsumoto.Weapon {
 			var weaponArray = new List<WeaponBase>();
 
 			var weapon = CreateWeapon(_weaponBaseDictionary[name]);
-			weapon.Initialize(1.0f);
 			weaponArray.Add(weapon);
 
 			if(!weapon.OtherWeapon) {
+			    weapon.Initialize(fadeTime);
 				return weaponArray.ToArray();
 			}
 
 			// 両手武器用
 			var otherWeapon = CreateWeapon(weapon.OtherWeapon);
-			otherWeapon.Initialize(1.0f);
 			weapon.OtherWeapon = otherWeapon;
 			weaponArray.Add(otherWeapon);
 
-			return weaponArray.ToArray();
+            weapon.Initialize(fadeTime);
+            otherWeapon.Initialize(fadeTime);
+
+            return weaponArray.ToArray();
 		}
 
 		[ContextMenu("OverrideData")]

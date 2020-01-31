@@ -10,7 +10,7 @@ namespace Matsumoto.Weapon.Test {
 
 		[ContextMenu("CreateWeapon")]
 		public void Create() {
-			CreatedWeapon = Manager.CreateWeapon(CreateWeaponName);
+			CreatedWeapon = Manager.CreateWeapon(CreateWeaponName, 0.5f);
 		}
 
 		[ContextMenu("DeleteWeapon")]

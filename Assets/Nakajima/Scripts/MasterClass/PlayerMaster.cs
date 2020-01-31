@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Nakajima.Main;
 using Nakajima.Weapon;
 using Nakajima.Movement;
 using Matsumoto.Weapon;
@@ -9,11 +10,19 @@ namespace Nakajima.Player
 {
     public class PlayerMaster : MonoBehaviour
     {
+        // MainManager
+        protected MainManager mainMgr;
         // 自身のMovement;
         protected MovementComponetBase myMovement;
-        // 自身の体
+        // 自身のダメージ表示用クラス
+        protected DamageEffect myDamageEffect;
+        // ルートObj
+        [SerializeField]
+        protected GameObject rootObj;
+        // 自身の頭
         [SerializeField]
         protected GameObject myHead;
+        // 自身の体
         [SerializeField]
         protected GameObject myBody;
         // 頭と体の距離
@@ -35,8 +44,18 @@ namespace Nakajima.Player
         // 周波数(振動数)
         protected float frequency;
 
+        // 武器を使用できるかどうか
+        public bool CanUseWeapon {
+            protected set; get;
+        }
+
+        // 武器を生成できるかどうか
+        public bool CanCreateWeapon {
+            protected set; get;
+        }
+
         // スコア
-        public int GetScore {
+        public int Score {
             protected set; get;
         }
         
@@ -96,5 +115,10 @@ namespace Nakajima.Player
         /// </summary>
         /// <param name="_hand">利き手</param>
         public virtual void CheckDelete(HandMaster _hand) { }
+
+        /// <summary>
+        /// 勝敗判定
+        /// </summary>
+        public virtual void GetWinOrLose() { }
     }
 }

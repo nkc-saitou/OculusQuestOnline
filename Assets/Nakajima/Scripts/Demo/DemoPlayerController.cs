@@ -18,6 +18,7 @@ namespace Nakajima.Player
         {
             myRig = GetComponent<Rigidbody>();
             myMovement = GetComponent<MovementComponetBase>();
+            myDamageEffect = FindObjectOfType<DamageEffect>();
             weaponMgr = FindObjectOfType<WeaponManager>();
 
             // イベントをバインド
@@ -39,7 +40,6 @@ namespace Nakajima.Player
         /// </summary>
         public override void Move()
         {
-            TrackingMove();
 
             // 移動方法ステートで処理わけ
             switch (myMovement.movementState)
@@ -55,6 +55,7 @@ namespace Nakajima.Player
                     break;
             }
 
+            TrackingMove(inputVec);
             // 移動力の計算
             myMovement.Move(inputVec);
             // 移動
@@ -64,18 +65,19 @@ namespace Nakajima.Player
         /// <summary>
         /// トラッキングするObjectの移動
         /// </summary>
-        private void TrackingMove()
+        private void TrackingMove(Vector3 _inputVec)
         {
-            if (myBody == null) return;
+            // ルートがないならリターン
+            if (rootObj == null) return;
 
-            // トラッキングした場合の座標
-            Vector3 trackingPos = myHead.transform.position;
+            // HMDのローカル位置を取得
+            Vector3 trackingPos = InputTracking.GetLocalPosition(XRNode.CenterEye);
 
-            frequency = 1.0f / moveTime;
-            float sin = Mathf.Cos(2 * Mathf.PI * frequency * Time.time) * moveValue;
-            Vector3 trackingPos_B = new Vector3(trackingPos.x, myMovement.GetMyCamera.transform.localPosition.y + 0.3f + sin, trackingPos.z);
-
-            myBody.transform.position = trackingPos_B;
+            // 移動方向
+            Vector3 moveVec = _inputVec * 13.0f;
+            // rootを傾ける
+            rootObj.transform.localPosition = trackingPos;
+            rootObj.transform.rotation = Quaternion.Euler(moveVec.z, myMovement.GetMyCamera.transform.localEulerAngles.y, -moveVec.x);
         }
 
         /// <summary>
@@ -84,22 +86,16 @@ namespace Nakajima.Player
         public override void Actoin()
         {
             // X/Aボタンで武器生成
-            if (OVRInput.GetDown(OVRInput.RawButton.X) && myHand[1].HasWeapon == false)
+            if (OVRInput.Get(OVRInput.RawButton.X))
                 myHand[1].Create();
-            if (OVRInput.GetDown(OVRInput.RawButton.A) && myHand[0].HasWeapon == false)
+            if (OVRInput.Get(OVRInput.RawButton.A))
                 myHand[0].Create();
 
-            // X/Aボタンを離したら武器の削除
-            if (OVRInput.GetUp(OVRInput.RawButton.X))
-                myHand[1].weaponCreate.DeleteWeapon();
-            if (OVRInput.GetUp(OVRInput.RawButton.A))
-                myHand[0].weaponCreate.DeleteWeapon();
-
             // 中指トリガーで武器を掴む
-            if (OVRInput.GetDown(OVRInput.RawButton.LHandTrigger) && myHand[1].HasWeapon == false)
-                myHand[1].GrabWeapon();
-            if (OVRInput.GetDown(OVRInput.RawButton.RHandTrigger) && myHand[0].HasWeapon == false)
-                myHand[0].GrabWeapon();
+            //if (OVRInput.GetDown(OVRInput.RawButton.LHandTrigger) && myHand[1].HasWeapon == false)
+            //    myHand[1].GrabWeapon();
+            //if (OVRInput.GetDown(OVRInput.RawButton.RHandTrigger) && myHand[0].HasWeapon == false)
+            //    myHand[0].GrabWeapon();
 
             // 人差し指トリガーで武器使用
             if (OVRInput.GetDown(OVRInput.RawButton.LIndexTrigger) && myHand[1].HasWeapon)
@@ -112,10 +108,20 @@ namespace Nakajima.Player
                 myHand[0].WeaponAction(true, true);
 
             // Y/Bボタンで所持中の武器の削除
-            if (OVRInput.GetDown(OVRInput.RawButton.Y) && myHand[1].isBoth == false)
-                myHand[1].DeleteWeapon(myHand[1].CheckDelete());
-            if (OVRInput.GetDown(OVRInput.RawButton.B) && myHand[0].isBoth == false)
-                myHand[0].DeleteWeapon(myHand[0].CheckDelete());
+            //if (OVRInput.GetDown(OVRInput.RawButton.Y) && myHand[1].isBoth == false)
+            //    myHand[1].DeleteWeapon(myHand[1].CheckDelete());
+            //if (OVRInput.GetDown(OVRInput.RawButton.B) && myHand[0].isBoth == false)
+            //    myHand[0].DeleteWeapon(myHand[0].CheckDelete());
+
+            // X/Aボタンを離したら武器の削除
+            //if (OVRInput.GetUp(OVRInput.RawButton.X))
+            //    myHand[1].weaponCreate.DeleteWeapon();
+            //if (OVRInput.GetUp(OVRInput.RawButton.A))
+            //    myHand[0].weaponCreate.DeleteWeapon();
+            if (OVRInput.GetUp(OVRInput.RawButton.X))
+                myHand[1].GrabWeapon();
+            if (OVRInput.GetUp(OVRInput.RawButton.A))
+                myHand[0].GrabWeapon();
         }
 
         /// <summary>

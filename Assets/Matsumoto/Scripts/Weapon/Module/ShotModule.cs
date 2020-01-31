@@ -7,6 +7,8 @@ namespace Matsumoto.Weapon {
 
 	public class ShotModule : WeaponModuleBase {
 
+		public string ShotSEName = "";
+
 		[SerializeField]
 		private ModuleObject _bullet;
 
@@ -31,9 +33,11 @@ namespace Matsumoto.Weapon {
                     var p = (Vector3)(data[0]);
                     var r = (Quaternion)(data[1]);
                     var b = Instantiate(_bullet, p, r);
-                    b.ModuleData = _moduleData;
+					b.Owner = Owner.Value;
+					b.ModuleData = _moduleData;
 
 					var e = Instantiate(_muzzle, p, r);
+					e.transform.SetParent(_shotAnchor);
 					e.transform.localPosition = new Vector3();
 					e.PlayEffect();
 
@@ -41,7 +45,7 @@ namespace Matsumoto.Weapon {
 						e.DestroyEffect();
 					}).AddTo(this);
 
-					Audio.AudioManager.PlaySE("beamgun1", position: p);
+					Audio.AudioManager.PlaySE(ShotSEName, position: p);
 
 				});
             });

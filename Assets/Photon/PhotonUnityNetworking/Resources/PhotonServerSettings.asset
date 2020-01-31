@@ -42,5 +42,7 @@ MonoBehaviour:
   - ExecSyncEvent
   - OtherClientEntry
   - SceneChange
+  - PlayerEntry
+  - PlayerCount
   DisableAutoOpenWizard: 1
   ShowSettings: 1

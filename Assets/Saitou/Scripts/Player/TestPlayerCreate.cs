@@ -13,29 +13,20 @@ namespace Saitou.Network
 {
     public class TestPlayerCreate : MonoBehaviourPunCallbacks
     {
-
-        NetworkTest _network;
         public Transform[] CreatePos;
 
         public GameObject playerPrefab;
 
-        public Action<PlayerHand[]> OnPlayerCreate;
+        public  Action<PlayerHand[]> OnPlayerCreate;
 
         void Start()
         {
-            _network = FindObjectOfType<NetworkTest>();
-
-            _network.OnInRoom
-                .Subscribe(_ =>
-                {
-
-                });
-
 
             this.UpdateAsObservable()
                 .TakeUntilDestroy(this)
                 .Where(_ => PhotonNetwork.PlayerList.Length >= 2)
                 .Take(1)
+                .Delay(TimeSpan.FromMilliseconds(1000))
                 .Subscribe(async _ =>
                 {
                     Transform pos = CreatePos[TestOnlineData.PlayerID - 1];

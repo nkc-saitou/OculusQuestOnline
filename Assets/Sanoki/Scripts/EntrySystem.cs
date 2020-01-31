@@ -16,8 +16,11 @@ namespace Sanoki.Online
         NetworkManager networkManager;
         bool[] isStart = new bool[2];
 
-        public Text[] flgText = new Text[2];
-        
+        public bool[] IsStart()
+        {
+            return isStart;
+        }
+
         private void Start()
         {
             networkManager = FindObjectOfType<NetworkManager>();
@@ -36,14 +39,7 @@ namespace Sanoki.Online
 
         private void Update()
         {
-            if (Input.GetKeyDown(KeyCode.G)) Entry();
-            //if (Input.GetKeyDown(KeyCode.F))
-            //{
-            //    networkManager.JoinOrCreateRoom();
-            //}
-            flgText[0].text = "マスタークライアント：" + isStart[0].ToString();
-            flgText[1].text = "その他：" + isStart[1].ToString();
-            if (OVRInput.GetDown(OVRInput.RawButton.A)) Entry();
+            
 
         }
         
@@ -74,7 +70,7 @@ namespace Sanoki.Online
         [PunRPC]
         void SceneChange()
         {
-            SceneChanger.Instance.MoveScene("Online_test", 1.0f, 1.0f, SceneChangeType.BlackFade, true);
+            SceneChanger.Instance.MoveScene("TestSaitou", 1.0f, 1.0f, SceneChangeType.BlackFade, true);
         }
 
         /// <summary>
@@ -90,4 +86,5 @@ namespace Sanoki.Online
             return true;
         }
     }
+    
 }

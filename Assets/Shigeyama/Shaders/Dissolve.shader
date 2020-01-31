@@ -3,17 +3,62 @@
 	Properties
 	{
 		_MainTex("Texture", 2D) = "white" {}
+		_NoiseMap("Noise", 2D) = "white" {}
+		[Normal]_NormalTex("Normal", 2D) = "bump" {}
 		_Value("Value", Range(0, 1)) = 0.0
 		_ColorInside("Color inside", Color) = (1, 1, 1, 1)
 		[HDR]_EmissionColorInside("Color Emission inside", Color) = (0, 0, 0, 1)
 		_ColorOutside("Color outside", Color) = (1, 1, 1, 1)
-		[HDR]_EmissionColorOutSide("Color Emission outside", Color) = (0, 0, 0, 1)
+		[HDR]_EmissionColorOutside("Color Emission outside", Color) = (0, 0, 0, 1)
 		_DivideX("DivideX", Int) = 128
 		_DivideY("DivideY", Int) = 128
 		_UpdatePer("UpdatePer", Float) = 0
 		_Glossiness("Smoothness", Range(0,1)) = 0.5
 		_Metallic("Metallic", Range(0,1)) = 0.0
 	}
+		CGINCLUDE
+		#include "UnityCG.cginc"
+		uniform half _Value;
+		uniform half4 _ColorOutside;
+		uniform half4 _ColorInside;
+		uniform	half4 _EmissionColorOutside;
+		uniform	half4 _EmissionColorInside;
+		uniform sampler2D _MainTex;
+		uniform sampler2D _NoiseMap;
+		uniform sampler2D _NormalTex;
+		uniform int _DivideX;
+		uniform int _DivideY;
+		uniform half _UpdatePer;
+		uniform half _Glossiness;
+		uniform half _Metallic;
+
+		#pragma target 3.0
+
+		float random(fixed2 p) {
+
+			float t = 0;
+			if (_UpdatePer <= 0) {
+				t = _Time.y;
+			}
+			else {
+				t = floor(_Time.y / _UpdatePer) * _UpdatePer;
+			}
+			
+			//return frac(sin(dot(p, float2(12.9898, 78.233)) + t) * float(43758.5453));
+
+			return tex2D(_NoiseMap, frac((p / 256) + t)).r;
+		}
+
+		float noise(fixed2 st) {
+			fixed2 p = floor(st);
+			return random(p);
+		}
+
+		struct Input {
+			float2 uv_MainTex;
+		};
+
+		ENDCG
 
 		SubShader
 		{
@@ -21,39 +66,7 @@
 
 				CGPROGRAM
 				#pragma surface surf Standard fullforwardshadows
-
-				struct Input {
-					float2 uv_MainTex;
-				};
-
-				float _Value;
-				fixed4 _ColorOutside;
-				fixed4 _EmissionColorOutSide;
-				sampler2D _MainTex;
-				int _DivideX;
-				int _DivideY;
-				fixed _UpdatePer;
-				half _Glossiness;
-				half _Metallic;
-
-				float random(fixed2 p) {
-
-					fixed t = 0;
-					if (_UpdatePer <= 0) {
-						t = _Time.y;
-					}
-					else {
-						t = floor(_Time.y / _UpdatePer) * _UpdatePer;
-					}
-
-					return frac(sin(dot(p + t, fixed2(12.9898, 78.233))) * 43758.5453);
-				}
-
-				float noise(fixed2 st) {
-					fixed2 p = floor(st);
-					return random(p);
-				}
-
+				
 				void surf(Input IN, inout SurfaceOutputStandard o) {
 					fixed4 c = tex2D(_MainTex, IN.uv_MainTex);
 
@@ -62,10 +75,11 @@
 					}
 
 					o.Albedo = c * _ColorOutside;
-					o.Emission = _EmissionColorOutSide;
+					o.Normal = UnpackNormal(tex2D(_NormalTex, IN.uv_MainTex));
+					o.Emission = _EmissionColorOutside;
 					o.Metallic = _Metallic;
 					o.Smoothness = _Glossiness;
-					o.Alpha = c.a;
+					o.Alpha = c.a * _ColorOutside.a;
 				}
 
 				ENDCG
@@ -74,38 +88,6 @@
 
 				CGPROGRAM
 				#pragma surface surf Standard fullforwardshadows
-
-				struct Input {
-					float2 uv_MainTex;
-				};
-
-				fixed4 _ColorInside;
-				fixed4 _EmissionColorInside;
-				float _Value;
-				sampler2D _MainTex;
-				int _DivideX;
-				int _DivideY;
-				fixed _UpdatePer;
-				half _Glossiness;
-				half _Metallic;
-
-				float random(fixed2 p) {
-
-					fixed t = 0;
-					if (_UpdatePer <= 0) {
-						t = _Time.y;
-					}
-					else {
-						t = floor(_Time.y / _UpdatePer) * _UpdatePer;
-					}
-
-					return frac(sin(dot(p + t, fixed2(12.9898, 78.233))) * 43758.5453);
-				}
-
-				float noise(fixed2 st) {
-					fixed2 p = floor(st);
-					return random(p);
-				}
 
 				void surf(Input IN, inout SurfaceOutputStandard o) {
 					fixed4 c = tex2D(_MainTex, IN.uv_MainTex);
@@ -118,9 +100,10 @@
 					o.Emission = _EmissionColorInside;
 					o.Metallic = _Metallic;
 					o.Smoothness = _Glossiness;
-					o.Alpha = c.a;
+					o.Alpha = _ColorInside.a;
 				}
 
 				ENDCG
 		}
+			Fallback "Diffuse"
 }

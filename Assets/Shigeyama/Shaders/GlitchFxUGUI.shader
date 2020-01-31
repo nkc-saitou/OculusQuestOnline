@@ -5,6 +5,7 @@
 		[PerRendererData] _MainTex("Sprite Texture", 2D) = "white" {}
 		_Color("Tint", Color) = (1,1,1,1)
 		[MaterialToggle] PixelSnap("Pixel snap", Float) = 0
+		_NoiseMap("Noise", 2D) = "white" {}
 		_DivideX("DivideX", Int) = 128
 		_DivideY("DivideY", Int) = 128
 		_UpdatePer("UpdatePer", Float) = 0
@@ -66,6 +67,7 @@
 
 				sampler2D _MainTex;
 				sampler2D _AlphaTex;
+				sampler2D _NoiseMap;
 				int _DivideX;
 				int _DivideY;
 				fixed _UpdatePer;
@@ -79,14 +81,14 @@
 	#if ETC1_EXTERNAL_ALPHA
 					// get the color from an external texture (usecase: Alpha support for ETC1 on android)
 					color.a = tex2D(_AlphaTex, uv).r;
-	#endif ETC1_EXTERNAL_ALPHA
+	#endif //ETC1_EXTERNAL_ALPHA
 
 					return color;
 				}
 
 				float random(fixed2 p) {
 
-					fixed t = 0;
+					float t = 0;
 					if (_UpdatePer <= 0) {
 						t = _Time.y;
 					}
@@ -94,7 +96,8 @@
 						t = floor(_Time.y / _UpdatePer) * _UpdatePer;
 					}
 
-					return frac(sin(dot(p + t, fixed2(12.9898, 78.233))) * 43758.5453);
+					//return frac(sin(dot(p + t, float2(12.9898, 78.233))) * float(43758.5453));
+					return tex2D(_NoiseMap, frac((p / 256) + t)).r;
 				}
 
 				float noise(fixed2 st) {
