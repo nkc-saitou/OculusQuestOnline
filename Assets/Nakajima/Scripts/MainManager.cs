@@ -128,10 +128,14 @@ namespace Nakajima.Main
 
             resultCanvas.SetActive(true);
 
+            resultCanvas.GetComponent<ResultUI>().SetScoreText(playerScore[0], playerScore[1]);
+
             // イベント実行
             resultEvent?.Invoke();
 
-            resultCanvas.GetComponent<ResultUI>().SetScoreText(playerScore[0], playerScore[1]);
+            // 10秒後ロビー画面へ
+            Observable.Timer(TimeSpan.FromMilliseconds(10000))
+                .Subscribe(_ => SceneChanger.Instance.MoveScene("LobbyTest", 1.0f, 1.0f, SceneChangeType.BlackFade, true));
         }
 
         /// <summary>
