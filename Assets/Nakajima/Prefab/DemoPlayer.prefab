@@ -657,7 +657,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1228349002732582601}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
@@ -2267,6 +2267,7 @@ MonoBehaviour:
   currentState: 1
   spawnOriginObj_Circle: {fileID: 0}
   spawnOriginObj_Display: {fileID: 0}
+  spawnObj: {fileID: 0}
   weaponList:
   - {fileID: 1353050716332709435, guid: 87acb058fbc9a34449a5dd79d6186898, type: 3}
   - {fileID: 7736314363512946226, guid: e764e101858569c46ae3ccb193c0da19, type: 3}
@@ -4036,6 +4037,7 @@ MonoBehaviour:
   currentState: 1
   spawnOriginObj_Circle: {fileID: 0}
   spawnOriginObj_Display: {fileID: 0}
+  spawnObj: {fileID: 0}
   weaponList:
   - {fileID: 1353050716332709435, guid: 87acb058fbc9a34449a5dd79d6186898, type: 3}
   - {fileID: 7736314363512946226, guid: e764e101858569c46ae3ccb193c0da19, type: 3}

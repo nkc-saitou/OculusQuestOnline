@@ -98,7 +98,7 @@ namespace Nakajima.Main
         [ContextMenu("start")]
         private void GameStart()
         {
-            battleStart?.Invoke(2.0f);
+            battleStart?.Invoke(10.0f);
         }
 
         /// <summary>
