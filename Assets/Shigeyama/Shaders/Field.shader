@@ -8,6 +8,7 @@
 		[HDR]_LineColor("LineColor", Color) = (1,1,1,1)
 		_Period("Period", Float) = 1
 		_LineWidth("LineWidth", Float) = 0.1
+		_FadeTexScale("FadeTexScale", Float) = 1
 		_ScrollSpeedX("ScrollSpeedX", Float) = 1
 		_ScrollSpeedY("ScrollSpeedY", Float) = 1
 		[Enum(UnityEngine.Rendering.CullMode)]_Cull("Cull", Float) = 0
@@ -56,13 +57,14 @@
 				// もしテクスチャ座標やフォグ効果が不要なら削除してしまい、空いたTEXCOORDを利用してもOKです
 				float3 worldPos : TEXCOORD1;
             };
-
+			
 			sampler2D _MainTex;
 			sampler2D _FadeTex;
 			fixed4 _FillColor;
 			fixed4 _LineColor;
 			fixed _Period; 
 			fixed _LineWidth;
+			fixed _FadeTexScale;
 			fixed _ScrollSpeedX;
 			fixed _ScrollSpeedY;
 			float4 _MainTex_ST;
@@ -104,7 +106,7 @@
 				fixed4 l = _LineColor * fixed4(v, v, v, v);
 
 				// scroll
-				fixed2 uv = frac(float2(i.worldPos.x, i.worldPos.y) + float2(_Time.y * _ScrollSpeedX, _Time.y * _ScrollSpeedY));
+				fixed2 uv = frac(float2(i.worldPos.x, i.worldPos.y) / _FadeTexScale + float2(_Time.y * _ScrollSpeedX, _Time.y * _ScrollSpeedY));
 				fixed4 tex = tex2D(_FadeTex, uv);
 
 				c += l * tex.r;
