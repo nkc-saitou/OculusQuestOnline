@@ -24,7 +24,7 @@ namespace Saitou.Network
         Subject<Unit> onInRoomSub = new Subject<Unit>();
         public IObservable<Unit> OnInRoom { get { return onInRoomSub; } }
 
-        string roomName = "myRoomName";
+        string roomName = "RoomName";
 
         void Start()
         {

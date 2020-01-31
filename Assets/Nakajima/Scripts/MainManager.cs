@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using System;
+using Nakajima.Player;
 using UniRx;
 using UniRx.Async;
 using Photon.Pun;
@@ -17,10 +18,25 @@ namespace Nakajima.Main
         public Action<bool> battleEnd;
         // エントリーイベント
         public Action playerEntry;
+        // リザルトイベント
+        public Action resultEvent;
 
         // photonView
         private PhotonView myPhotonView;
 
+        // ローカルプレイヤー
+        private PlayerMaster playerController;
+
+        // ResultCanvasの設定
+        [SerializeField]
+        private GameObject resultCanvas;
+        public GameObject ResultCanvas {
+            get { return resultCanvas; }
+        }
+
+        [SerializeField]
+        private GameObject[] rootPos;
+        
         // スコアの更新イベント
         public Action<int, int> updateScore;
 
@@ -63,10 +79,13 @@ namespace Nakajima.Main
         void Start()
         {
             myPhotonView = GetComponent<PhotonView>();
+
             // イベントにバインド
             battleStart += BattleStart;
             battleEnd += BattleEnd;
-            updateScore += UpdateScore;
+            updateScore += (_ID, _score) => {
+                myPhotonView.RPC(nameof(UpdateScore), RpcTarget.All, _ID, _score);
+            };
             playerEntry += () => {
                 myPhotonView.RPC(nameof(PlayerEntry), RpcTarget.All);
             };
@@ -81,6 +100,8 @@ namespace Nakajima.Main
         /// </summary>
         void Update()
         {
+            // CanvasTracking();
+
             if (battle) CountDown();
         }
 
@@ -101,6 +122,8 @@ namespace Nakajima.Main
             battle = true;
             GameTime = _time;
 
+            playerController = FindObjectOfType<PlayerMaster>();
+
             // 時間終了まで待機
             await UniTask.WaitUntil(() => GameTime <= 0.0f);
 
@@ -115,6 +138,13 @@ namespace Nakajima.Main
         private void BattleEnd(bool _battle)
         {
             battle = false;
+
+            // イベント実行
+            resultEvent?.Invoke();
+
+            // 10秒後ロビー画面へ
+            Observable.Timer(TimeSpan.FromMilliseconds(10000))
+                .Subscribe(_ => SceneChanger.Instance.MoveScene("LobbyTest", 1.0f, 1.0f, SceneChangeType.BlackFade, true));
         }
 
         /// <summary>
@@ -131,6 +161,7 @@ namespace Nakajima.Main
         /// </summary>
         /// <param name="_ID">プレイヤーID</param>
         /// <param name="_score">更新スコア</param>
+        [PunRPC]
         private void UpdateScore(int _ID, int _score)
         {
             // 相手プレイヤースコアのインデックスに変更
@@ -150,6 +181,69 @@ namespace Nakajima.Main
             }
 
             gameTime -= Time.deltaTime;
+        }
+
+        /// <summary>
+        /// キャンバスの位置を調整する
+        /// </summary>
+        private void CanvasTracking()
+        {
+            if (playerController == null) return;
+
+            // プレイヤーとのベクトルを取得
+            //Vector3 playerVec = (transform.position - playerController.transform.position).normalized;
+            for(int i = 0;i < rootPos.Length; i++)
+            {
+                Vector3 playerVec = playerController.myMovement.GetMyCamera.transform.forward * 30;
+                playerVec = new Vector3(playerVec.x, rootPos[i].transform.position.y, playerVec.z);
+                // プレイヤーとの反対のベクトル
+                Vector3 reverseVec = playerVec * -1;
+
+                // トラッキングした位置
+                Vector3 trackingPos = reverseVec * (stageSize + 10);
+                rootPos[i].transform.position = Vector3.Lerp(rootPos[i].transform.position, Vector3.zero + playerVec, 10.0f);
+                rootPos[i].transform.rotation = Quaternion.Euler(0.0f, playerController.myMovement.GetMyCamera.transform.eulerAngles.y, 0.0f);
+            }
+        }
+
+        /// <summary>
+        /// 勝敗判定
+        /// </summary>
+        /// <param name="_ID"></param>
+        /// <returns>1 勝ち 2 負け 0 引き分け</returns>
+        public void WinOrLose(int _ID, ResultUI _resultObj)
+        {
+            // デフォルトは引き分け
+            var result = 0;
+
+            // IDに応じて勝敗判定
+            if (_ID == 1)
+            {
+                // 勝ち
+                if (playerScore[0] > playerScore[1]) {
+                    result = 1;
+                }
+                // 負け
+                else if (playerScore[0] < playerScore[1]) {
+                    result = 2;
+                }
+            }
+            else if (_ID == 2)
+            {
+                // 勝ち
+                if (playerScore[1] > playerScore[0]) {
+                    result = 1;
+                }
+                // 負け
+                else if (playerScore[1] < playerScore[0]) {
+                    result = 2;
+                }
+            }
+
+            // ResultCanvasの処理
+            var canvas = _resultObj.GetComponent<ResultUI>();
+            canvas.SetScoreText(playerScore[0], playerScore[1]);
+            canvas.ResultDisplay(result);
         }
 
         /// <summary>

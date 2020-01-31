@@ -13,9 +13,13 @@ namespace Nakajima.Player
         // MainManager
         protected MainManager mainMgr;
         // 自身のMovement;
-        protected MovementComponetBase myMovement;
+        [HideInInspector]
+        public MovementComponetBase myMovement;
         // 自身のダメージ表示用クラス
         protected DamageEffect myDamageEffect;
+        // リザルト用Canvas
+        [SerializeField]
+        protected ResultUI resultCanvas;
         // ルートObj
         [SerializeField]
         protected GameObject rootObj;
@@ -115,5 +119,10 @@ namespace Nakajima.Player
         /// </summary>
         /// <param name="_hand">利き手</param>
         public virtual void CheckDelete(HandMaster _hand) { }
+
+        /// <summary>
+        /// 勝敗判定
+        /// </summary>
+        public virtual void GetWinOrLose() { }
     }
 }

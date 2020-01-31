@@ -2,6 +2,7 @@
 using System.Collections;
 using UniRx;
 using System;
+using Nakajima.Player;
 
 namespace Matsumoto.Weapon {
 
@@ -52,11 +53,23 @@ namespace Matsumoto.Weapon {
 		}
 
 		private void OnCollisionEnter(Collision collision) {
+            if (collision.collider.GetComponent<ModuleObject>()) return;
+            if (collision.collider.GetComponent<WeaponBase>()) return;
+
+            var player = collision.collider.GetComponent<DisplayPlayerProvider>();
+            if (player.MyID == Owner.GetMyProvider.MyID) return;
+
 			OnHit();
 		}
 
 		private void OnTriggerEnter(Collider other) {
-			OnHit();
+            if (other.GetComponent<ModuleObject>()) return;
+            if (other.GetComponent<WeaponBase>()) return;
+
+            var player = other.GetComponent<DisplayPlayerProvider>();
+            if (player.MyID == Owner.GetMyProvider.MyID) return;
+
+            OnHit();
 		}
 	}
 }

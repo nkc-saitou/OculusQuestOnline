@@ -20,6 +20,9 @@ namespace Nakajima.Player
         [SerializeField, Header("<自分の手(0 右手 1 左手)>")]
         protected PlayerHand[] myHand;
 
+        // プレイヤーID
+        int ID;
+
         // オンライン用のプレイヤーの生成
         private TestPlayerCreate testPlayerCreate;
 
@@ -49,11 +52,16 @@ namespace Nakajima.Player
                 myHand[1].oppositeWeapon += SetOpposite;
                 myHand[1].deleteWeapon += CheckDelete;
 
+                ID = myHand[0].GetMyProvider.MyID;
+                if (ID == 1) transform.rotation = Quaternion.Euler(0.0f, 180.0f, 0.0f);
+
                 if (rootObj == null) return;
 
                 rootObj.transform.GetChild(0).transform.localPosition = new Vector3(0.0f, -1.7f, 0.0f);
                 rootObj.transform.GetChild(1).transform.localPosition = new Vector3(0.0f, 0.0f, 0.0f);
             };
+
+            mainMgr.resultEvent += GetWinOrLose;
         }
 
         /// <summary>
@@ -103,15 +111,17 @@ namespace Nakajima.Player
         /// </summary>
         private void TrackingMove(Vector3 _inputVec)
         {
+            // ルートがないならリターン
             if (rootObj == null) return;
 
+            // HMDのローカル位置を取得
             Vector3 trackingPos = InputTracking.GetLocalPosition(XRNode.CenterEye);
 
             // 移動方向
             Vector3 moveVec = _inputVec * 13.0f;
             // rootを傾ける
             rootObj.transform.localPosition = trackingPos;
-            rootObj.transform.localRotation = Quaternion.Euler(moveVec.z, 0.0f, -moveVec.x);
+            rootObj.transform.rotation = Quaternion.Euler(moveVec.z, myMovement.GetMyCamera.transform.eulerAngles.y, -moveVec.x);
         }
 
         /// <summary>
@@ -193,6 +203,17 @@ namespace Nakajima.Player
         }
 
         /// <summary>
+        /// 勝敗判定
+        /// </summary>
+        public override void GetWinOrLose()
+        {
+            resultCanvas.gameObject.SetActive(true);
+
+            // 勝敗の結果
+            mainMgr.WinOrLose(ID, resultCanvas);
+        }
+
+        /// <summary>
         /// 当たり判定
         /// </summary>
         /// <param name="col"></param>
@@ -200,13 +221,13 @@ namespace Nakajima.Player
         {
             var module = col.gameObject.GetComponent<ModuleObject>();
 
-            if (module == null) return;
+            if (module == null || module.Owner.GetMyProvider.MyID == ID) return;
             
             Score += module.GetPower();
 
             myDamageEffect.OnDamage();
 
-            mainMgr.updateScore(myHand[0].GetMyProvider.MyID, Score);
+            mainMgr.updateScore(ID, Score);
         }
     }
 }

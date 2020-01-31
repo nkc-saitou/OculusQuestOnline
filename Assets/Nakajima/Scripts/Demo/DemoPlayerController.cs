@@ -67,11 +67,17 @@ namespace Nakajima.Player
         /// </summary>
         private void TrackingMove(Vector3 _inputVec)
         {
+            // ルートがないならリターン
             if (rootObj == null) return;
+
+            // HMDのローカル位置を取得
+            Vector3 trackingPos = InputTracking.GetLocalPosition(XRNode.CenterEye);
+
             // 移動方向
             Vector3 moveVec = _inputVec * 13.0f;
-
-            rootObj.transform.rotation = Quaternion.Euler(moveVec.z, 0.0f, -moveVec.x);
+            // rootを傾ける
+            rootObj.transform.localPosition = trackingPos;
+            rootObj.transform.rotation = Quaternion.Euler(moveVec.z, myMovement.GetMyCamera.transform.localEulerAngles.y, -moveVec.x);
         }
 
         /// <summary>
