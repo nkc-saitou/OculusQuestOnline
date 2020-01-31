@@ -73,6 +73,16 @@ namespace Nakajima.Player
             Move();
 
             Actoin();
+
+            CheckCreateWeapon();
+        }
+
+        /// <summary>
+        /// 生成中の武器をチェックする
+        /// </summary>
+        private void CheckCreateWeapon()
+        {
+
         }
 
         /// <summary>

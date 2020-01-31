@@ -146,6 +146,7 @@ namespace Nakajima.Player
             hasObj.transform.localRotation = Quaternion.identity;
             HasWeapon = true;
             isBoth = true;
+            weaponCreate.DeleteWeapon();
 
             _weapon.GetComponent<IWeapon>().SetOwner(this);
         }

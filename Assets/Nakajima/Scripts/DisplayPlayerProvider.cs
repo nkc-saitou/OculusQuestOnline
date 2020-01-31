@@ -16,6 +16,8 @@ namespace Nakajima.Player
             set; get;
         }
 
+        private NetworkEventManager netEventMgr;
+
         // 自身のオブジェクト
         [SerializeField]
         private GameObject myHead;
@@ -23,9 +25,9 @@ namespace Nakajima.Player
         private GameObject myBody;
         [SerializeField]
         private GameObject headAnchor;
+        
 
-        [SerializeField]
-        private GameObject[] MyWacca=new GameObject[2];
+        public GameObject[] MyWacca=new GameObject[2];
 
         // 自身のHand
         [SerializeField]
@@ -34,24 +36,27 @@ namespace Nakajima.Player
         private PlayerHand myHand_L;
 
         // Start is called before the first frame update
-        async void Start()
+        void Start()
         {
             Register();
 
-            await UniTask.WaitUntil(() => MyID != 0);
+            netEventMgr = FindObjectOfType<NetworkEventManager>();
 
-            MyWacca[MyID - 1].SetActive(true);
+            //await UniTask.WaitUntil(() => netEventMgr.playerCount > 1);
 
-            DisplayPlayerProvider[] providerAray = FindObjectsOfType<DisplayPlayerProvider>();
+            //MyWacca[MyID - 1].SetActive(true);
 
-            for(int i = 0; i < providerAray.Length; i++)
-            {
-                if (providerAray[i].MyID != TestOnlineData.PlayerID)
-                {
-                    providerAray[i].MyWacca[providerAray[i].MyID - 1].SetActive(true);
-                    break;
-                }
-            }
+            //DisplayPlayerProvider[] providerAray = FindObjectsOfType<DisplayPlayerProvider>();
+            //Debug.Log("プロバイダー数 : " + providerAray.Length);
+
+            //for(int i = 0; i < providerAray.Length; i++)
+            //{
+            //    if (providerAray[i].MyID != TestOnlineData.PlayerID)
+            //    {
+            //        providerAray[i].MyWacca[providerAray[i].MyID - 1].SetActive(true);
+            //        break;
+            //    }
+            //}
         }
 
 

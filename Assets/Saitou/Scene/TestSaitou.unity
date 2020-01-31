@@ -836,7 +836,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 811492675}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0.052, z: -5.76}
+  m_LocalPosition: {x: 0, y: 0.5, z: -5.76}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -1533,7 +1533,7 @@ PrefabInstance:
     - target: {fileID: 6941946784638767709, guid: c2a4e0163d4ef0f428311e1d7c4888ba,
         type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6941946784638767711, guid: c2a4e0163d4ef0f428311e1d7c4888ba,
         type: 3}
@@ -1595,7 +1595,13 @@ PrefabInstance:
       propertyPath: viewIdField
       value: 4
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    - target: {fileID: 6941946784638767680, guid: c2a4e0163d4ef0f428311e1d7c4888ba,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents:
+    - {fileID: 6941946784638767680, guid: c2a4e0163d4ef0f428311e1d7c4888ba, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: c2a4e0163d4ef0f428311e1d7c4888ba, type: 3}
 --- !u!1 &1613653778
 GameObject:
@@ -1668,7 +1674,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1613653778}
   m_LocalRotation: {x: 0, y: 1, z: 0, w: 0}
-  m_LocalPosition: {x: 0, y: 0.052, z: 7.47}
+  m_LocalPosition: {x: 0, y: 0.5, z: 7.47}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -1705,6 +1711,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bd6488cba0183d94589552b053df27f6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  playerCount: 0
 --- !u!4 &1718925912
 Transform:
   m_ObjectHideFlags: 0
@@ -2067,7 +2074,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2134909702}
-  - component: {fileID: 2134909701}
   - component: {fileID: 2134909703}
   m_Layer: 0
   m_Name: Network
@@ -2076,19 +2082,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &2134909701
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2134909700}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: bd1fa3578c7284a4c9f72d12bd006ea3, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  maxPlayers: 4
 --- !u!4 &2134909702
 Transform:
   m_ObjectHideFlags: 0
@@ -2131,6 +2124,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Barrier
+      objectReference: {fileID: 0}
+    - target: {fileID: 1699494422680717443, guid: 6efe578762acb45ee8003542fe49ea13,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1699494422680717471, guid: 6efe578762acb45ee8003542fe49ea13,
         type: 3}

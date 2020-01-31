@@ -8,13 +8,15 @@ using Nakajima.Player;
 using Saitou.Network;
 using UniRx.Async;
 using System.Linq;
+using UnityEngine.SceneManagement;
 
 public class NetworkEventManager : MonoBehaviourPunCallbacks
 {
     // 手の情報
     ExitGames.Client.Photon.Hashtable hand;
 
-    int playerCount = 0;
+    [HideInInspector]
+    public int playerCount = 0;
 
     // Hand
     PlayerHand[] HandList = new PlayerHand[4];
@@ -76,6 +78,7 @@ public class NetworkEventManager : MonoBehaviourPunCallbacks
                     HandList[3] = player.GetMyHand("Hand_L");
                     break;
             }
+            player.MyWacca[player.MyID - 1].SetActive(true);
         }
 
         EventBind(HandList);
@@ -114,6 +117,7 @@ public class NetworkEventManager : MonoBehaviourPunCallbacks
     private void PlayerCount()
     {
         playerCount++;
+        Debug.Log("シーン : " +  SceneManager.GetActiveScene().name  + " " + "プレイヤー数 : " + playerCount);
     }
 
     /// <summary>

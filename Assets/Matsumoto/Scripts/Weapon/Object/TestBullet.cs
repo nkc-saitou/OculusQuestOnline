@@ -67,7 +67,10 @@ namespace Matsumoto.Weapon {
             if (other.GetComponent<WeaponBase>()) return;
 
             var player = other.GetComponent<DisplayPlayerProvider>();
-            if (player.MyID == Owner.GetMyProvider.MyID) return;
+            if(player != null)
+            {
+                if (player.MyID == Owner.GetMyProvider.MyID) return;
+            }
 
             OnHit();
 		}

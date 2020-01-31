@@ -26,7 +26,7 @@ namespace Saitou.Network
                 .TakeUntilDestroy(this)
                 .Where(_ => PhotonNetwork.PlayerList.Length >= 2)
                 .Take(1)
-                .Delay(TimeSpan.FromMilliseconds(1000))
+                .Delay(TimeSpan.FromMilliseconds(500))
                 .Subscribe(async _ =>
                 {
                     Transform pos = CreatePos[TestOnlineData.PlayerID - 1];
