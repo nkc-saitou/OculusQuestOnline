@@ -37,6 +37,7 @@ namespace Matsumoto.Weapon {
 					b.ModuleData = _moduleData;
 
 					var e = Instantiate(_muzzle, p, r);
+					e.transform.SetParent(_shotAnchor);
 					e.transform.localPosition = new Vector3();
 					e.PlayEffect();
 

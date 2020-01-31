@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 8824530156128727535}
   - component: {fileID: 4427101607777204413}
   m_Layer: 8
-  m_Name: ShotModule
+  m_Name: ShotArrowModule
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -43,7 +43,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 72d7df962a4458748a5cf21a875ab0cd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _moduleData: {fileID: 11400000, guid: 72ff831a437df4f4f8e386e3f19977ec, type: 2}
-  ShotSEName: beamgun1
-  _bullet: {fileID: 6287824836626435742, guid: 48e836ecbf3e27d4c94ba47f175260cf, type: 3}
+  _moduleData: {fileID: 11400000, guid: 52f952f3929520c4f88fb21236335124, type: 2}
+  ShotSEName: ClossBow_Shot
+  _bullet: {fileID: 6287824836626435742, guid: 0ba281f5974867343861761402ef9f7f, type: 3}
   _muzzle: {fileID: 7236786618123525392, guid: 51a7d7f90587c7343931009d1928fc00, type: 3}
