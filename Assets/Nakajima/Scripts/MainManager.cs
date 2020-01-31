@@ -83,7 +83,9 @@ namespace Nakajima.Main
             // イベントにバインド
             battleStart += BattleStart;
             battleEnd += BattleEnd;
-            updateScore += UpdateScore;
+            updateScore += (_ID, _score) => {
+                myPhotonView.RPC(nameof(UpdateScore), RpcTarget.All, _ID, _score);
+            };
             playerEntry += () => {
                 myPhotonView.RPC(nameof(PlayerEntry), RpcTarget.All);
             };
@@ -159,6 +161,7 @@ namespace Nakajima.Main
         /// </summary>
         /// <param name="_ID">プレイヤーID</param>
         /// <param name="_score">更新スコア</param>
+        [PunRPC]
         private void UpdateScore(int _ID, int _score)
         {
             // 相手プレイヤースコアのインデックスに変更

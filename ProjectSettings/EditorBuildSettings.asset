@@ -8,7 +8,7 @@ EditorBuildSettings:
   - enabled: 0
     path: Assets/Shigeyama/Scenes/TestFX.unity
     guid: f71539e241c3b384193657437c251088
-  - enabled: 1
+  - enabled: 0
     path: Assets/chiikama/scene/test.unity
     guid: 94eb9a8fbc1685648b1b81e3314f61b0
   - enabled: 1

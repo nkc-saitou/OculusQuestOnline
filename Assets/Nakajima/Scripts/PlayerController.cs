@@ -53,6 +53,7 @@ namespace Nakajima.Player
                 myHand[1].deleteWeapon += CheckDelete;
 
                 ID = myHand[0].GetMyProvider.MyID;
+                if (ID == 1) transform.rotation = Quaternion.Euler(0.0f, 180.0f, 0.0f);
 
                 if (rootObj == null) return;
 
@@ -120,7 +121,7 @@ namespace Nakajima.Player
             Vector3 moveVec = _inputVec * 13.0f;
             // rootを傾ける
             rootObj.transform.localPosition = trackingPos;
-            rootObj.transform.rotation = Quaternion.Euler(moveVec.z, myMovement.GetMyCamera.transform.localEulerAngles.y, -moveVec.x);
+            rootObj.transform.rotation = Quaternion.Euler(moveVec.z, myMovement.GetMyCamera.transform.eulerAngles.y, -moveVec.x);
         }
 
         /// <summary>
