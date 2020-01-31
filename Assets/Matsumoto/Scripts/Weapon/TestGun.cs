@@ -6,6 +6,12 @@ namespace Matsumoto.Weapon {
 
 	public class TestGun : WeaponBase {
 
+		public override void Initialize(float fadeTime) {
+			base.Initialize(fadeTime);
+
+			((ShotModule)_weaponModules[0]).ShotSEName = "beamgun1";
+		}
+
 		// Update is called once per frame
 		void Update() {
 

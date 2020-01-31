@@ -86,6 +86,8 @@ namespace Matsumoto.Weapon {
 
 			var input = (WeaponOtherInput)_otherWeapon;
 
+			((ShotModule)_weaponModules[0]).ShotSEName = "ClossBow_Shot";
+
 			_arrowPosition = _arrow.localPosition.z;
 
 			input.OnButtonDownRecieved

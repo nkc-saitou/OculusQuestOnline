@@ -7,6 +7,8 @@ namespace Matsumoto.Weapon {
 
 	public class ShotModule : WeaponModuleBase {
 
+		public string ShotSEName = "";
+
 		[SerializeField]
 		private ModuleObject _bullet;
 
@@ -42,7 +44,7 @@ namespace Matsumoto.Weapon {
 						e.DestroyEffect();
 					}).AddTo(this);
 
-					Audio.AudioManager.PlaySE("beamgun1", position: p);
+					Audio.AudioManager.PlaySE(ShotSEName, position: p);
 
 				});
             });
