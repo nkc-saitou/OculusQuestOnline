@@ -115,5 +115,10 @@ namespace Nakajima.Player
         /// </summary>
         /// <param name="_hand">利き手</param>
         public virtual void CheckDelete(HandMaster _hand) { }
+
+        /// <summary>
+        /// 勝敗判定
+        /// </summary>
+        public virtual void GetWinOrLose() { }
     }
 }
