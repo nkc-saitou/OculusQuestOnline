@@ -13,9 +13,13 @@ namespace Nakajima.Player
         // MainManager
         protected MainManager mainMgr;
         // 自身のMovement;
-        protected MovementComponetBase myMovement;
+        [HideInInspector]
+        public MovementComponetBase myMovement;
         // 自身のダメージ表示用クラス
         protected DamageEffect myDamageEffect;
+        // リザルト用Canvas
+        [SerializeField]
+        protected ResultUI resultCanvas;
         // ルートObj
         [SerializeField]
         protected GameObject rootObj;

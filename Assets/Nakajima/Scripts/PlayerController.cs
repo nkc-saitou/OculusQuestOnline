@@ -20,6 +20,9 @@ namespace Nakajima.Player
         [SerializeField, Header("<自分の手(0 右手 1 左手)>")]
         protected PlayerHand[] myHand;
 
+        // プレイヤーID
+        int ID;
+
         // オンライン用のプレイヤーの生成
         private TestPlayerCreate testPlayerCreate;
 
@@ -48,6 +51,8 @@ namespace Nakajima.Player
                 myHand[0].deleteWeapon += CheckDelete;
                 myHand[1].oppositeWeapon += SetOpposite;
                 myHand[1].deleteWeapon += CheckDelete;
+
+                ID = myHand[0].GetMyProvider.MyID;
 
                 if (rootObj == null) return;
 
@@ -201,8 +206,10 @@ namespace Nakajima.Player
         /// </summary>
         public override void GetWinOrLose()
         {
+            resultCanvas.gameObject.SetActive(true);
+
             // 勝敗の結果
-            int result = mainMgr.WinOrLose(1);
+            mainMgr.WinOrLose(ID, resultCanvas);
         }
 
         /// <summary>
@@ -213,13 +220,13 @@ namespace Nakajima.Player
         {
             var module = col.gameObject.GetComponent<ModuleObject>();
 
-            if (module == null) return;
+            if (module == null || module.Owner.GetMyProvider.MyID == ID) return;
             
             Score += module.GetPower();
 
             myDamageEffect.OnDamage();
 
-            mainMgr.updateScore(myHand[0].GetMyProvider.MyID, Score);
+            mainMgr.updateScore(ID, Score);
         }
     }
 }
