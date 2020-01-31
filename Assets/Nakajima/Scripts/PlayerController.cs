@@ -52,6 +52,7 @@ namespace Nakajima.Player
                 myHand[1].oppositeWeapon += SetOpposite;
                 myHand[1].deleteWeapon += CheckDelete;
 
+                // IDの設定
                 ID = myHand[0].GetMyProvider.MyID;
                 if (ID == 1) transform.rotation = Quaternion.Euler(0.0f, 180.0f, 0.0f);
 
