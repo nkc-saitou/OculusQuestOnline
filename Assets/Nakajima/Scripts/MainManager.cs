@@ -4,6 +4,8 @@ using UnityEngine;
 using System;
 using UniRx;
 using UniRx.Async;
+using Photon.Pun;
+using UnityEngine.SceneManagement;
 
 namespace Nakajima.Main
 {
@@ -13,15 +15,28 @@ namespace Nakajima.Main
         public Action<float> battleStart;
         // バトル終了イベント
         public Action<bool> battleEnd;
+        // エントリーイベント
+        public Action playerEntry;
+
+        // photonView
+        private PhotonView myPhotonView;
 
         // スコアの更新イベント
         public Action<int, int> updateScore;
 
         // バトル開始したかどうか
-        private bool battle;
+        private bool battle = false;
         public bool Battle
         {
             get { return battle; }
+        }
+
+        // エントリー状態かどうか
+        private bool entry = false;
+        public bool Entry
+        {
+            set { entry = value; }
+            get { return entry; }
         }
 
         // プレイヤーの得点
@@ -38,15 +53,27 @@ namespace Nakajima.Main
         // ステージサイズ
         private const int stageSize = 24;
 
+        void Awake()
+        {
+        }
+
         /// <summary>
         /// 初回処理
         /// </summary>
         void Start()
         {
+            myPhotonView = GetComponent<PhotonView>();
             // イベントにバインド
             battleStart += BattleStart;
             battleEnd += BattleEnd;
             updateScore += UpdateScore;
+            playerEntry += () => {
+                myPhotonView.RPC(nameof(PlayerEntry), RpcTarget.All);
+            };
+
+            playerScore = new int[2];
+
+            if (SceneManager.GetActiveScene().name == "LobbyTest") playerEntry();
         }
         
         /// <summary>
@@ -91,6 +118,15 @@ namespace Nakajima.Main
         }
 
         /// <summary>
+        /// プレイヤーエントリーイベント
+        /// </summary>
+        [PunRPC]
+        private void PlayerEntry()
+        {
+            Entry = true;
+        }
+
+        /// <summary>
         /// スコアの更新イベント
         /// </summary>
         /// <param name="_ID">プレイヤーID</param>
@@ -98,9 +134,8 @@ namespace Nakajima.Main
         private void UpdateScore(int _ID, int _score)
         {
             // 相手プレイヤースコアのインデックスに変更
-            int index = _ID + 1 * (_ID - 1) * -2;
-
-            playerScore[index] = _score;
+            if(_ID == 1) playerScore[1] = _score;
+            else if(_ID == 2) playerScore[0] = _score;
         }
 
         /// <summary>

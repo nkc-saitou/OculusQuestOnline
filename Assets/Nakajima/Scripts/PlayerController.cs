@@ -132,7 +132,7 @@ namespace Nakajima.Player
             //    myHand[0].GrabWeapon();
 
             // バトル中のみ武器は使用できる
-            if (mainMgr.Battle)
+            if (mainMgr.Battle || mainMgr.Entry)
             {
                 // 人差し指トリガーで武器使用
                 if (OVRInput.GetDown(OVRInput.RawButton.LIndexTrigger) && myHand[1].HasWeapon)

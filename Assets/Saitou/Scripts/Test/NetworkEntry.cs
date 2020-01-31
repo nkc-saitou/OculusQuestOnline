@@ -43,20 +43,20 @@ namespace Saitou.Network
                         await UniTask.Delay(1000);
 
                         //SceneChanger.Instance.MoveScene("LobyTest", 1.0f, 1.0f, SceneChangeType.WhiteFade, true);
-                        SceneChanger.Instance.MoveScene("TestSaitou", 1.0f, 1.0f, SceneChangeType.WhiteFade, true);
+                        SceneChanger.Instance.MoveScene("LobbyTest", 1.0f, 1.0f, SceneChangeType.WhiteFade, true);
                     }
                 });
 
-            Observable.Interval(TimeSpan.FromMilliseconds(500))
-                .Where(_ => IsMatchingCompleate == false)
-                .Subscribe(_ => 
-                {
-                    MatchingText.text = "Matching";
-                    for (int i = 0; i < matchingIndex; i++) MatchingText.text += ".";
+            //Observable.Interval(TimeSpan.FromMilliseconds(500))
+            //    .Where(_ => IsMatchingCompleate == false)
+            //    .Subscribe(_ => 
+            //    {
+            //        MatchingText.text = "Matching";
+            //        for (int i = 0; i < matchingIndex; i++) MatchingText.text += ".";
 
-                    if (matchingIndex < 3) matchingIndex++;
-                    else matchingIndex = 0;
-                });
+            //        if (matchingIndex < 3) matchingIndex++;
+            //        else matchingIndex = 0;
+            //    });
         }
     }
 }

@@ -15,7 +15,12 @@ namespace Sanoki.Online
         PhotonView photonView;
         NetworkManager networkManager;
         bool[] isStart = new bool[2];
-        
+
+        public bool[] IsStart()
+        {
+            return isStart;
+        }
+
         private void Start()
         {
             networkManager = FindObjectOfType<NetworkManager>();
@@ -65,7 +70,7 @@ namespace Sanoki.Online
         [PunRPC]
         void SceneChange()
         {
-            SceneChanger.Instance.MoveScene("Online_test", 1.0f, 1.0f, SceneChangeType.BlackFade, true);
+            SceneChanger.Instance.MoveScene("TestSaitou", 1.0f, 1.0f, SceneChangeType.BlackFade, true);
         }
 
         /// <summary>
@@ -79,16 +84,6 @@ namespace Sanoki.Online
                 if (!isStart[i]) return false;
             }
             return true;
-        }
-
-        private void OnTriggerEnter(Collider other)
-        {
-            Matsumoto.Weapon.ModuleObject obj;
-            obj = other.GetComponent<Matsumoto.Weapon.ModuleObject>();
-            if (TestOnlineData.PlayerID == obj.Owner.GetMyProvider.MyID)
-            {
-                Entry();
-            }
         }
     }
     
