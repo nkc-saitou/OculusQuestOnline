@@ -11,14 +11,7 @@ namespace Nakajima.Player
 {
     public class DamageEffect : MonoBehaviour
     {
-        // 自身のCanvas
-        public Canvas[] myEyeCanvas;
-
-        // エフェクト用Image
-        [SerializeField]
-        private Image[] myEffectImg;
-
-        private Material[] myEffectMaterial = new Material[2];
+        private Material myEffectMaterial;
 
         private bool isFade;
 
@@ -28,12 +21,7 @@ namespace Nakajima.Player
         void Start()
         {
             // マテリアルのセット
-            myEffectMaterial[0] = myEffectImg[0].material;
-            myEffectMaterial[1] = myEffectImg[1].material;
-
-            for(int i = 0;i < myEffectMaterial.Length; i++) {
-                myEffectMaterial[i].SetFloat("_GradationPower", alpha);
-            }
+            myEffectMaterial = GetComponent<MeshRenderer>().material;
         }
         
         void Update()
@@ -67,10 +55,7 @@ namespace Nakajima.Player
             {
                 alpha = Mathf.Lerp(alpha, _param, time / _interval);
 
-                for (int i = 0; i < myEffectMaterial.Length; i++)
-                {
-                    myEffectMaterial[i].SetFloat("_GradationPower", alpha);
-                }
+                myEffectMaterial.SetFloat("_GradationPower", alpha);
 
                 time += Time.deltaTime;
 
@@ -87,7 +72,7 @@ namespace Nakajima.Player
         /// </summary>
         private void ResetCanvas()
         {
-            StartCoroutine(ChangeParam(0.4f, 2.0f));
+            StartCoroutine(ChangeParam(0.0f, 1.0f));
         }
     }
 }
