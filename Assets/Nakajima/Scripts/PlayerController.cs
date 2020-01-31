@@ -54,6 +54,8 @@ namespace Nakajima.Player
                 rootObj.transform.GetChild(0).transform.localPosition = new Vector3(0.0f, -1.7f, 0.0f);
                 rootObj.transform.GetChild(1).transform.localPosition = new Vector3(0.0f, 0.0f, 0.0f);
             };
+
+            mainMgr.resultEvent += GetWinOrLose;
         }
 
         /// <summary>
@@ -190,6 +192,15 @@ namespace Nakajima.Player
                 myHand[0].DeleteWeapon(false);
             else if (_hand.myTouch == OVRInput.RawButton.RHandTrigger)
                 myHand[1].DeleteWeapon(false);
+        }
+
+        /// <summary>
+        /// 勝敗判定
+        /// </summary>
+        public override void GetWinOrLose()
+        {
+            // 勝敗の結果
+            int result = mainMgr.WinOrLose(myHand[0].GetMyProvider.MyID);
         }
 
         /// <summary>

@@ -17,9 +17,19 @@ namespace Nakajima.Main
         public Action<bool> battleEnd;
         // エントリーイベント
         public Action playerEntry;
+        // リザルトイベント
+        public Action resultEvent;
 
         // photonView
         private PhotonView myPhotonView;
+
+        // ResultCanvasの設定
+        [SerializeField]
+        private GameObject resultCanvas;
+        public GameObject ResultCanvas {
+            get { return resultCanvas; }
+        }
+
 
         // スコアの更新イベント
         public Action<int, int> updateScore;
@@ -115,6 +125,13 @@ namespace Nakajima.Main
         private void BattleEnd(bool _battle)
         {
             battle = false;
+
+            resultCanvas.SetActive(true);
+
+            // イベント実行
+            resultEvent?.Invoke();
+
+            resultCanvas.GetComponent<ResultUI>().SetScoreText(playerScore[0], playerScore[1]);
         }
 
         /// <summary>
@@ -150,6 +167,44 @@ namespace Nakajima.Main
             }
 
             gameTime -= Time.deltaTime;
+        }
+
+        /// <summary>
+        /// 勝敗判定
+        /// </summary>
+        /// <param name="_ID"></param>
+        /// <returns>1 勝ち 2 負け 0 引き分け</returns>
+        public int WinOrLose(int _ID)
+        {
+            // デフォルトは引き分け
+            var result = 0;
+
+            // IDに応じて勝敗判定
+            if (_ID == 1)
+            {
+                // 勝ち
+                if (playerScore[0] > playerScore[1]) {
+                    result = 1;
+                }
+                // 負け
+                else if (playerScore[0] < playerScore[1]) {
+                    result = 2;
+                }
+            }
+            else if (_ID == 2)
+            {
+                // 勝ち
+                if (playerScore[1] > playerScore[0]) {
+                    result = 1;
+                }
+                // 負け
+                else if (playerScore[1] < playerScore[0]) {
+                    result = 2;
+                }
+            }
+
+            resultCanvas.GetComponent<ResultUI>().ResultDisplay(result);
+            return result;
         }
 
         /// <summary>
