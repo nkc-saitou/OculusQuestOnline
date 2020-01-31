@@ -7,8 +7,8 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Barrier
-  m_Shader: {fileID: 4800000, guid: 5df436e6ec208c643a52740d3f3397cc, type: 3}
+  m_Name: FieldTop
+  m_Shader: {fileID: 4800000, guid: e55341c0b378344429ee9ccb40f97752, type: 3}
   m_ShaderKeywords: 
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
@@ -39,6 +39,10 @@ Material:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
+    - _FadeTex:
+        m_Texture: {fileID: 2800000, guid: 55a185053c1ae6d4ea71a9a8edc52e2b, type: 3}
+        m_Scale: {x: 1, y: -105.62}
+        m_Offset: {x: 0, y: 0}
     - _MainTex:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
@@ -56,23 +60,26 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     m_Floats:
-    - _Amplified: 1
     - _BumpScale: 1
-    - _Clear: 0.73
+    - _Cull: 2
     - _Cutoff: 0.5
     - _DetailNormalMapScale: 1
-    - _Divide: 10
     - _DstBlend: 0
-    - _FillClear: 0.4
+    - _FadeTexScale: 55
+    - _FillClear: 0
     - _GlossMapScale: 1
     - _Glossiness: 0.5
     - _GlossyReflections: 1
-    - _LineRatio: 0.03
+    - _LineRatio: 0.9
+    - _LineWidth: 0.3
     - _Metallic: 0
     - _Mode: 0
     - _OcclusionStrength: 1
     - _Parallax: 0.02
+    - _Period: 9.9
     - _ScrollSpeed: 1
+    - _ScrollSpeedX: 0
+    - _ScrollSpeedY: 0
     - _SmoothnessTextureChannel: 0
     - _SpecularHighlights: 1
     - _SrcBlend: 1
@@ -81,6 +88,6 @@ Material:
     m_Colors:
     - _Color: {r: 1, g: 1, b: 1, a: 1}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
-    - _FillColor: {r: 8, g: 0, b: 0, a: 0.039215688}
-    - _LineColor: {r: 32, g: 20.981133, b: 20.981133, a: 1}
-    - _SideColor: {r: 1, g: 0.015686275, b: 0, a: 0.13333334}
+    - _FillColor: {r: 0, g: 0.940187, b: 1, a: 0.08235294}
+    - _LineColor: {r: 0, g: 2.270603, b: 1.9971795, a: 1}
+    - _SideColor: {r: 1, g: 1, b: 1, a: 1}

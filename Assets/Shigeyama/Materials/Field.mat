@@ -65,6 +65,7 @@ Material:
     - _Cutoff: 0.5
     - _DetailNormalMapScale: 1
     - _DstBlend: 0
+    - _FadeTexScale: 55
     - _FillClear: 0
     - _GlossMapScale: 1
     - _Glossiness: 0.5
@@ -78,7 +79,7 @@ Material:
     - _Period: 9.9
     - _ScrollSpeed: 1
     - _ScrollSpeedX: 1
-    - _ScrollSpeedY: 1
+    - _ScrollSpeedY: 0.3
     - _SmoothnessTextureChannel: 0
     - _SpecularHighlights: 1
     - _SrcBlend: 1

@@ -23,6 +23,9 @@ namespace Nakajima.Player
         [SerializeField]
         private GameObject headAnchor;
 
+        [SerializeField]
+        private GameObject[] MyWacca=new GameObject[2];
+
         // 自身のHand
         [SerializeField]
         private PlayerHand myHand_R;
@@ -33,6 +36,7 @@ namespace Nakajima.Player
         void Start()
         {
             Register();
+            MyWacca[MyID - 1].SetActive(true);
         }
 
         /// <summary>
