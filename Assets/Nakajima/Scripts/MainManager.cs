@@ -134,7 +134,7 @@ namespace Nakajima.Main
             resultEvent?.Invoke();
 
             // 10秒後ロビー画面へ
-            Observable.Timer(TimeSpan.FromMilliseconds(10))
+            Observable.Timer(TimeSpan.FromMilliseconds(10000))
                 .Subscribe(_ => SceneChanger.Instance.MoveScene("LobbyTest", 1.0f, 1.0f, SceneChangeType.BlackFade, true));
         }
 
