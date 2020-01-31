@@ -9,6 +9,9 @@ EditorBuildSettings:
     path: Assets/Shigeyama/Scenes/TestFX.unity
     guid: f71539e241c3b384193657437c251088
   - enabled: 1
+    path: Assets/chiikama/scene/test.unity
+    guid: 94eb9a8fbc1685648b1b81e3314f61b0
+  - enabled: 1
     path: Assets/Sanoki/Scenes/Title_test.unity
     guid: 0d4dba8ba88f16a42a809fa414c1f668
   - enabled: 1

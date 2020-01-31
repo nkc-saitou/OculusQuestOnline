@@ -3,14 +3,19 @@ using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
 using System;
+using Photon.Pun;
+using Saitou.Network;
+using UniRx;
+using UniRx.Triggers;
 
-public class GuardManager : MonoBehaviour
+public class GuardManager : MonoBehaviourPunCallbacks
 {
     public GameObject[] GuardPos;
     public GameObject guardPrefab;
 
     public int InstantiateCount;
-    public int GuardHP;
+
+    NetworkTest network;
 
     // 今生成されているGuardObjectのIndex
     List<int> GuardIndex = new List<int>();
@@ -81,20 +86,56 @@ public class GuardManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        for(int i = 0; i < 6;i++)
-        {
-            randomIndex.Add(i);
-        }
+        network = FindObjectOfType<NetworkTest>();
 
-        for(int i = 0; i < InstantiateCount; i++)
-        {
-            GuardIndex.Add(RandomGuardExtract());
-        }
+        network.OnInRoom
+            .TakeUntilDestroy(this)
+            .Where(_ => PhotonNetwork.PlayerList.Length == 2)
+            .Where(_ => TestOnlineData.PlayerID == 2)
+            .Take(1)
+            .Subscribe(_ =>
+            {
+                for (int i = 0; i < GuardPos.Length; i++)
+                {
+                    randomIndex.Add(i);
+                }
 
-        for(int i = 0; i<GuardIndex.Count;i++)
-        {
-            CreateGuard(GuardIndex[i]);
-        }
+                for (int i = 0; i < InstantiateCount; i++)
+                {
+                    GuardIndex.Add(RandomGuardExtract());
+                }
+
+                for (int i = 0; i < GuardIndex.Count; i++)
+                {
+                    CreateGuard(GuardIndex[i]);
+                }
+            });
+
+
+        //this.UpdateAsObservable()
+        //    .TakeUntilDestroy(this)
+        //    .Where(_ => Input.GetMouseButtonDown(0))
+        //    .Subscribe(_ => 
+        //    {
+        //        CreateGuardList[0].GuardDestroy();
+        //    });
+
+        //if (TestOnlineData.PlayerID == 2) return;
+
+        //for(int i = 0; i < GuardPos.Length;i++)
+        //{
+        //    randomIndex.Add(i);
+        //}
+
+        //for(int i = 0; i < InstantiateCount; i++)
+        //{
+        //    GuardIndex.Add(RandomGuardExtract());
+        //}
+
+        //for(int i = 0; i<GuardIndex.Count;i++)
+        //{
+        //    CreateGuard(GuardIndex[i]);
+        //}
     }
 
     void GuardChanger(Guard _guard)
@@ -110,14 +151,17 @@ public class GuardManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+        //Debug.Log(PhotonNetwork.PlayerList.Length);
     }
 
     void CreateGuard(int index)
     {
-        Guard _guard = Instantiate(guardPrefab, GuardPos[index].transform.position, GuardPos[index].transform.rotation).GetComponent<Guard>();
-        _guard.MyIndex = index;
-        CreateGuardList.Add(_guard);
+        //Guard _guard = PhotonNetwork.Instantiate("Barrier", GuardPos[index].transform.position, GuardPos[index].transform.rotation).GetComponent<Guard>();
+        PhotonNetwork.Instantiate("Barrier", GuardPos[index].transform.position, GuardPos[index].transform.rotation);
+        //_guard.MyIndex = index;
+        //CreateGuardList.Add(_guard);
+
+        //GuardChanger(_guard);
     }
 
     //オブジェクトを複数表示

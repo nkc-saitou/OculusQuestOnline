@@ -2,8 +2,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 using System;
+using Photon.Pun;
 
-public class Guard : MonoBehaviour
+public class Guard : MonoBehaviourPunCallbacks
 {
     public int HP
     {
@@ -21,6 +22,8 @@ public class Guard : MonoBehaviour
 
     void OnTriggerEnter(Collider col)
     {
+        if (TestOnlineData.PlayerID == 2) return;
+
         if (col.GetComponent<Matsumoto.Weapon.ModuleObject>() != null)
         {
             currentHP--;
@@ -28,10 +31,16 @@ public class Guard : MonoBehaviour
 
         if(currentHP <= 0)
         {
-            Destroy(gameObject);
-            DestroyAct();
+            GuardDestroy();
         }
     }
+
+    public void GuardDestroy()
+    {
+        PhotonNetwork.Destroy(gameObject);
+        DestroyAct();
+    }
+
     // Start is called before the first frame update
     void Start()
     {
@@ -41,6 +50,6 @@ public class Guard : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+
     }
 }
