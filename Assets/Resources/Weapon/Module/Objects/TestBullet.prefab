@@ -87,7 +87,7 @@ Rigidbody:
   m_IsKinematic: 0
   m_Interpolate: 0
   m_Constraints: 0
-  m_CollisionDetection: 3
+  m_CollisionDetection: 1
 --- !u!1001 &4832054207616056555
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -95,11 +95,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 960380217352831686}
     m_Modifications:
-    - target: {fileID: 6037839348682643576, guid: 3394552166669eb4cb9f6d2ce0a2cd3d,
-        type: 3}
-      propertyPath: m_Name
-      value: Bullet_Blue_Edit
-      objectReference: {fileID: 0}
     - target: {fileID: 6037839348682643558, guid: 3394552166669eb4cb9f6d2ce0a2cd3d,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -154,6 +149,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6037839348682643576, guid: 3394552166669eb4cb9f6d2ce0a2cd3d,
+        type: 3}
+      propertyPath: m_Name
+      value: Bullet_Blue_Edit
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 3394552166669eb4cb9f6d2ce0a2cd3d, type: 3}
