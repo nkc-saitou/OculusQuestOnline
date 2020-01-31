@@ -36,8 +36,21 @@ namespace Nakajima.Player
         void Start()
         {
             Register();
+
             MyWacca[MyID - 1].SetActive(true);
+
+            DisplayPlayerProvider[] providerAray = FindObjectsOfType<DisplayPlayerProvider>();
+
+            for(int i = 0; i < providerAray.Length; i++)
+            {
+                if (providerAray[i].MyID != TestOnlineData.PlayerID)
+                {
+                    providerAray[i].MyWacca[providerAray[i].MyID - 1].SetActive(true);
+                    break;
+                }
+            }
         }
+
 
         /// <summary>
         /// 自身のObjを登録
