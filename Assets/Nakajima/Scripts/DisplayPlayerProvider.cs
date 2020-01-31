@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UniRx.Async;
 
 namespace Nakajima.Player
 {
@@ -33,9 +34,11 @@ namespace Nakajima.Player
         private PlayerHand myHand_L;
 
         // Start is called before the first frame update
-        void Start()
+        async void Start()
         {
             Register();
+
+            await UniTask.WaitUntil(() => MyID != 0);
 
             MyWacca[MyID - 1].SetActive(true);
 

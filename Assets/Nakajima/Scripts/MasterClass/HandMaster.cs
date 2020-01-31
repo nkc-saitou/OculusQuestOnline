@@ -14,6 +14,7 @@ namespace Nakajima.Player
     public class HandMaster : MonoBehaviour
     {
         // WeaponCreateの参照
+        [HideInInspector]
         public WeaponCreate weaponCreate;
         protected WeaponManager weaponMgr;
 
@@ -21,6 +22,7 @@ namespace Nakajima.Player
         public OVRInput.RawButton myTouch;
 
         // 触れたオブジェクト
+        [HideInInspector]
         public GameObject hasObj;
 
         // 両手武器かどうか
