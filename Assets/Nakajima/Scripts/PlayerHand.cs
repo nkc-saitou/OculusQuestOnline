@@ -73,10 +73,6 @@ namespace Nakajima.Player
             // 何も触れていないならリターン
             if (HasWeapon) return;
 
-            // 生成中の武器だったら装備する
-            // 掴んだなら他の武器は削除
-            weaponCreate.DeleteWeapon();
-
             // 武器のデータを持ってくる
             weaponMgr.LoadWeapon();
             var handList = weaponMgr.CreateWeapon(GetWeaponName(hasObj.name), 0.5f);
@@ -84,6 +80,10 @@ namespace Nakajima.Player
             hasObj.transform.parent = transform;
             hasObj.transform.localPosition = Vector3.zero;
             hasObj.transform.localRotation = Quaternion.identity;
+
+            // 生成中の武器だったら装備する
+            // 掴んだなら他の武器は削除
+            weaponCreate.DeleteWeapon();
 
             handList[0].SetOwner(this);
 
@@ -225,7 +225,7 @@ namespace Nakajima.Player
         public override void DeleteWeapon()
         {
             // なにもないならリターン
-            if (HasWeapon == false || photonView.IsMine) return;
+            if (HasWeapon == false || photonView.IsMine || hasObj == null) return;
 
             // 削除
             var weapon = hasObj.GetComponent<IWeapon>();
@@ -241,14 +241,14 @@ namespace Nakajima.Player
         /// 触れている状態
         /// </summary>
         /// <param name="_col">コリジョン</param>
-        private void OnTriggerStay(Collider _col)
-        {
-            // 武器を持っているならリターン
-            if (HasWeapon) return;
+        //private void OnTriggerStay(Collider _col)
+        //{
+        //    // 武器を持っているならリターン
+        //    if (HasWeapon) return;
 
-            var obj = _col.gameObject.GetComponent<ProvisionalWeapon>();
-            if (obj == null) return;
-            hasObj = _col.gameObject;
-        }
+        //    var obj = _col.gameObject.GetComponent<ProvisionalWeapon>();
+        //    if (obj == null) return;
+        //    hasObj = _col.gameObject;
+        //}
     }
 }
