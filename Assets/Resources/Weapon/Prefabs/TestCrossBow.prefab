@@ -46,7 +46,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _weaponData: {fileID: 0}
   _weaponModules:
-  - {fileID: 4427101607777204413, guid: 28aaeaae80c4e30469de7c05478147a7, type: 3}
+  - {fileID: 4427101607777204413, guid: 0f0e993a249dadc4b8d93397afcccfdc, type: 3}
   _otherWeapon: {fileID: 2063658209161802891, guid: c15bb3e6d112d5042b95bff34b23dd47,
     type: 3}
   _bowBody: {fileID: 5678552101653678976}
