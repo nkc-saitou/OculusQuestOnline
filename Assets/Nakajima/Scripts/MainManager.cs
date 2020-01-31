@@ -7,6 +7,7 @@ using UniRx;
 using UniRx.Async;
 using Photon.Pun;
 using UnityEngine.SceneManagement;
+using Matsumoto.Audio;
 
 namespace Nakajima.Main
 {
@@ -144,7 +145,10 @@ namespace Nakajima.Main
 
             // 10秒後ロビー画面へ
             Observable.Timer(TimeSpan.FromMilliseconds(10000))
-                .Subscribe(_ => SceneChanger.Instance.MoveScene("LobbyTest", 1.0f, 1.0f, SceneChangeType.BlackFade, true));
+                .Subscribe(_ => {
+					AudioManager.FadeOut(1);
+					SceneChanger.Instance.MoveScene("LobbyTest", 1.0f, 1.0f, SceneChangeType.BlackFade, true);
+					});
         }
 
         /// <summary>

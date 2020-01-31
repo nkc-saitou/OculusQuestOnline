@@ -7,6 +7,7 @@ using UnityEngine.UI;
 using UniRx.Async;
 using UniRx.Triggers;
 using UniRx;
+using Matsumoto.Audio;
 
 namespace Sanoki.Online
 {
@@ -35,6 +36,8 @@ namespace Sanoki.Online
                 {
                     photonView.RPC(nameof(SceneChange), RpcTarget.All);
                 });
+
+			AudioManager.FadeIn(1, "Lobby_BGM");
         }
 
         private void Update()
@@ -70,7 +73,8 @@ namespace Sanoki.Online
         [PunRPC]
         void SceneChange()
         {
-            SceneChanger.Instance.MoveScene("TestSaitou", 1.0f, 1.0f, SceneChangeType.BlackFade, true);
+			AudioManager.FadeOut(1);
+			SceneChanger.Instance.MoveScene("TestSaitou", 1.0f, 1.0f, SceneChangeType.BlackFade, true);
         }
 
         /// <summary>

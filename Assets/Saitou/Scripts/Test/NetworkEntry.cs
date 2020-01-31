@@ -7,6 +7,7 @@ using UniRx;
 using UniRx.Triggers;
 using System;
 using UniRx.Async;
+using Matsumoto.Audio;
 
 namespace Saitou.Network
 {
@@ -42,8 +43,10 @@ namespace Saitou.Network
 
                         await UniTask.Delay(1000);
 
-                        //SceneChanger.Instance.MoveScene("LobyTest", 1.0f, 1.0f, SceneChangeType.WhiteFade, true);
-                        SceneChanger.Instance.MoveScene("LobbyTest", 1.0f, 1.0f, SceneChangeType.WhiteFade, true);
+						AudioManager.FadeOut(1);
+
+						//SceneChanger.Instance.MoveScene("LobyTest", 1.0f, 1.0f, SceneChangeType.WhiteFade, true);
+						SceneChanger.Instance.MoveScene("LobbyTest", 1.0f, 1.0f, SceneChangeType.WhiteFade, true);
                     }
                 });
 
