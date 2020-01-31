@@ -15,7 +15,7 @@ public class GuardManager : MonoBehaviourPunCallbacks
 
     public int InstantiateCount;
 
-    NetworkTest network;
+    TestPlayerCreate create;
 
     // 今生成されているGuardObjectのIndex
     List<int> GuardIndex = new List<int>();
@@ -86,14 +86,11 @@ public class GuardManager : MonoBehaviourPunCallbacks
     // Start is called before the first frame update
     void Start()
     {
-        network = FindObjectOfType<NetworkTest>();
+        create = FindObjectOfType<TestPlayerCreate>();
 
-        network.OnInRoom
-            .TakeUntilDestroy(this)
-            .Where(_ => PhotonNetwork.PlayerList.Length == 2)
-            .Where(_ => TestOnlineData.PlayerID == 2)
-            .Take(1)
-            .Subscribe(_ =>
+        create.OnPlayerCreate = (tmp) =>
+        {
+            if(PhotonNetwork.PlayerList.Length == 2 && TestOnlineData.PlayerID == 2)
             {
                 for (int i = 0; i < GuardPos.Length; i++)
                 {
@@ -109,8 +106,9 @@ public class GuardManager : MonoBehaviourPunCallbacks
                 {
                     CreateGuard(GuardIndex[i]);
                 }
-            });
+            }
 
+        };
 
         //this.UpdateAsObservable()
         //    .TakeUntilDestroy(this)
