@@ -24,10 +24,7 @@ namespace Saitou.GameScene
         {
             _playerCreate.OnPlayerCreate = (tmp) => 
             {
-                foreach(Animator anim in _startUI)
-                {
-                    anim.SetTrigger("IsStart");
-                }
+                CountStart().Forget();
             };
 
 
@@ -36,6 +33,17 @@ namespace Saitou.GameScene
                 _mainManager.battleStart(60.0f);
             };
 
+        }
+
+        async UniTask CountStart()
+        {
+            await UniTask.Delay(500);
+            foreach (Animator anim in _startUI)
+            {
+                anim.SetTrigger("IsStart");
+            }
+
+            _mainManager.Ready = true;
         }
     }
 }

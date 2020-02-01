@@ -88,7 +88,7 @@ public class NetworkEventManager : MonoBehaviourPunCallbacks
             player.MyWacca[player.MyID - 1].SetActive(true);
         }
 
-        mainMgr.Ready = true;
+        //mainMgr.Ready = true;
         EventBind(HandList);
     }
 
