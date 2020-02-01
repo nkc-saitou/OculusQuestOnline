@@ -69,7 +69,7 @@ namespace Nakajima.Player
         public override void GrabWeapon()
         {
             // 何も触れていないならリターン
-            if (HasWeapon) return;
+            if (HasWeapon || isBoth) return;
 
             // 武器のデータを持ってくる
             weaponMgr.LoadWeapon();
@@ -137,13 +137,14 @@ namespace Nakajima.Player
         {
             // 武器を持っているなら削除
             if(HasWeapon) DeleteWeapon(CheckDelete());
-            
+
+            isBoth = true;
+
             hasObj = _weapon;
             hasObj.transform.parent = transform;
             hasObj.transform.localPosition = Vector3.zero;
             hasObj.transform.localRotation = Quaternion.identity;
             HasWeapon = true;
-            isBoth = true;
             weaponCreate.DeleteWeapon();
 
             _weapon.GetComponent<IWeapon>().SetOwner(this);
@@ -177,7 +178,7 @@ namespace Nakajima.Player
             
             await UniTask.WaitUntil(() => hasObj == null);
 
-            if (IsActive == false) return;
+            if (IsActive == false || HasWeapon) return;
 
             weaponCreate.ActiveHand = this;
             weaponCreate.Create();
