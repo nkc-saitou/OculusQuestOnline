@@ -101,9 +101,9 @@ namespace Matsumoto.Weapon {
 
 		private Vector3 CalcThrowVector() {
 
-			for(int i = 0;i < _samples.Count;i++) {
-				_samples[i] += Owner.Value.transform.position;
-			}
+			//for(int i = 0;i < _samples.Count;i++) {
+			//	_samples[i] += Owner.Value.transform.position;
+			//}
 
 			var lastVector = _samples.Last();
 
