@@ -69,7 +69,7 @@ namespace Nakajima.Player
         public override void GrabWeapon()
         {
             // 何も触れていないならリターン
-            if (HasWeapon || isBoth) return;
+            if (HasWeapon) return;
 
             // 武器のデータを持ってくる
             weaponMgr.LoadWeapon();
