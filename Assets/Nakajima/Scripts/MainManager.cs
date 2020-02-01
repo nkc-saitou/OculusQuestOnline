@@ -41,6 +41,13 @@ namespace Nakajima.Main
         // スコアの更新イベント
         public Action<int, int> updateScore;
 
+        // 武器が出せる状態かどうか
+        private bool ready = false;
+        public bool Ready
+        {
+            get { return ready; }
+        }
+
         // バトル開始したかどうか
         private bool battle = false;
         public bool Battle

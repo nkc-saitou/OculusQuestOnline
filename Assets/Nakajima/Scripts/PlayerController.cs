@@ -71,6 +71,9 @@ namespace Nakajima.Player
         /// </summary>
         public override void Update()
         {
+            // 準備段階でないならリターン
+            if (mainMgr.Ready == false) return;
+
             Move();
 
             Actoin();
