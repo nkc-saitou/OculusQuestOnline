@@ -44,6 +44,8 @@ namespace Matsumoto.Weapon {
 
 		private void Explosion() {
 
+            if (_explosiveCollision.enabled) return;
+
 			_explosiveCollision.enabled = true;
 
 			// effect
