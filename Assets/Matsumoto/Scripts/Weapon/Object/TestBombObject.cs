@@ -60,7 +60,10 @@ namespace Matsumoto.Weapon {
 		private void OnCollisionEnter(Collision collision) {
             // プレイヤーは判定から除外
             var player = collision.gameObject.GetComponent<PlayerMaster>();
-            if (player != null) return;
+            if (player != null)
+            {
+                if(player.ID == Owner.GetMyProvider.MyID) return;
+            }
 
             var enemy = collision.gameObject.GetComponent<DisplayPlayerProvider>();
             if (enemy != null) {

@@ -20,10 +20,6 @@ namespace Nakajima.Player
         [SerializeField, Header("<自分の手(0 右手 1 左手)>")]
         protected PlayerHand[] myHand;
 
-        // プレイヤーID
-        [HideInInspector]
-        public int ID;
-
         // オンライン用のプレイヤーの生成
         private TestPlayerCreate testPlayerCreate;
 

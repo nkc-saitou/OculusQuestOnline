@@ -10,6 +10,10 @@ namespace Nakajima.Player
 {
     public class PlayerMaster : MonoBehaviour
     {
+        // プレイヤーID
+        [HideInInspector]
+        public int ID;
+
         // MainManager
         protected MainManager mainMgr;
         // 自身のMovement;
