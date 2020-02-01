@@ -57,21 +57,41 @@ namespace Matsumoto.Weapon {
 			
 		}
 
-		private void OnCollisionEnter(Collision collision) {
+        private void OnTriggerEnter(Collider collision)
+        {
             // プレイヤーは判定から除外
             var player = collision.gameObject.GetComponent<PlayerMaster>();
             if (player != null)
             {
-                if(player.ID == Owner.GetMyProvider.MyID) return;
+                if (player.ID == Owner.GetMyProvider.MyID) return;
             }
 
             var enemy = collision.gameObject.GetComponent<DisplayPlayerProvider>();
-            if (enemy != null) {
+            if (enemy != null)
+            {
                 if (enemy.MyID == Owner.GetMyProvider.MyID) return;
             }
 
             Explosion();
-		}
-	}
+        }
+
+        //private void OnCollisionEnter(Collision collision)
+        //{
+        //    // プレイヤーは判定から除外
+        //    var player = collision.gameObject.GetComponent<PlayerMaster>();
+        //    if (player != null)
+        //    {
+        //        if (player.ID == Owner.GetMyProvider.MyID) return;
+        //    }
+
+        //    var enemy = collision.gameObject.GetComponent<DisplayPlayerProvider>();
+        //    if (enemy != null)
+        //    {
+        //        if (enemy.MyID == Owner.GetMyProvider.MyID) return;
+        //    }
+
+        //    Explosion();
+        //}
+    }
 }
 

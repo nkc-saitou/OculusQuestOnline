@@ -2243,7 +2243,7 @@ CapsuleCollider:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4843531762562746774}
   m_Material: {fileID: 0}
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_Enabled: 1
   m_Radius: 0.5
   m_Height: 1.5
@@ -3670,7 +3670,7 @@ Transform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
-  - {fileID: 4704719907194317424}
+  - {fileID: 5420894526615264029}
   m_Father: {fileID: 5825808658071346374}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -4313,7 +4313,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 4ad6df9900269944589130caa16ea7c0, type: 3}
---- !u!4 &4704719907194317424 stripped
+--- !u!4 &5420894526615264029 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 752214447527145812, guid: 4ad6df9900269944589130caa16ea7c0,
     type: 3}

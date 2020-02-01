@@ -64,12 +64,19 @@ namespace Matsumoto.Weapon {
 
 		private void OnTriggerEnter(Collider other) {
             if (other.GetComponent<ModuleObject>()) return;
-            if (other.GetComponent<WeaponBase>()) return;
+            if (other.GetComponent<WeaponBase>()) return;            
 
-            var player = other.GetComponent<DisplayPlayerProvider>();
-            if(player != null)
+            // プレイヤーは判定から除外
+            var player = other.gameObject.GetComponent<PlayerMaster>();
+            if (player != null)
             {
-                if (player.MyID == Owner.GetMyProvider.MyID) return;
+                if (player.ID == Owner.GetMyProvider.MyID) return;
+            }
+
+            var enemy = other.GetComponent<DisplayPlayerProvider>();
+            if (enemy != null)
+            {
+                if (enemy.MyID == Owner.GetMyProvider.MyID) return;
             }
 
             OnHit();
