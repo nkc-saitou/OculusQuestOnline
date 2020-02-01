@@ -222,6 +222,12 @@ namespace Nakajima.Player
         {
             resultCanvas.gameObject.SetActive(true);
 
+            // 武器所持中なら削除
+            foreach (var hand in myHand)
+            {
+                hand.DeleteWeapon(hand.CheckDelete());
+            }
+
             // 勝敗の結果
             mainMgr.WinOrLose(ID, resultCanvas);
         }

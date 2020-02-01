@@ -146,7 +146,8 @@ namespace Nakajima.Main
         /// <param name="_battle"></param>
         private void BattleEnd(bool _battle)
         {
-            battle = false;
+            ready = false;
+            battle = true;
 
             // イベント実行
             resultEvent?.Invoke();
