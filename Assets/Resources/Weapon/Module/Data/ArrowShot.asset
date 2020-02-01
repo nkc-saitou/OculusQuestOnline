@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ModuleName: 
   GuardPower: 0
-  Power: 50
+  Power: 15
   Speed: 20
   Size: 1.5
   UseWaitSec: 2

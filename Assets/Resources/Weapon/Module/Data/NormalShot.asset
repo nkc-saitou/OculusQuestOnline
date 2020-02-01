@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ModuleName: ababa
   GuardPower: 0
-  Power: 10000
+  Power: 1
   Speed: 100
   Size: 1
   UseWaitSec: 0.5
