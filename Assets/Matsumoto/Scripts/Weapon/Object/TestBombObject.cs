@@ -8,7 +8,7 @@ namespace Matsumoto.Weapon {
 	public class TestBombObject : ModuleObject {
 
 		public float LifeTime = 10;
-		public float ExplosionStart = 1.0f;
+		public float ExplosionStart = 0.5f;
 
 		[SerializeField]
 		private Rigidbody _rigidbody;
