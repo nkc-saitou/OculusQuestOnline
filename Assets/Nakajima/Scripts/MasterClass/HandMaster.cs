@@ -28,6 +28,14 @@ namespace Nakajima.Player
         // 両手武器かどうか
         public bool isBoth;
 
+        // アクティブ状態
+        private bool isActive = true;
+        public bool IsActive
+        {
+            set { isActive = value; }
+            get { return isActive; }
+        }
+
         // 武器を所持しているか
         private bool hasWeapon;
         public bool HasWeapon

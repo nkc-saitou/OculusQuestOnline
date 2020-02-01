@@ -32,8 +32,6 @@ namespace Nakajima.Player
         // 右手か左手か
         private string handName;
 
-        int temp = 0;
-
         /// <summary>
         /// 初回処理
         /// </summary>
@@ -178,6 +176,8 @@ namespace Nakajima.Player
             if (HasWeapon) DeleteWeapon(CheckDelete());
             
             await UniTask.WaitUntil(() => hasObj == null);
+
+            if (IsActive == false) return;
 
             weaponCreate.ActiveHand = this;
             weaponCreate.Create();

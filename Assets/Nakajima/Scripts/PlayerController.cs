@@ -70,7 +70,11 @@ namespace Nakajima.Player
         public override void Update()
         {
             // 準備段階でないならリターン
-            if (mainMgr.Ready == false) return;
+            if (mainMgr.Ready == false) {
+                // 移動量はリセット
+                if (myRig.velocity != Vector3.zero) myRig.velocity = Vector3.zero;
+                return;
+            }
 
             Move();
 
@@ -226,6 +230,8 @@ namespace Nakajima.Player
             foreach (var hand in myHand)
             {
                 hand.DeleteWeapon(hand.CheckDelete());
+                hand.IsActive = false;
+                hand.hasObj = null;
             }
 
             // 勝敗の結果
