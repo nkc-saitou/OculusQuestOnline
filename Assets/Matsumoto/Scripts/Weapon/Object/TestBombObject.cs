@@ -57,6 +57,10 @@ namespace Matsumoto.Weapon {
 		}
 
 		private void OnCollisionEnter(Collision collision) {
+            // プレイヤーは判定から除外
+            var player = collision.gameObject.GetComponent<PlayerController>();
+            if (player != null) return;
+
 			Explosion();
 		}
 	}
