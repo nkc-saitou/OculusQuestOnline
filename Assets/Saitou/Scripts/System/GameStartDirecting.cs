@@ -42,8 +42,6 @@ namespace Saitou.GameScene
             {
                 anim.SetTrigger("IsStart");
             }
-
-            _mainManager.Ready = true;
         }
     }
 }
