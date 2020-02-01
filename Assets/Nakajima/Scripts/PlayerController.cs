@@ -56,6 +56,8 @@ namespace Nakajima.Player
                 if (rootObj == null) return;
 
                 rootObj.transform.GetChild(0).transform.localPosition = new Vector3(0.0f, -1.7f, 0.0f);
+                var collider = rootObj.transform.GetChild(0).GetComponent<CapsuleCollider>();
+                if (collider != null) collider.enabled = false;
                 rootObj.transform.GetChild(1).transform.localPosition = new Vector3(0.0f, 0.0f, 0.0f);
             };
 
