@@ -87,8 +87,10 @@ public class NetworkEventManager : MonoBehaviourPunCallbacks
             }
             player.MyWacca[player.MyID - 1].SetActive(true);
         }
+
         await UniTask.Delay(500);
-        mainMgr.Ready = true;
+
+        if(SceneManager.GetActiveScene().name == "LobbyTest") mainMgr.Ready = true;
         EventBind(HandList);
     }
 

@@ -128,6 +128,7 @@ namespace Nakajima.Main
         private async void BattleStart(float _time)
         {
             // フラグを立てる
+            ready = true;
             battle = true;
             GameTime = _time;
 
