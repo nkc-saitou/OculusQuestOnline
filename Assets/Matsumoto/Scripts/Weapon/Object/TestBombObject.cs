@@ -57,7 +57,7 @@ namespace Matsumoto.Weapon {
 		}
 
 		private void OnCollisionEnter(Collision collision) {
-			if(_timer > ExplosionStart) Explosion();
+			Explosion();
 		}
 	}
 }
