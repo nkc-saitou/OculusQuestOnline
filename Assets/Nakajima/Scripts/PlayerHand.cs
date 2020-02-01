@@ -177,7 +177,7 @@ namespace Nakajima.Player
             
             await UniTask.WaitUntil(() => hasObj == null);
 
-            if (IsActive == false) return;
+            if (IsActive == false || HasWeapon) return;
 
             weaponCreate.ActiveHand = this;
             weaponCreate.Create();
