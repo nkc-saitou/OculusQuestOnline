@@ -26,10 +26,12 @@ namespace Matsumoto.Weapon {
 		private List<Vector3> _samples = new List<Vector3>();
         private NetworkEventManager manager;
 
+		
+
         private void Update() {
 
 			// Sample Vec
-			_samples.Add((transform.position - _prevPosition));
+			_samples.Add((Owner.Value.transform.localPosition - _prevPosition));
 			_prevPosition = transform.position;
 
 			if(_samples.Count > _sampleCount) {
