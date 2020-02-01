@@ -2,6 +2,7 @@
 using System.Collections;
 using UniRx;
 using System;
+using Nakajima.Player;
 
 namespace Matsumoto.Weapon {
 
@@ -58,10 +59,15 @@ namespace Matsumoto.Weapon {
 
 		private void OnCollisionEnter(Collision collision) {
             // プレイヤーは判定から除外
-            var player = collision.gameObject.GetComponent<PlayerController>();
+            var player = collision.gameObject.GetComponent<PlayerMaster>();
             if (player != null) return;
 
-			Explosion();
+            var enemy = collision.gameObject.GetComponent<DisplayPlayerProvider>();
+            if (enemy != null) {
+                if (enemy.MyID == Owner.GetMyProvider.MyID) return;
+            }
+
+            Explosion();
 		}
 	}
 }

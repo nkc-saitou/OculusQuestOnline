@@ -21,7 +21,8 @@ namespace Nakajima.Player
         protected PlayerHand[] myHand;
 
         // プレイヤーID
-        int ID;
+        [HideInInspector]
+        public int ID;
 
         // オンライン用のプレイヤーの生成
         private TestPlayerCreate testPlayerCreate;
