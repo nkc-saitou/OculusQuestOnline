@@ -90,7 +90,7 @@ namespace Matsumoto.Weapon {
 				return;
 			}
 
-			var throwVector = CalcThrowVector() * _throwPower;
+			var throwVector = _throwAnchor.position + CalcThrowVector() * _throwPower;
 			Debug.Log("throwVec :" + throwVector);
 			_throwAnchor.forward = throwVector;
 			Debug.DrawLine(_throwAnchor.position, _throwAnchor.position + throwVector, Color.red, 1);
