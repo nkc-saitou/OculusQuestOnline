@@ -32,7 +32,7 @@ namespace Matsumoto.Weapon {
 
 			// Sample Vec
 			_samples.Add((Owner.Value.transform.localPosition - _prevPosition));
-			_prevPosition = transform.position;
+			_prevPosition = Owner.Value.transform.localPosition;
 
 			if(_samples.Count > _sampleCount) {
 				_samples.RemoveAt(0);
@@ -43,7 +43,7 @@ namespace Matsumoto.Weapon {
 		public override void ModuleInitialize(WeaponBase weapon) {
 			base.ModuleInitialize(weapon);
 
-            _prevPosition = transform.position;
+            _prevPosition = Owner.Value.transform.localPosition;
             _samples = new List<Vector3>();
 
             Owner.Subscribe(item =>
