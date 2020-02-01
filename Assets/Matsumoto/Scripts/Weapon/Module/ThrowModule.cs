@@ -29,8 +29,8 @@ namespace Matsumoto.Weapon {
         private void Update() {
 
 			// Sample Vec
-			_samples.Add((transform.position - _prevPosition));
-			_prevPosition = transform.position;
+			_samples.Add((Owner.Value.transform.localPosition - _prevPosition));
+			_prevPosition = Owner.Value.transform.localPosition;
 
 			if(_samples.Count > _sampleCount) {
 				_samples.RemoveAt(0);
@@ -41,7 +41,7 @@ namespace Matsumoto.Weapon {
 		public override void ModuleInitialize(WeaponBase weapon) {
 			base.ModuleInitialize(weapon);
 
-            _prevPosition = transform.position;
+            _prevPosition = Owner.Value.transform.localPosition;
             _samples = new List<Vector3>();
 
             Owner.Subscribe(item =>
@@ -98,6 +98,10 @@ namespace Matsumoto.Weapon {
 		}
 
 		private Vector3 CalcThrowVector() {
+
+			for(int i = 0;i < _samples.Count;i++) {
+				_samples[i] += Owner.Value.transform.position;
+			}
 
 			var lastVector = _samples.Last();
 
