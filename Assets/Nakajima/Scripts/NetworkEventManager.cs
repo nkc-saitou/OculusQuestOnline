@@ -5,6 +5,7 @@ using Photon.Pun;
 using ExitGames.Client.Photon;
 using Photon.Realtime;
 using Nakajima.Player;
+using Nakajima.Main;
 using Saitou.Network;
 using UniRx.Async;
 using System.Linq;
@@ -15,6 +16,10 @@ public class NetworkEventManager : MonoBehaviourPunCallbacks
     // 手の情報
     ExitGames.Client.Photon.Hashtable hand;
 
+    // MainManager
+    private MainManager mainMgr;
+
+    // プレイヤー数
     [HideInInspector]
     public int playerCount = 0;
 
@@ -49,6 +54,8 @@ public class NetworkEventManager : MonoBehaviourPunCallbacks
 
         await UniTask.WaitUntil(() => playerCount > 1);
 
+        mainMgr = FindObjectOfType<MainManager>();
+
         DisplayPlayerProvider[] playerList = FindObjectsOfType<DisplayPlayerProvider>();
         Debug.Log("プレイヤー  " + playerList.Length);
         foreach (var player in playerList)
@@ -81,6 +88,7 @@ public class NetworkEventManager : MonoBehaviourPunCallbacks
             player.MyWacca[player.MyID - 1].SetActive(true);
         }
 
+        mainMgr.Ready = true;
         EventBind(HandList);
     }
 
