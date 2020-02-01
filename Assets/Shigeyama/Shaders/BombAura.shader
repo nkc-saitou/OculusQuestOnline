@@ -16,7 +16,6 @@
 				"IgnoreProjector" = "True"
 				"RenderType" = "Transparent"
 			}
-        LOD 100
 
 			Lighting Off
 			ZWrite Off
