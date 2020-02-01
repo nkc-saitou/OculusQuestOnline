@@ -45,6 +45,7 @@ namespace Nakajima.Main
         private bool ready = false;
         public bool Ready
         {
+            set { ready = value; }
             get { return ready; }
         }
 
