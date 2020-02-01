@@ -67,7 +67,7 @@ namespace Matsumoto.Weapon {
                 if (player.ID == Owner.GetMyProvider.MyID) return;
             }
             // 敵サイド
-            var enemy = collision.gameObject.GetComponent<DisplayPlayerProvider>();
+            var enemy = collision.gameObject.GetComponentInParent<DisplayPlayerProvider>();
             if (enemy != null)
             {
                 if (enemy.MyID == Owner.GetMyProvider.MyID) return;
